@@ -4,4 +4,3 @@ module.exports = {
       "ecmaVersion": 6
     }
   };
-
