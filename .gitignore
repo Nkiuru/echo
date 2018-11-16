@@ -62,3 +62,8 @@ typings/
 
 # Intellij WebStorm
 .idea
+
+# General MacOS
+.DS_Store
+.AppleDouble
+.LSOverride
