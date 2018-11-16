@@ -67,3 +67,6 @@ typings/
 .DS_Store
 .AppleDouble
 .LSOverride
+
+# Ignore dist-folder
+dist/

@@ -1,6 +1,10 @@
 module.exports = {
-    "extends": "google",
-    "parserOptions": {
-      "ecmaVersion": 6
-    }
-  };
+  "extends": "google",
+  "parserOptions": {
+    "ecmaVersion": 6
+  },
+  rules: {
+    'max-len': ["error", { "code": 120 }],
+    "indent": ["error", 2]
+  }
+};
