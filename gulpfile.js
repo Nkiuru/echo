@@ -10,7 +10,7 @@ sass.compiler = require('node-sass');
 // Set destination paths
 const path = {
   js: 'src/client/js/*.js',
-  scss: ['src/client/sass/main.scss'],
+  scss: ['src/client/sass/**/*.scss'],
   img: 'src/client/img/*.*',
 };
 
