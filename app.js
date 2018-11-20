@@ -13,6 +13,7 @@ app.engine(
     defaultLayout: 'main',
     layoutsDir: 'src/views/layouts',
     partialsDir: 'src/views/partials',
+    usersDir: 'src/views/users',
   }));
 
 app.set('views', __dirname + '/src/views');
@@ -22,7 +23,15 @@ app.set('view engine', 'hbs');
 app.use(express.static(path.join(__dirname, '/dist')));
 
 app.get('/', (req, res) => {
-  res.render('login');
+  res.render('index');
+});
+
+app.get('/login', (req, res) => {
+  res.render('logregbase');
+});
+
+app.get('/register', (req, res) => {
+  res.render('logregbase');
 });
 
 app.listen(port, () => {

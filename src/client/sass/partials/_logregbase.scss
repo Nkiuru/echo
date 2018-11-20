@@ -1,0 +1,17 @@
+@import 'form';
+
+.login-page {
+  background: pink;
+  height: 100vh;
+  display: flex;
+
+  &__form-container {
+    flex-basis: 40%;
+    background: $background_lightgrey;
+  }
+
+  &__aside-container {
+    flex-basis: 60%;
+    background: $main_darkblue;
+  }
+}

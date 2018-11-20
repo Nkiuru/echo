@@ -1,0 +1,23 @@
+.form {
+
+  &__wrapper {
+    padding: 0 10rem 0 10rem;
+
+    h5 {
+      margin: 0 0 .2rem 0;
+      letter-spacing: 1px;
+    }
+
+    input {
+      width: 100%;
+      padding: .5rem;
+      margin-bottom: 1rem;
+      border: 1px solid $border-lightgrey;
+
+      &:focus {
+        outline: none;
+        border-bottom: 1px solid $main_green;
+      }
+    }
+  }
+}
