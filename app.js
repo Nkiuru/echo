@@ -1,9 +1,19 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
 const path = require('path');
+const https = require('https');
+const fs = require('fs');
 const app = express();
-const port = 3000;
+const port = 8000;
 
+app.set('trust proxy', 1);
+const sslKey = fs.readFileSync('/etc/pki/tls/private/ca.key');
+const sslCert = fs.readFileSync('/etc/pki/tls/certs/ca.crt');
+
+const options = {
+  key: sslKey,
+  cert: sslCert,
+};
 
 // Handlebars middleware
 app.engine(
@@ -34,6 +44,12 @@ app.get('/register', (req, res) => {
   res.render('logregbase');
 });
 
-app.listen(port, () => {
+/* app.listen(port, () => {
+  console.log(`Server started on port ${port}...`);
+});*/
+
+app.listen(port);
+
+https.createServer(options, app).listen(3000, () => {
   console.log(`Server started on port ${port}...`);
 });
