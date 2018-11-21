@@ -45,5 +45,35 @@
         border-bottom: 1px solid $main_green;
       }
     }
+    
+    select {
+      width: 100%;
+      padding: .5rem;
+      border: 1px solid #D1D2DD;
+      border-radius: 0;
+      -webkit-appearance: none;
+      position: relative;
+      background-repeat: no-repeat;
+      background-position-x: 90%;
+      background-position-y: center;
+      background-image: url('/static/img/arrow.svg');
+    }
+    &__dual-input {
+      display: flex;
+      justify-content: space-evenly;
+      width: 100%;
+
+      &__single {
+        flex: 1;
+
+        &:nth-of-type(1) {
+          margin-right: 5px;
+        }
+
+        &:nth-of-type(2) {
+          margin-left: 5px;
+        }
+      }
+    }
   }
 }

@@ -9,10 +9,27 @@
       <label for="email"><h5>email</h5></label>
       <input type="text" placeholder="Enter Email" name="email" required>
 
+      <label for="displayName"><h5>display name</h5></label>
+      <input type="text" placeholder="display name" name="displayName" required>
+      
+      <div class="form__wrapper__dual-input">
+        <div class="form__wrapper__dual-input__single">
+        <label for="select"><h5>country</h5></label>
+        <select>
+          <option value="0">Country</option>
+          <option value="1">Audi</option>
+          <option value="2">BMW</option>
+        </select>
+        </div>
+        <div class="form__wrapper__dual-input__single">
+          <label for="city"><h5>city</h5></label>
+          <input type="text" placeholder="city" name="city" required>
+        </div>
+      </div>
       <label for="psw"><h5>password</h5></label>
       <input type="password" placeholder="Enter Password" name="psw" required>
 
-      <label for="psw-repeat"><b>Repeat Password</b></label>
+      <label for="psw-repeat"><h5>confirm password</h5></label>
       <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
 
       <button type="submit" class="registerbtn">Register</button>
