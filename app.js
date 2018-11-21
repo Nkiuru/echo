@@ -1,8 +1,10 @@
+require('dotenv').config();
 const express = require('express');
 const exphbs = require('express-handlebars');
 const path = require('path');
 const https = require('https');
 const fs = require('fs');
+const db = require('./src/modules/database');
 const app = express();
 const port = 8000;
 
@@ -10,11 +12,17 @@ app.set('trust proxy', 1);
 //const sslKey = fs.readFileSync('/etc/pki/tls/private/ca.key');
 //const sslCert = fs.readFileSync('/etc/pki/tls/certs/ca.crt');
 
-/* const options = {
+/*const options = {
   key: sslKey,
   cert: sslCert,
-}; */
+};*/
 
+const connection = db.connect();
+
+const cb = (result, res) => {
+  console.log(result);
+  res.send(result);
+};
 // Handlebars middleware
 app.engine(
   'hbs',
@@ -42,6 +50,10 @@ app.get('/login', (req, res) => {
 
 app.get('/register', (req, res) => {
   res.render('logregbase');
+});
+
+app.get('/users', (req, res) => {
+  db.select(connection, cb, res);
 });
 
 /* app.listen(port, () => {
