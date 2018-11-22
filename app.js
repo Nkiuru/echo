@@ -14,8 +14,11 @@ app.set('trust proxy', 1);
 const connection = db.connect();
 
 const cb = (result, res) => {
-  console.log(result);
+  // console.log(result);
   res.send(result);
+};
+const renderCb = (result, res) => {
+  res.render('logregbase', {dropDownCountries: result});
 };
 // Handlebars middleware
 app.engine(
@@ -42,12 +45,16 @@ app.get('/login', (req, res) => {
   res.render('logregbase');
 });
 
-app.get('/register', (req, res) => {
-  res.render('logregbase');
-});
-
 app.get('/users', (req, res) => {
   db.select(connection, cb, res);
+});
+
+app.get('/register', (req, res) => {
+  db.getCountries(connection).then((result) => {
+    res.render('logregbase', {country: result});
+  }).catch((err) => {
+    res.render('logregbase', {error: err});
+  });
 });
 
 if (process.env.hasOwnProperty('HTTPS')) {

@@ -20,7 +20,23 @@ const select = (connection, cb, res) => {
     });
 };
 
+const getCountries = (connection) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      'SELECT * FROM country;',
+      (err, results, fields) => {
+        if (err) {
+          reject(err);
+        }
+        if (results) {
+          resolve(results);
+        }
+      });
+  });
+};
+
 module.exports = {
   connect: connect,
   select: select,
+  getCountries: getCountries,
 };

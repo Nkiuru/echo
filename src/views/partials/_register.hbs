@@ -5,20 +5,20 @@
 
       <label for="username"><h5>username</h5></label>
       <input type="text" placeholder="Enter Email" name="username" required>
-      
+
       <label for="email"><h5>email</h5></label>
       <input type="text" placeholder="Enter Email" name="email" required>
 
       <label for="displayName"><h5>display name</h5></label>
       <input type="text" placeholder="display name" name="displayName" required>
-      
+
       <div class="form__wrapper__dual-input">
         <div class="form__wrapper__dual-input__single">
         <label for="select"><h5>country</h5></label>
         <select>
-          <option value="0">Country</option>
-          <option value="1">Audi</option>
-          <option value="2">BMW</option>
+          {{#each country}}
+            <option value="{{countryId}}">{{countryName}}</option>
+          {{/each}}
         </select>
         </div>
         <div class="form__wrapper__dual-input__single">
