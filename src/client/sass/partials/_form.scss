@@ -4,7 +4,8 @@
   color: $main_darkblue;
 
   &__wrapper {
-    width: 35%;
+    width: 40%;
+    padding: 5rem 0;
 
     h1 {
       z-index: 1;
@@ -35,6 +36,7 @@
       border: 1px solid $light_grey;
       letter-spacing: .05rem;
       color: $medium_grey;
+      box-sizing: border-box;
 
       &::placeholder {
         color: $light_grey;
