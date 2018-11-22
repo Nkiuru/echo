@@ -6,20 +6,17 @@ const https = require('https');
 const http = require('http');
 const fs = require('fs');
 const db = require('./src/modules/database');
+const users = require('./src/modules/users');
 const app = express();
 const port = 8000;
 
 app.set('trust proxy', 1);
 
-const connection = db.connect();
-
 const cb = (result, res) => {
   // console.log(result);
   res.send(result);
 };
-const renderCb = (result, res) => {
-  res.render('logregbase', {dropDownCountries: result});
-};
+
 // Handlebars middleware
 app.engine(
   'hbs',
@@ -34,6 +31,8 @@ app.engine(
 app.set('views', __dirname + '/src/views');
 app.set('view engine', 'hbs');
 
+app.use(users);
+
 // Static folder
 app.use('/static', express.static(path.join(__dirname, '/dist')));
 
@@ -45,12 +44,13 @@ app.get('/login', (req, res) => {
   res.render('logregbase');
 });
 
+/*
 app.get('/users', (req, res) => {
-  db.select(connection, cb, res);
-});
+  db.select(cb, res);
+});*/
 
 app.get('/register', (req, res) => {
-  db.getCountries(connection).then((result) => {
+  db.getCountries().then((result) => {
     res.render('logregbase', {country: result});
   }).catch((err) => {
     res.render('logregbase', {error: err});

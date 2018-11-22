@@ -1,26 +1,40 @@
 'use strict';
 
 const mysql = require('mysql2');
+const connection = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASS,
+});
 
-const connect = () => {
-  return mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASS,
+
+const select = () => {
+  // simple query
+  return new Promise((resolve, reject) => {
+    connection.query(
+      'SELECT * FROM user;',
+      (err, results, fields) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
   });
 };
 
-const select = (connection, cb, res) => {
-  // simple query
-  connection.query(
-    'SELECT * FROM user;',
-    (err, results, fields) => {
-      cb(results, res);
-    });
+const createUser = (data) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      'INSERT INTO user(userId, username, password, displayName, countryId, city, bio, email, isAdmin, profileImageId)' +
+      'VALUES (0, ?, ?, ?, ?, ?, NULL, ?, 0, NULL);',
+      data,
+      (err, results, fields) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
 };
 
-const getCountries = (connection) => {
+const getCountries = () => {
   return new Promise((resolve, reject) => {
     connection.query(
       'SELECT * FROM country;',
@@ -36,7 +50,8 @@ const getCountries = (connection) => {
 };
 
 module.exports = {
-  connect: connect,
+  connection: connection,
   select: select,
   getCountries: getCountries,
+  createUser: createUser,
 };
