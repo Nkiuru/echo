@@ -20,7 +20,13 @@
         right: .5rem;
         top: .3rem;
         background-repeat: no-repeat;
-        background-image: url('/static/img/brush-stroke.svg');
+        background-image: url('/static/img/brush-stroke-green.svg');
+      }
+
+      &.login-title {
+        &::before {
+          background-image: url('/static/img/brush-stroke-blue.svg');
+        }
       }
     }
 
@@ -76,6 +82,15 @@
           margin-left: 5px;
         }
       }
+    }
+  }
+}
+
+.login {
+  input {
+    &:focus {
+      outline: none;
+      border-bottom: 1px solid $main_blue;
     }
   }
 }

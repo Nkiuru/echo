@@ -8,6 +8,9 @@
   &__form-container {
     flex-basis: 40%;
     background: $background_lightgrey;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   &__aside-container {
