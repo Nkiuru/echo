@@ -3,19 +3,13 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const path = require('path');
 const https = require('https');
+const http = require('http');
 const fs = require('fs');
 const db = require('./src/modules/database');
 const app = express();
 const port = 8000;
 
 app.set('trust proxy', 1);
-//const sslKey = fs.readFileSync('/etc/pki/tls/private/ca.key');
-//const sslCert = fs.readFileSync('/etc/pki/tls/certs/ca.crt');
-
-/*const options = {
-  key: sslKey,
-  cert: sslCert,
-};*/
 
 const connection = db.connect();
 
@@ -56,12 +50,18 @@ app.get('/users', (req, res) => {
   db.select(connection, cb, res);
 });
 
-/* app.listen(port, () => {
-  console.log(`Server started on port ${port}...`);
-});*/
+if (process.env.hasOwnProperty('HTTPS')) {
+  const sslKey = fs.readFileSync('/etc/pki/tls/private/ca.key');
+  const sslCert = fs.readFileSync('/etc/pki/tls/certs/ca.crt');
 
-app.listen(port);
-
-/* https.createServer(options, app).listen(3000, () => {
-  console.log(`Server started on port ${port}...`);
-}); */
+  const options = {
+    key: sslKey,
+    cert: sslCert,
+  };
+  http.createServer(app).listen(port);
+  https.createServer(options, app).listen(3000, () => {
+    console.log(`Server started on port ${port}...`);
+  });
+} else {
+  app.listen(port);
+}
