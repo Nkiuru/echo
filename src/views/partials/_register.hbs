@@ -12,20 +12,16 @@
       <label for="displayName"><h5>display name</h5></label>
       <input type="text" placeholder="display name" name="displayName" required>
 
-      <div class="form__wrapper__dual-input">
-        <div class="form__wrapper__dual-input__single">
-        <label for="select"><h5>country</h5></label>
-        <select>
-          {{#each country}}
-            <option value="{{countryId}}">{{countryName}}</option>
-          {{/each}}
-        </select>
-        </div>
-        <div class="form__wrapper__dual-input__single">
-          <label for="city"><h5>city</h5></label>
-          <input type="text" placeholder="city" name="city" required>
-        </div>
-      </div>
+      <label for="select"><h5>country</h5></label>
+      <select>
+        {{#each country}}
+          <option class="select__placeholder" value="" selected disabled hidden>Country</option>
+          <option value="{{countryId}}">{{countryName}}</option>
+        {{/each}}
+      </select>
+      <label for="city"><h5>city</h5></label>
+      <input type="text" placeholder="city" name="city" required>
+      
       <label for="psw"><h5>password</h5></label>
       <input type="password" placeholder="Enter Password" name="psw" required>
 

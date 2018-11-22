@@ -35,7 +35,7 @@
       letter-spacing: 1px;
     }
 
-    input {
+    input, select {
       width: 100%;
       padding: .5rem;
       margin-bottom: 1rem;
@@ -55,9 +55,6 @@
     }
     
     select {
-      width: 100%;
-      padding: .5rem;
-      border: 1px solid #D1D2DD;
       border-radius: 0;
       -webkit-appearance: none;
       position: relative;
@@ -66,6 +63,7 @@
       background-position-y: center;
       background-image: url('/static/img/arrow.svg');
     }
+
     &__dual-input {
       display: flex;
       justify-content: space-evenly;
@@ -94,3 +92,4 @@
     }
   }
 }
+
