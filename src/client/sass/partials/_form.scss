@@ -81,6 +81,17 @@
         }
       }
     }
+
+    &__error {
+      color: $error_red;
+      font-family: $roboto_condensed;
+      text-align: center;
+      border: 1px solid $error_red;
+      padding: .2rem;
+      border-radius: 2px;
+      margin-bottom: 1rem;
+      display: none;
+    }
   }
 }
 
