@@ -1,0 +1,17 @@
+.button {
+  padding: .5rem 1rem;
+  border: none;
+  border-radius: 2px;
+
+  &.green {
+    background: $main_green;
+  }
+
+  &.blue {
+    background: $main_blue;
+  }
+}
+
+.form-btn {
+  width: 100%;
+}
