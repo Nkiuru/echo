@@ -51,6 +51,6 @@ gulp.task('watch', ['js', 'scss', 'img'], () => {
 gulp.task('start', ['watch'], () => {
   return nodemon({
     script: 'app.js',
-    ignore: ['dist/*', 'src/client/*'],
+    ignore: ['dist/*', 'src/client/*', 'sessions/*'],
   });
 });
