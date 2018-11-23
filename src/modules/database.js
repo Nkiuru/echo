@@ -35,7 +35,7 @@ const createUser = (data) => {
   });
 };
 
-const getUser = (username) => {
+const getUserWPassword = (username) => {
   return new Promise((resolve, reject) => {
     connection.query(
       'SELECT * FROM user WHERE username = ?;', [username], (err, results) => {
@@ -49,12 +49,24 @@ const getUser = (username) => {
 const getUserById = (id) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      'SELECT * FROM user WHERE userId = ?;', [id], (err, results) => {
+      'SELECT userId, username, displayName, countryId, city, bio, email, isAdmin, profileImageId' +
+      ' FROM user WHERE userId = ?;', [id], (err, results) => {
         if (err) {
           reject(err.code);
         } else if (results) resolve(results);
-      },
-    );
+      });
+  });
+};
+
+const getUser = (username) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      'SELECT userId, username, displayName, countryId, city, bio, email, isAdmin, profileImageId' +
+      ' FROM user WHERE username = ?;', [username], (err, results) => {
+        if (err) {
+          reject(err.code);
+        } else if (results) resolve(results);
+      });
   });
 };
 
@@ -78,6 +90,7 @@ module.exports = {
   select: select,
   getCountries: getCountries,
   getUser: getUser,
+  getgetUserWPassword: getUserWPassword,
   getUserById: getUserById,
   createUser: createUser,
 };

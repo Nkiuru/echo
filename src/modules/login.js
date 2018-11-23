@@ -14,17 +14,17 @@ const bcrypt = require('bcrypt');
 passport.use(new LocalStrategy(
   {usernameField: 'username'},
   (username, password, done) => {
-    db.getUser(username)
+    db.getgetUserWPassword(username)
       .then((result) => {
         console.log(result);
         const user = result[0];
         if (user.length > 0) {
           return done(null, false, {message: 'Invalid credentials.\n'});
-        } else if (!bcrypt.compare(password, user.password).then(() => {
-          return done(null, false, {message: 'Invalid credentials.\n'});
-        })) {
         }
-        return done(null, user);
+        bcrypt.compare(password, user.password)
+          .then((result) => {
+            return done(null, user);
+          });
       })
       .catch((error) => done(error));
   }));
@@ -44,7 +44,7 @@ passport.deserializeUser((id, done) => {
 const app = module.exports = express();
 
 // add & configure middleware
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(session({
   genid: (req) => {
@@ -73,15 +73,15 @@ app.post('/login', (req, res, next) => {
       if (err) {
         return next(err);
       }
-      res.send(req.isAuthenticated());
+      return res.redirect('auth');
     });
   })(req, res, next);
 });
 
 app.get('/auth', (req, res) => {
   if (req.isAuthenticated()) {
-    res.send('you hit the authentication endpoint\n');
+    res.send('you hit the authentication endpoint');
   } else {
-    console.log('no bueno');
+    console.log('no authenticated');
   }
 });
