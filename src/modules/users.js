@@ -20,14 +20,14 @@ app.post('/users', (req, res, next) => {
         req.body.password = hash;
         next();
       }).catch((err) => {
-      console.log('memes');
+      console.log(err);
     });
   } else {
-    // Passwords don't match
+    res.send({error: 'passwords do not match'});
   }
 });
 
-app.use('/users', (req, res, next) => {
+app.use('/users', (req, res) => {
   const data = [
     req.body.username,
     req.body.password,
@@ -37,9 +37,15 @@ app.use('/users', (req, res, next) => {
     req.body.email,
   ];
   db.createUser(data).then(() => {
-    db.select().then((result) => {
+    db.getUser(req.body.username).then((result) => {
       res.send(result);
+    }).catch((err) => {
+      console.log(err);
+      res.send({error: err});
     });
+  }).catch((err) => {
+    console.log(err);
+    res.send({error: err});
   });
 });
 

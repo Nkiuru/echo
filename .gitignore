@@ -70,3 +70,6 @@ typings/
 
 # Ignore dist-folder
 dist/
+
+# Ignore session files
+sessions/
