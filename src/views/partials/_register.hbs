@@ -4,10 +4,10 @@
       <h1>Sign Up</h1>
 
       <label for="username"><h5>username</h5></label>
-      <input type="text" placeholder="Enter Email" name="username" required>
+      <input id="username" type="text" placeholder="Enter Username" name="username" required>
 
       <label for="email"><h5>email</h5></label>
-      <input type="text" placeholder="Enter Email" name="email" required>
+      <input id="email" type="email" placeholder="Enter Email" name="email" required>
 
       <label for="displayName"><h5>display name</h5></label>
       <input type="text" placeholder="display name" name="displayName" required>
@@ -23,11 +23,13 @@
       <input type="text" placeholder="city" name="city" required>
       
       <label for="psw"><h5>password</h5></label>
-      <input type="password" placeholder="Enter Password" name="psw" required>
+      <input id="psw" type="password" placeholder="Enter Password" name="psw" required>
 
       <label for="psw-repeat"><h5>confirm password</h5></label>
-      <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
+      <input id="psw-repeat" type="password" placeholder="Repeat Password" name="psw-repeat" required>
 
-      <button type="submit" class="button green register-btn form-btn">Sign Up</button>
+      <div id="form-error" class="form__wrapper__error">Eipä ollu</div>
+      <button id="register-submit" type="submit" class="button green register-btn form-btn">Sign Up</button>
     </div>
   </form>
+  <script src="/static/js/validate.js"></script>

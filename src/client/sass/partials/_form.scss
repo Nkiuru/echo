@@ -43,15 +43,22 @@
       letter-spacing: .05rem;
       color: $medium_grey;
       box-sizing: border-box;
+      outline: none;
 
       &::placeholder {
         color: $light_grey;
       }
 
       &:focus {
-        outline: none;
+        border-bottom: 1px solid $error_red;
+      }
+
+      &:focus:not(:invalid) {
         border-bottom: 1px solid $main_green;
       }
+    }
+    .invalid {
+      border-bottom: 1px solid $error_red;
     }
 
     select {
