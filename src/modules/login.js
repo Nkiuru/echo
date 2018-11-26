@@ -16,15 +16,19 @@ passport.use(new LocalStrategy(
   (username, password, done) => {
     db.getgetUserWPassword(username)
       .then((result) => {
-        const user = result[0];
-        if (user.length > 0) {
+        if (result.length > 0) {
+          const user = result[0];
+          if (user.length > 0) {
+            return done(null, false, {message: 'Invalid credentials.\n'});
+          }
+          bcrypt.compare(password, user.password)
+            .then((result) => {
+              if (result) return done(null, user.userId);
+              return done(null, false, {message: 'Invalid credentials.'});
+            });
+        } else {
           return done(null, false, {message: 'Invalid credentials.\n'});
         }
-        bcrypt.compare(password, user.password)
-          .then((result) => {
-            if (result) return done(null, user.userId);
-            return done(null, false, {message: 'Invalid credentials.'});
-          });
       })
       .catch((error) => done(error));
   }));
@@ -73,6 +77,7 @@ app.post('/login', (req, res, next) => {
       if (err) {
         return next(err);
       }
+      console.log('userId:' + user + ' successfully logged in');
       return res.redirect('auth');
     });
   })(req, res, next);

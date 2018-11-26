@@ -55,8 +55,8 @@ app.get('/register', (req, res) => {
 });
 
 if (process.env.hasOwnProperty('HTTPS')) {
-  const sslKey = fs.readFileSync('/etc/pki/tls/private/ca.key');
-  const sslCert = fs.readFileSync('/etc/pki/tls/certs/ca.crt');
+  const sslKey = fs.readFileSync(process.env.SSL_KEY);
+  const sslCert = fs.readFileSync(process.env.SSL_CERT);
 
   const options = {
     key: sslKey,
