@@ -35,7 +35,7 @@
       letter-spacing: 1px;
     }
 
-    input {
+    input, select {
       width: 100%;
       padding: .5rem;
       margin-bottom: 1rem;
@@ -43,21 +43,25 @@
       letter-spacing: .05rem;
       color: $medium_grey;
       box-sizing: border-box;
+      outline: none;
 
       &::placeholder {
         color: $light_grey;
       }
 
       &:focus {
-        outline: none;
+        border-bottom: 1px solid $error_red;
+      }
+
+      &:focus:not(:invalid) {
         border-bottom: 1px solid $main_green;
       }
     }
+    .invalid {
+      border-bottom: 1px solid $error_red;
+    }
 
     select {
-      width: 100%;
-      padding: .5rem;
-      border: 1px solid #D1D2DD;
       border-radius: 0;
       -webkit-appearance: none;
       position: relative;
@@ -66,6 +70,7 @@
       background-position-y: center;
       background-image: url($path + '/static/img/arrow.svg');
     }
+
     &__dual-input {
       display: flex;
       justify-content: space-evenly;
@@ -82,6 +87,17 @@
           margin-left: 5px;
         }
       }
+    }
+
+    &__error {
+      color: $error_red;
+      font-family: $roboto_condensed;
+      text-align: center;
+      border: 1px solid $error_red;
+      padding: .2rem;
+      border-radius: 2px;
+      margin-bottom: 1rem;
+      display: none;
     }
   }
 }
