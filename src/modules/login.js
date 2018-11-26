@@ -16,22 +16,23 @@ passport.use(new LocalStrategy(
   (username, password, done) => {
     db.getgetUserWPassword(username)
       .then((result) => {
-        console.log(result);
+        // console.log(result);
         const user = result[0];
         if (user.length > 0) {
           return done(null, false, {message: 'Invalid credentials.\n'});
         }
         bcrypt.compare(password, user.password)
           .then((result) => {
-            return done(null, user);
+            if (result) return done(null, user.userId);
+            return done(null, false, {message: 'Invalid credentials.'});
           });
       })
       .catch((error) => done(error));
   }));
 
 // tell passport how to serialize the user
-passport.serializeUser((user, done) => {
-  done(null, user.userId);
+passport.serializeUser((userId, done) => {
+  done(null, userId);
 });
 
 passport.deserializeUser((id, done) => {

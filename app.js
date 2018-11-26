@@ -43,6 +43,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
+  console.log(req.user);
   res.render('logregbase');
 });
 
