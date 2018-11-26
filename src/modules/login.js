@@ -16,7 +16,6 @@ passport.use(new LocalStrategy(
   (username, password, done) => {
     db.getgetUserWPassword(username)
       .then((result) => {
-        // console.log(result);
         const user = result[0];
         if (user.length > 0) {
           return done(null, false, {message: 'Invalid credentials.\n'});

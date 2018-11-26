@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const saltRounds = 10;
 const app = module.exports = express();
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
 app.post('/users', (req, res, next) => {
   // userId, username, password, displayName, countryId, city, bio, email, isAdmin, profileImageId
@@ -15,11 +16,10 @@ app.post('/users', (req, res, next) => {
   const pwd = req.body.password;
   const pwd2 = req.body.password2;
   if (pwd === pwd2) {
-    bcrypt.hash(pwd, saltRounds)
-      .then((hash) => {
-        req.body.password = hash;
-        next();
-      }).catch((err) => {
+    bcrypt.hash(pwd, saltRounds).then((hash) => {
+      req.body.password = hash;
+      next();
+    }).catch((err) => {
       console.log(err);
     });
   } else {

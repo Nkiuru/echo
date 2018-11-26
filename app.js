@@ -43,8 +43,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-  console.log(req.user);
-  res.render('logregbase');
+  res.render('logregbase', {login: true});
 });
 
 app.get('/register', (req, res) => {

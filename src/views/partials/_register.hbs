@@ -1,5 +1,5 @@
 
-  <form class="form register">
+  <form class="form register" id="registerForm">
     <div class="form__wrapper">
       <h1>Sign Up</h1>
 
@@ -13,7 +13,7 @@
       <input type="text" placeholder="display name" name="displayName" required>
 
       <label for="select"><h5>country</h5></label>
-      <select>
+      <select name="country">
         {{#each country}}
           <option class="select__placeholder" value="" selected disabled hidden>Country</option>
           <option value="{{countryId}}">{{countryName}}</option>
@@ -21,7 +21,7 @@
       </select>
       <label for="city"><h5>city</h5></label>
       <input type="text" placeholder="city" name="city" required>
-      
+
       <label for="psw"><h5>password</h5></label>
       <input id="psw" type="password" placeholder="Enter Password" name="psw" required>
 
@@ -32,4 +32,4 @@
       <button id="register-submit" type="submit" class="button green register-btn form-btn">Sign Up</button>
     </div>
   </form>
-  <script src="/static/js/validate.js"></script>
+  <script src="static/js/validate.js"></script>
