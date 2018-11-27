@@ -15,6 +15,17 @@ const app = express();
 const port = 8000;
 
 require('./src/authenticate').init(app);
+app.use(session({
+  genid: (req) => {
+    return uuid(); // use UUIDs for session IDs
+  },
+  store: new FileStore(),
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  maxAge: 69000,
+}));
+
 app.set('trust proxy', 1);
 // Handlebars middleware
 app.engine(
@@ -34,17 +45,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.use(session({
-  genid: (req) => {
-    return uuid(); // use UUIDs for session IDs
-  },
-  store: new FileStore(),
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: true,
-}));
-
 
 app.get('/users', passport.authenticationMiddleware(), (req, res) => {
   db.select().then((result) => {
@@ -74,8 +74,8 @@ app.get('/register', (req, res) => {
 require('./src/user').init(app);
 
 if (process.env.hasOwnProperty('HTTPS')) {
-  const sslKey = fs.readFileSync('/etc/pki/tls/private/ca.key');
-  const sslCert = fs.readFileSync('/etc/pki/tls/certs/ca.crt');
+  const sslKey = fs.readFileSync(process.env.SSL_KEY);
+  const sslCert = fs.readFileSync(process.env.SSL_CERT);
 
   const options = {
     key: sslKey,
