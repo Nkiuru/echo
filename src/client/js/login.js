@@ -7,7 +7,6 @@ btn.addEventListener('click', (e) => {
   e.preventDefault();
   const settings = {
     method: 'POST',
-    redirect: 'follow',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -16,7 +15,17 @@ btn.addEventListener('click', (e) => {
       password: loginForm.elements.namedItem('psw').value,
     }),
   };
-  fetch('login', settings).catch((err) => {
-    console.log(err);
-  });
+
+  fetch('/login', settings)
+    .then(response => response.json())
+    .then((json) => {
+      if (!json.success) {
+        alert(json.error);
+        return;
+      }
+      window.location.replace('/users');
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });

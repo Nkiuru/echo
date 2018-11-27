@@ -15,18 +15,19 @@ const initPassport = () => {
         .then((result) => {
           if (result.length > 0) {
             const user = result[0];
-            if (user.length > 0) {
-              return done(null, false, {message: 'Invalid credentials.\n'});
+            if (!user) {
+              return done(null, false, {message: 'Invalid credentials.'});
             }
             bcrypt.compare(password, user.password)
               .then((result) => {
                 if (result) {
                   console.log(username + ' logged in');
-                  return done(null, user.userId);}
+                  return done(null, user.userId);
+                }
                 return done(null, false, {message: 'Invalid credentials.'});
               });
           } else {
-            return done(null, false, {message: 'Invalid credentials.\n'});
+            return done(null, false, {message: 'Invalid credentials.'});
           }
         })
         .catch((error) => done(error));
