@@ -44,6 +44,7 @@ submit.addEventListener('click', (e) => {
     const countryId = fd.elements.namedItem('country').value;
     const email = fd.elements.namedItem('email').value;
     const city = fd.elements.namedItem('city').value;
+
     const settings = {
       method: 'POST',
       headers: {
@@ -59,13 +60,24 @@ submit.addEventListener('click', (e) => {
         'email': email,
       }),
     };
+    
     console.log(settings);
-    fetch('users', settings).then(() => {
-    }).catch((err) => {
-      console.log(err);
-    });
+    fetch('/register', settings)
+      .then(response => response.json())
+      .then((json) => {
+        if (!json.success) {
+          alert(json.error);
+          return
+        }
+        window.location.replace('/users');
+      })
+      .catch((err) => {
+        console.log('ERROR ' + err);
+      });
   } else {
-    console.log('invalid form');
+    console.log('invalid form')
     e.preventDefault();
   }
 });
+
+

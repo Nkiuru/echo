@@ -18,18 +18,29 @@ const createUser = (req, res) => {
         req.body.city,
         req.body.email,
       ];
-      db.createUser(data).then(() => {
-        console.log(req.body.username + ' created');
-        res.render('index');
+      db.createUser(data)
+        .then(() => {
+          res.json({ success: true });
+          console.log(req.body.username + ' created');
+          return res.end();
+          
       }).catch((err) => {
-        console.log(err);
-        res.send({error: err});
+        console.log('ERROR CREATING USER: ' + err);
+        res.json({
+          success: false,
+          error: err,
+        });
+        return res.end();
       });
     }).catch((err) => {
       console.log(err);
     });
   } else {
-    res.send({error: 'passwords do not match'});
+    res.json({
+      success: false,
+      error: 'passwords do not match',
+    });
+    res.end();
   }
 };
 module.exports = {

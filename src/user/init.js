@@ -40,7 +40,7 @@ const initUser = (app) => {
       });
     })(req, res, next);
   });
-  app.post('/users', addUser);
+  app.post('/register', addUser);
 };
 
 const renderWelcome = (req, res) => {
