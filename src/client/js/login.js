@@ -7,6 +7,7 @@ btn.addEventListener('click', (e) => {
   e.preventDefault();
   const settings = {
     method: 'POST',
+    redirect: 'follow',
     headers: {
       'Content-Type': 'application/json',
     },

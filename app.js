@@ -5,12 +5,16 @@ const path = require('path');
 const https = require('https');
 const http = require('http');
 const fs = require('fs');
+const uuid = require('uuid/v4');
+const passport = require('passport');
+const session = require('express-session');
+const FileStore = require('session-file-store')(session);
 const db = require('./src/modules/database');
-const users = require('./src/modules/users');
-const login = require('./src/modules/login');
+const bodyParser = require('body-parser');
 const app = express();
 const port = 8000;
 
+require('./src/authenticate').init(app);
 app.set('trust proxy', 1);
 // Handlebars middleware
 app.engine(
@@ -26,10 +30,23 @@ app.engine(
 app.set('views', __dirname + '/src/views');
 app.set('view engine', 'hbs');
 
-app.use(users);
-app.use(login);
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.get('/users', (req, res) => {
+app.use(session({
+  genid: (req) => {
+    return uuid(); // use UUIDs for session IDs
+  },
+  store: new FileStore(),
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+}));
+
+
+app.get('/users', passport.authenticationMiddleware(), (req, res) => {
   db.select().then((result) => {
     res.json(result);
     res.end();
@@ -53,6 +70,8 @@ app.get('/register', (req, res) => {
     res.render('logregbase', {error: err});
   });
 });
+
+require('./src/user').init(app);
 
 if (process.env.hasOwnProperty('HTTPS')) {
   const sslKey = fs.readFileSync('/etc/pki/tls/private/ca.key');

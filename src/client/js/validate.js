@@ -60,10 +60,7 @@ submit.addEventListener('click', (e) => {
       }),
     };
     console.log(settings);
-    fetch('users', settings).then((result) => {
-      return result.json();
-    }).then((json) => {
-      console.log(json);
+    fetch('users', settings).then(() => {
     }).catch((err) => {
       console.log(err);
     });
