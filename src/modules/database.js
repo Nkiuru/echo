@@ -13,7 +13,7 @@ const select = () => {
   // simple query
   return new Promise((resolve, reject) => {
     connection.query(
-      'SELECT * FROM user;',
+      'SELECT userId, username, displayName, countryId, city, bio, email, isAdmin, profileImageId FROM user;',
       (err, results, fields) => {
         if (err) reject(err);
         if (results) resolve(results);

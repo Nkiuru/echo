@@ -5,8 +5,8 @@ const initUser = (app) => {
   app.get('/', renderWelcome);
   app.get('/users', passport.authenticationMiddleware(), testAuth);
   app.post('/login', passport.authenticate('local', {
-    successRedirect: '/users',
-    failureRedirect: '/',
+    successRedirect: 'users',
+    failureRedirect: 'node/',
   }));
   app.post('/users', addUser);
 };

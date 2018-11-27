@@ -20,7 +20,9 @@ const initPassport = () => {
             }
             bcrypt.compare(password, user.password)
               .then((result) => {
-                if (result) return done(null, user.userId);
+                if (result) {
+                  console.log(username + ' logged in');
+                  return done(null, user.userId);}
                 return done(null, false, {message: 'Invalid credentials.'});
               });
           } else {
