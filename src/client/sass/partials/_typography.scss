@@ -1,14 +1,22 @@
 // Google fonts
 @import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700');
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700');
 
 // font variables
 $roboto-condensed: 'Roboto Condensed', sans-serif;
+$lato: 'Lato', sans-serif;
 $font-bold: 700;
+$font-regular: 400;
+$font-size-regular: 14px;
 
 
 h1, h2, h3, h4, h5, h6 {
   font-family: $roboto-condensed;
   font-weight: $font-bold;
+}
+
+body {
+  font-family: $lato;
 }
 
 button {
