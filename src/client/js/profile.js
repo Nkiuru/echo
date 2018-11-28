@@ -1,16 +1,31 @@
-const displayName = document.querySelector('.profile-wrapper__info__display-name');
+const displayName = document.querySelector('.display-name');
+const locationElement = document.querySelector('.location');
+const bio = document.querySelector('.bio-text');
 
 console.log(displayName.innerHTML);
 
-fetch('/users/tester')
+fetch('/users/user')
   .then((response) => response.json())
   .then((json) => {
-    if (!json.success) {
-      alert(json.error);
-      return;
+    console.log(JSON.stringify(json));
+
+    // set display name
+    displayName.textContent = json.displayName;
+
+    // Check if both city and country are given and display location correctly
+    if (json.city && json.country) {
+      locationElement.textContent = `${json.city}, ${json.country}`;
+    } else if (json.city && !json.country) {
+      locationElement.textContent = json.city;
+    } else {
+      locationElement.textContent = json.country;
+    }
+    // set bio text
+    if (json.bio) {
+      bio.textContent = json.bio;
+    } else {
+      bio.textContent = 'bio not written';
     }
   })
-  .catch((err) => {
-    console.log(err);
-  });
+  .catch((err) => console.log(err));
 

@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: flex-end;
 
-  &__profile-container {
+  .profile-container {
     width: 64px;
     height: 64px;
     border-radius: 100%;
@@ -17,7 +17,7 @@
     align-items: center;
     background-color: $main_darkblue;
 
-    &__inner {
+    .inner {
       width: 80%;
       height: 80%;
       border-radius: 100%;
@@ -32,7 +32,7 @@
       }
     }
   }
-  &__dropdown-toggle {
+  .dropdown-toggle {
     width: 24px;
     height: 24px;
     background-repeat: no-repeat;

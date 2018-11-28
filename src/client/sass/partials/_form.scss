@@ -3,7 +3,7 @@
   justify-content: center;
   color: $main_darkblue;
 
-  &__wrapper {
+  .wrapper {
     width: 40%;
     padding: 5rem 0;
 
@@ -71,12 +71,12 @@
       background-image: url('/static/img/arrow.svg');
     }
 
-    &__dual-input {
+    .dual-input {
       display: flex;
       justify-content: space-evenly;
       width: 100%;
 
-      &__single {
+      .single {
         flex: 1;
 
         &:nth-of-type(1) {
@@ -89,7 +89,7 @@
       }
     }
 
-    &__error {
+    .error {
       color: $error_red;
       font-family: $roboto_condensed;
       text-align: center;

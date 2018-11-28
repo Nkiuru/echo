@@ -5,7 +5,7 @@
   height: 100vh;
   display: flex;
 
-  &__form-container {
+  .form-container {
     flex-basis: 40%;
     background: $background_lightgrey;
     display: flex;
@@ -13,7 +13,7 @@
     justify-content: center;
   }
 
-  &__aside-container {
+  .aside-container {
     flex-basis: 60%;
     background: $main_darkblue;
   }

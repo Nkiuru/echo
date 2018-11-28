@@ -23,7 +23,7 @@ btn.addEventListener('click', (e) => {
         alert(json.error);
         return;
       }
-      window.location.replace('/user/' + loginForm.elements.namedItem('username').value);
+      window.location.replace('/user/' + username.value);
     })
     .catch((err) => {
       console.log(err);
