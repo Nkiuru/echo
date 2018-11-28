@@ -44,7 +44,7 @@ const createUser = (req, res) => {
 };
 
 const getOwnData = (req, res) => {
-  db.getUserByIdWEmail(req.params.userId).then((result) => {
+  db.getUserByIdWEmail(req.user.userId).then((result) => {
     res.send(result[0]);
   }).catch((err) => {
     res.send({error: err});
