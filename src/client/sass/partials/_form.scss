@@ -12,20 +12,16 @@
       position: relative;
 
       &::before {
-        content: '';
+        content: url('/static/img/brush-stroke-green.svg');
         z-index: -1;
         position: absolute;
-        width: 100%;
-        height: 100%;
-        right: .5rem;
+        left: -.5rem;
         top: .3rem;
-        background-repeat: no-repeat;
-        background-image: url('/static/img/brush-stroke-green.svg');
       }
 
       &.login-title {
         &::before {
-          background-image: url('/static/img/brush-stroke-blue.svg');
+          content: url('/static/img/brush-stroke-blue.svg');
         }
       }
     }

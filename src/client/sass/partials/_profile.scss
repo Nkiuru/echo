@@ -1,18 +1,21 @@
 .profile-wrapper {
-  margin: 0 25rem 0 15rem;
+  // margin: 0 25rem 0 15rem;
   display: flex;
+  max-width: 60%;
+  justify-content: center;
+  margin-left: 15%;
 
   @include mobile {
     margin: .5rem;
     flex-direction: column;
+    max-width: 100%;
   }
 
   .info {
-
     @include mobile {
       border: 1px solid $card-border;
+      border-radius: $card-border-radius;
       margin-right: 0;
-      
     }
 
     flex: 2;
@@ -21,76 +24,127 @@
     background-color: $snow;
     border: 1px solid $card-border;
     border-top: none;
-    border-radius: 0 0 5px 5px;
+    border-radius: 0 0 $card-border-radius $card-border-radius;
     text-align: center;
     font-size: $font-size-regular;
 
-    .display-name,
-    .location {
-      margin: 0;
-      margin-bottom: 1rem;
-      font-weight: $font-regular;
-    }
-
-    .display-name {
-      z-index: 1;
-      position: relative;
-      font-weight: $font-bold;
-      margin-bottom: .5rem;
-
-      &::before {
-        content: '';
-        z-index: -1;
-        position: absolute;
-        width: 100%;
-        height: 150%;
-        left: 16%;
-        background-repeat: no-repeat;
-        background-image: url('/static/img/stroke-green-profile.svg');
+    .upper {
+      @include mobile {
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
       }
-    }
 
-    .location {
-      font-family: $lato;
-    }
+      .loc-name {
+        @include mobile {
+          flex: 1;
+        }
 
-    .image-container {
-      border-radius: 100%;
-      width: 10rem;
-      height: 10rem;
-      margin: auto;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border: 1px solid $card-border;
+        .display-name {
+          z-index: 1;
+          position: relative;
+          font-weight: $font-bold;
+          margin-bottom: .5rem;
+    
+          &::before {
+            content: url(/static/img/stroke-green-profile.svg);
+            z-index: -1;
+            position: absolute;
+            left: -50%;
+            right: -50%;
+          }
+        }
 
-      .inner {
-        overflow: hidden;
-        width: 90%;
-        height: 90%;
-        border-radius: 100%;
-
-        .img {
-          width: 100%;
+        .stroke {
+          background-image: url('/static/img/stroke-green-profile.svg');
+        }
+          
+    
+        .location {
+          font-family: $lato;
         }
       }
+
+      .display-name,
+      .location {
+        margin: 0;
+        margin-bottom: 1rem;
+        font-weight: $font-regular;
+      }
+  
+      .image-container {
+        border-radius: 100%;
+        width: 10rem;
+        height: 10rem;
+        margin: auto;
+        margin-bottom: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid $card-border;
+
+        @include sm-desktop {
+          width: 8rem;
+          height: 8rem;
+        }
+
+        @include mobile {
+          width: 6rem;
+          height: 6rem;
+          margin: 0;
+        }
+  
+        .inner {
+          overflow: hidden;
+          width: 90%;
+          height: 90%;
+          border-radius: 100%;
+  
+          .img {
+            width: 100%;
+          }
+        }
+      }  
     }
+
 
     .statistics {
       display: flex;
       justify-content: space-between;
+      margin-bottom: 1rem;
+
+      @include mobile {
+        justify-content: flex-start;
+      }
+
+      @include sm-desktop {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .followers {
+        @include mobile {
+          margin-right: 1rem;
+        }
+
+        @include sm-desktop {
+          //margin-right: 1rem;
+        }
+      }
 
       .followers,
       .following {
         display: flex;
+        margin: .25rem 0;
         
         .number {
-          margin-right: 5px;
+          margin: 0 5px 0 0;
           color: $main-darkblue;
           font-weight: $font-bold;
         }
         .text {
           color: $medium-grey;
+          margin: 0;
         }
       }
     }

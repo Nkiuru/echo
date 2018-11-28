@@ -7,6 +7,10 @@
   justify-content: flex-end;
 
   .profile-container {
+    @include mobile {
+      display: none;
+    }
+
     width: 64px;
     height: 64px;
     border-radius: 100%;
