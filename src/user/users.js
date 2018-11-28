@@ -18,12 +18,11 @@ const createUser = (req, res) => {
         req.body.city,
         req.body.email,
       ];
-      db.createUser(data)
-        .then(() => {
-          res.json({ success: true });
-          console.log(req.body.username + ' created');
-          return res.end();
-          
+      db.createUser(data).then(() => {
+        res.json({success: true});
+        console.log(req.body.username + ' created');
+        return res.end();
+
       }).catch((err) => {
         console.log('ERROR CREATING USER: ' + err);
         res.json({
@@ -43,6 +42,15 @@ const createUser = (req, res) => {
     res.end();
   }
 };
+
+const getUser = (req, res) => {
+  db.getUser(req.params.username).then((result) => {
+    res.send(result[0]);
+  }).catch((err) => {
+    res.send({error: err});
+  });
+};
 module.exports = {
   createUser: createUser,
+  getUser: getUser,
 };

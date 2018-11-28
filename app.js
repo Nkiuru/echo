@@ -46,12 +46,6 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/users', passport.authenticationMiddleware(), (req, res) => {
-  db.select().then((result) => {
-    res.json(result);
-    res.end();
-  });
-});
 // Static folder
 app.use('/static', express.static(path.join(__dirname, '/dist')));
 

@@ -8,7 +8,7 @@ const initUser = (app) => {
     passport.authenticate('local', (err, user, info) => {
       if (err) {
         console.error('Login error', err);
-      
+
         res.json({
           success: false,
           error: 'Something went wrong...',
@@ -35,16 +35,17 @@ const initUser = (app) => {
           return res.end();
         }
 
-        res.json({ success: true });
+        res.json({success: true});
         return res.end();
       });
     })(req, res, next);
   });
   app.post('/register', addUser);
+  app.get('/user/:username', passport.authenticationMiddleware(), getUser);
 };
 
 const renderWelcome = (req, res) => {
-  res.render('node/');
+  res.render('index');
 };
 
 const testAuth = (req, res) => {
@@ -54,6 +55,15 @@ const testAuth = (req, res) => {
 const addUser = (req, res, next) => {
   const users = require('./users');
   users.createUser(req, res);
+};
+
+const getUser = (req, res) => {
+  if (req.params.hasOwnProperty('username')) {
+    const users = require('./users');
+    users.getUser(req, res);
+  } else {
+    res.end();
+  }
 };
 
 module.exports = initUser;
