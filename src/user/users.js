@@ -44,7 +44,7 @@ const createUser = (req, res) => {
 };
 
 const getUser = (req, res) => {
-  db.getUser(req.params.username).then((result) => {
+  db.getUserById(req.params.userId).then((result) => {
     res.send(result[0]);
   }).catch((err) => {
     res.send({error: err});

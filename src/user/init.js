@@ -42,6 +42,7 @@ const initUser = (app) => {
   });
   app.post('/register', addUser);
   app.get('/user/:username', passport.authenticationMiddleware(), getUser);
+  app.get('/users/:userId', passport.authenticationMiddleware(), getUserData);
 };
 
 const renderWelcome = (req, res) => {
@@ -59,6 +60,15 @@ const addUser = (req, res, next) => {
 
 const getUser = (req, res) => {
   res.render('profile');
+};
+
+const getUserData = (req, res) => {
+  if (req.params.hasOwnProperty('userId')) {
+    const users = require('./users');
+    users.getUser(req, res);
+  } else {
+    res.end();
+  }
 };
 
 module.exports = initUser;
