@@ -49,6 +49,18 @@ const getUserWPassword = (username) => {
 const getUserById = (id) => {
   return new Promise((resolve, reject) => {
     connection.query(
+      'SELECT userId, username, displayName, countryId, city, bio, isAdmin, profileImageId' +
+      ' FROM user WHERE userId = ?;', [id], (err, results) => {
+        if (err) {
+          reject(err.code);
+        } else if (results) resolve(results);
+      });
+  });
+};
+
+const getUserByIdWEmail = (id) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
       'SELECT userId, username, displayName, countryId, city, bio, email, isAdmin, profileImageId' +
       ' FROM user WHERE userId = ?;', [id], (err, results) => {
         if (err) {
@@ -93,4 +105,5 @@ module.exports = {
   getgetUserWPassword: getUserWPassword,
   getUserById: getUserById,
   createUser: createUser,
+  getUserByIdWEmail: getUserByIdWEmail,
 };

@@ -43,6 +43,14 @@ const createUser = (req, res) => {
   }
 };
 
+const getOwnData = (req, res) => {
+  db.getUserByIdWEmail(req.user.userId).then((result) => {
+    res.send(result[0]);
+  }).catch((err) => {
+    res.send({error: err});
+  });
+};
+
 const getUser = (req, res) => {
   db.getUserById(req.params.userId).then((result) => {
     res.send(result[0]);
@@ -50,7 +58,9 @@ const getUser = (req, res) => {
     res.send({error: err});
   });
 };
+
 module.exports = {
   createUser: createUser,
   getUser: getUser,
+  getOwnData: getOwnData,
 };
