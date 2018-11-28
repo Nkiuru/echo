@@ -58,12 +58,7 @@ const addUser = (req, res, next) => {
 };
 
 const getUser = (req, res) => {
-  if (req.params.hasOwnProperty('username')) {
-    const users = require('./users');
-    users.getUser(req, res);
-  } else {
-    res.end();
-  }
+  res.render('profile');
 };
 
 module.exports = initUser;
