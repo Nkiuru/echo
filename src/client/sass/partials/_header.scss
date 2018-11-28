@@ -1,47 +1,61 @@
 .header {
-  height: 40px;
-  position: relative;
-  background-color: $main_darkblue;
+  height: 64px;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: flex-end;
+  background-color: $main_darkblue;
 
-  .profile-container {
-    @include mobile {
-      display: none;
+  .logo {
+    width: 3rem;
+    margin-left: .8rem;
+
+    img {
+      width: 100%;
     }
+  }
 
-    width: 64px;
-    height: 64px;
-    border-radius: 100%;
-    margin-top: 36px;
-    margin-right: 1rem;
+  .right-side-items {
     display: flex;
-    justify-content: center;
     align-items: center;
-    background-color: $main_darkblue;
+    justify-content: flex-end;
 
-    .inner {
-      width: 80%;
-      height: 80%;
+    .profile-container {
+      @include mobile {
+        display: none;
+      }
+  
+      width: 64px;
+      height: 64px;
       border-radius: 100%;
-      background-color: pink;
+      margin-top: 64px;
+      margin-right: 1rem;
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
-
-      img {
-        width: 100%;
+      background-color: $main_darkblue;
+  
+      .inner {
+        width: 80%;
+        height: 80%;
+        border-radius: 100%;
+        background-color: pink;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+  
+        img {
+          width: 100%;
+        }
       }
     }
-  }
-  .dropdown-toggle {
-    width: 24px;
-    height: 24px;
-    background-repeat: no-repeat;
-    background-position: center;
-    margin-right: 1rem;
-    background-image: url('/static/img/Vector.svg');
+    .dropdown-toggle {
+      width: 24px;
+      height: 24px;
+      background-repeat: no-repeat;
+      background-position: center;
+      margin-right: 1rem;
+      background-image: url('/static/img/Vector.svg');
+    }
   }
 }

@@ -11,10 +11,18 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    @include mobile {
+      flex-basis: 100%;
+    }
   }
 
   .aside-container {
     flex-basis: 60%;
     background: $main_darkblue;
+
+    @include mobile {
+      display: none;
+    }
   }
 }
