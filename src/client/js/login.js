@@ -17,13 +17,13 @@ btn.addEventListener('click', (e) => {
   };
 
   fetch('/login', settings)
-    .then(response => response.json())
+    .then((response) => response.json())
     .then((json) => {
       if (!json.success) {
         alert(json.error);
         return;
       }
-      window.location.replace('/users');
+      window.location.replace('/user/' + loginForm.elements.namedItem('username').value);
     })
     .catch((err) => {
       console.log(err);
