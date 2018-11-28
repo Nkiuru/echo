@@ -63,8 +63,10 @@ const getUser = (req, res) => {
 };
 
 const getUserData = (req, res) => {
-  if (req.params.hasOwnProperty('userId')) {
-    const users = require('./users');
+  const users = require('./users');
+  if (req.params.hasOwnProperty('userId') && req.params.userId === req.user) {
+    users.getOwnData(req, res);
+  } else if (req.params.hasOwnProperty('userId')) {
     users.getUser(req, res);
   } else {
     res.end();
