@@ -6,6 +6,6 @@ module.exports = {
   rules: {
     'max-len': ["error", { "code": 120 }],
     "indent": ["error", 2],
-    "object-curly-spacing": "never",
+    "object-curly-spacing": [1, "always"],
   }
 };
