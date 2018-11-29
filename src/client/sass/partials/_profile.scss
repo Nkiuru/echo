@@ -9,6 +9,7 @@
     margin: .5rem;
     flex-direction: column;
     max-width: 100%;
+    overflow: hidden;
   }
 
   .info {
@@ -45,6 +46,7 @@
           position: relative;
           font-weight: $font-bold;
           margin-bottom: .5rem;
+          color: $main-darkblue;
     
           &::before {
             content: url(/static/img/stroke-green-profile.svg);
@@ -62,6 +64,7 @@
     
         .location {
           font-family: $lato;
+          color: $medium-grey;
         }
       }
 
@@ -115,6 +118,8 @@
 
       @include mobile {
         justify-content: flex-start;
+        flex-direction: row;
+        margin-top: 1rem;
       }
 
       @include sm-desktop {
@@ -135,7 +140,7 @@
       .followers,
       .following {
         display: flex;
-        margin: .25rem 0;
+        //margin: .25rem 0;
         
         .number {
           margin: 0 5px 0 0;
@@ -157,8 +162,13 @@
         margin: 0;
       }
 
+      .bio-text {
+        color: $medium-grey;
+      }
+
       .title {
         font-weight: $font-bold;
+        color: $main-darkblue;
       }
     }
   }

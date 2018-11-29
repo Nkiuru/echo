@@ -5,7 +5,7 @@
 }
 
 @mixin sm-desktop {
-  @media (max-width: #{$screen-sm-desktop-max}) {
+  @media  (min-width: #{$screen-sm-desktop-min}) and (max-width: #{$screen-sm-desktop-max}) {
     @content;
   }
 }
