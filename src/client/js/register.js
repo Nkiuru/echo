@@ -2,7 +2,7 @@ const submit = document.getElementById('register-submit');
 const email = document.getElementById('email');
 const password = document.getElementById('psw');
 const passwordRepeat = document.getElementById('psw-repeat');
-
+const error = document.querySelector('#form-error');
 const validateEmail = (email) => {
   const expression = /(?!.*\.{2})^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
   return expression.test(email);
@@ -27,8 +27,18 @@ const validatePassword = () => {
 
 const isValid = () => {
   let valid = true;
-  if (validateEmail(email.value) === false) valid = false;
-  if (validatePassword() === false) valid = false;
+  if (validateEmail(email.value) === false) {
+    valid = false;
+    email.classList.add('invalid');
+  } else {
+    email.classList.remove('invalid');
+  }
+  if (validatePassword() === false) {
+    valid = false;
+    password.classList.add('invalid');
+  } else {
+    password.classList.remove('invalid');
+  }
   return valid;
 };
 
@@ -60,22 +70,27 @@ submit.addEventListener('click', (e) => {
         'email': email,
       }),
     };
-    
+
     console.log(settings);
-    fetch('/register', settings)
-      .then(response => response.json())
-      .then((json) => {
+    fetch('/register', settings).
+      then(response => response.json()).
+      then((json) => {
         if (!json.success) {
-          alert(json.error);
-          return
+          if (json.error === 'ER_DUP_ENTRY') {
+            error.innerHTML = 'Duplicate Username or Email';
+          } else {
+            error.innerHTML = json.error;
+          }
+          error.style.display = 'block';
+          return;
         }
         window.location.replace('/users');
-      })
-      .catch((err) => {
+      }).
+      catch((err) => {
         console.log('ERROR ' + err);
       });
   } else {
-    console.log('invalid form')
+    console.log('invalid form');
     e.preventDefault();
   }
 });
