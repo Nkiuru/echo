@@ -11,6 +11,11 @@
   &.blue {
     background: $main_blue;
   }
+
+  &:hover {
+    
+    animation: btn-hover $btn-hover-timing;
+  }
 }
 
 .form-btn {

@@ -26,11 +26,6 @@
       }
     }
 
-    h5 {
-      margin: 0 0 .2rem 0;
-      letter-spacing: 1px;
-    }
-
     .invalid {
       border-bottom: 1px solid $error_red;
     }
@@ -105,5 +100,32 @@ input, select, textarea {
 
   &:focus:not(:invalid) {
     border-bottom: 1px solid $main_green;
+  }
+}
+
+label {
+  h5 {
+    margin: 0 0 .2rem 0;
+    letter-spacing: 1px;
+  }
+}
+
+#back-to-login {
+
+  svg {
+    position: absolute;
+    left: 2rem;
+    top: 2rem;
+    color: $medium_grey;
+    transition: all 0.2s ease-out;
+  }
+
+  &:hover {
+    svg {
+      color: $main_blue;
+      filter: drop-shadow(0px 0px 10px rgba(61, 139, 255, .6));
+      
+      transition: all 0.2s ease-out;
+    }
   }
 }

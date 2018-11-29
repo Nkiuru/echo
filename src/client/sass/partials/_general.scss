@@ -10,8 +10,21 @@ body {
 .add-post {
   bottom: 0;
   right: 0;
-  margin: 1rem;
+  margin: 5rem;
   position: absolute;
+
+  img {
+    border-radius: 100%;
+  }
+  
+  &:hover {
+    img {
+      //box-shadow: 0px 0px 10px rgba(42, 222, 146, 1);
+      // transform: translateY(-20)px;
+      // transform: scale(2);
+      animation: post-btn-hover $post-btn-timing;
+    }
+  }
 }
 
 #overlay {
@@ -23,7 +36,11 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  opacity: .7;
   z-index: 5;
   display: none;
+  animation: overlay-in $overlay-timing;
+
+  &.closing {
+    animation: overlay-out $overlay-timing;
+  }
 }

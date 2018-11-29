@@ -1,20 +1,25 @@
-<div class="post-container">
-  <h1>Create a post</h1>
-  <form name="post-form" class="form post-form">
-    <textarea id="text" rows="4" cols="50" name="text" form="post-form" placeholder="Write a post..."></textarea>
-    <div class="upload-container">
-      <div class="file-container">
-        <div class="file-icons">
-          <img src="/static/img/icon-audio.svg" alt="">
-          <img src="/static/img/icon-photo.svg" alt="">
-          <img src="/static/img/icon-video.svg" alt="">
-          <h3>Drop files here</h3>
+<div class="fullscreen">
+  <div class="post-container">
+    <a class="close">
+      <img src="/static/img/x.svg" alt="">
+    </a>
+    <h1>Create a post</h1>
+    <form name="post-form" class="form post-form">
+      <textarea id="text" rows="4" cols="50" name="text" form="post-form" placeholder="Write a post..."></textarea>
+      <div class="upload-container">
+        <div class="file-container">
+          <div class="file-icons">
+            <img src="/static/img/icon-audio.svg" alt="">
+            <img src="/static/img/icon-photo.svg" alt="">
+            <img src="/static/img/icon-video.svg" alt="">
+            <h3>Drop files here</h3>
+          </div>
+          <input class="file" type="file" name="files[]" id="file" data-multiple-caption="{count} files selected" multiple />
+          <label for="file"></label>
         </div>
-        <input class="file" type="file" name="files[]" id="file" data-multiple-caption="{count} files selected" multiple />
-        <label for="file"></label>
+        <div class="progress">stuff</div>
       </div>
-      <div class="progress">stuff</div>
-    </div>
-  </form>
-  <button type="submit" id="submit-post" class="button blue form-btn">Post</button>
+    </form>
+    <button type="submit" id="submit-post" class="button blue form-btn">Post</button>
+  </div>
 </div>

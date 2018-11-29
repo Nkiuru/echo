@@ -1,16 +1,31 @@
 const openPostBtn = document.querySelector('#add-post-open');
-const createPostForm = document.querySelector('.post-container');
+const postForm = document.querySelector('.post-container');
 const submitBtn = document.querySelector('#submit-post');
-// const postForm = document.querySelector('form[name=post-form]');
 const overlay = document.querySelector('#overlay');
+const closeBtn = document.querySelector('.close');
+const fullscreen = document.querySelector('.fullscreen');
 
 
 openPostBtn.addEventListener('click', (e) => {
   e.preventDefault();
-  createPostForm.style.display = 'flex';
+  fullscreen.style.display = 'flex';
   overlay.style.display = 'block';
   console.log('opened');
 });
+
+closeBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  postForm.classList.add('closing');
+  overlay.classList.add('closing');
+
+  setTimeout(() => {
+    postForm.classList.remove('closing');
+    overlay.classList.remove('closing');
+    fullscreen.style.display = 'none';
+    overlay.style.display = 'none';
+  }, 500);
+});
+
 
 submitBtn.addEventListener('click', (e) => {
   console.log('post');
@@ -24,7 +39,6 @@ submitBtn.addEventListener('click', (e) => {
       postText: document.querySelector('#text').value,
     }),
   };
-
 
   fetch('/post', settings)
     .then((response) => response.json())

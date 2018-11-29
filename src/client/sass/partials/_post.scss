@@ -1,16 +1,37 @@
+.fullscreen {
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  overflow: hidden;
+  display: none;
+  z-index: 6;
+  justify-content: center;
+  align-items: center;
+}
+
+
 .post-container {
+  z-index: 10;
   padding: 1rem;
   background: $snow;
   border: $card-border;
-  max-width: 400px;
-  margin: auto;
-  left: 0;
-  right: 0;
-  position: absolute;
-  z-index: 10;
-  //display: none;
   flex-direction: column;
   border-radius: $card-border-radius;
+  animation: post-in $post-in-timing;
+
+  &.closing {
+    animation: post-out $post-out-timing;
+  }
+
+  .close {
+    right: .5rem;
+    top: .5rem;
+    z-index: 2;
+    cursor: pointer;
+    position: absolute;
+  }
 
   h1 {
     z-index: 1;

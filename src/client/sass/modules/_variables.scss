@@ -9,3 +9,12 @@ $screen-sm-desktop-min: 700px;
 $card-border-radius: 5px;
 
 $card-border: 1px solid $card-border-color;
+
+// animation timings
+$post-in-timing: .3s cubic-bezier(.42,.1,.52,1.5) 1 forwards;
+$post-out-timing: .15s linear 1 forwards;
+$overlay-timing: .2s linear 1 forwards;
+$post-btn-timing: .3s cubic-bezier(.57,.21,.69,1.25) 1 forwards;
+$btn-hover-timing: .3s ease-out 1 forwards;
+
+
