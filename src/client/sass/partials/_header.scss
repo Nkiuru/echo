@@ -4,6 +4,8 @@
   justify-content: space-between;
   align-items: center;
   background-color: $main_darkblue;
+  z-index: 10;
+  position: relative;
 
   .logo {
     width: 3rem;

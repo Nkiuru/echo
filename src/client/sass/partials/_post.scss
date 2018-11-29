@@ -1,15 +1,88 @@
 .post-container {
-  padding: 2rem;
-  background: $background_lightgrey;
+  padding: 1rem;
+  background: $snow;
   border: $card-border;
   max-width: 400px;
   margin: auto;
-  top: 0;
-  bottom: 0;
   left: 0;
   right: 0;
   position: absolute;
   z-index: 10;
-  display: none;
+  //display: none;
   flex-direction: column;
+  border-radius: $card-border-radius;
+
+  h1 {
+    z-index: 1;
+    position: relative;
+    font-weight: $font-bold;
+    margin: 0;
+    margin-bottom: 2rem;
+    color: $main-darkblue;
+    text-align: center;
+
+    &::before {
+      content: url(/static/img/stroke-green-post.svg);
+      z-index: -1;
+      position: absolute;
+      left: -50%;
+      right: -50%;
+    }
+  }
+
+  .post-form {
+    flex-direction: column;
+
+    textarea {
+      border-radius: 2px;
+      letter-spacing: normal;
+
+      &:focus {
+        border-bottom: 1px solid $light_grey;
+      }
+    }
+
+    .upload-container {
+      display: flex;
+
+      .file-container,
+      .progress {
+        flex: 1;
+      }
+
+      .file-container {
+        flex: 1;
+        min-height: 200px;
+        padding: 1rem;
+        display: flex;
+        position: relative;
+        align-items: center;
+        margin-bottom: 1rem;
+        box-sizing: border-box;
+        border: 1px dashed $medium-grey;
+
+        .file-icons {
+          display: flex;
+          justify-content: space-evenly;
+          flex-wrap: wrap
+        }
+
+        input {
+          display: none;
+        }
+
+        input,
+        label {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          top: 0;
+          left: 0;
+          border: none;
+          cursor: pointer;
+
+        }
+      }
+    }
+  }
 }

@@ -31,28 +31,6 @@
       letter-spacing: 1px;
     }
 
-    input, select {
-      width: 100%;
-      padding: .5rem;
-      margin-bottom: 1rem;
-      border: 1px solid $light_grey;
-      letter-spacing: .05rem;
-      color: $medium_grey;
-      box-sizing: border-box;
-      outline: none;
-
-      &::placeholder {
-        color: $light_grey;
-      }
-
-      &:focus {
-        border-bottom: 1px solid $error_red;
-      }
-
-      &:focus:not(:invalid) {
-        border-bottom: 1px solid $main_green;
-      }
-    }
     .invalid {
       border-bottom: 1px solid $error_red;
     }
@@ -104,5 +82,28 @@
       outline: none;
       border-bottom: 1px solid $main_blue;
     }
+  }
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: .5rem;
+  margin-bottom: 1rem;
+  border: 1px solid $light_grey;
+  letter-spacing: .05rem;
+  color: $medium_grey;
+  box-sizing: border-box;
+  outline: none;
+
+  &::placeholder {
+    color: $light_grey;
+  }
+
+  &:focus {
+    border-bottom: 1px solid $error_red;
+  }
+
+  &:focus:not(:invalid) {
+    border-bottom: 1px solid $main_green;
   }
 }

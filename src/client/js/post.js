@@ -1,15 +1,14 @@
 const openPostBtn = document.querySelector('#add-post-open');
 const createPostForm = document.querySelector('.post-container');
 const submitBtn = document.querySelector('#submit-post');
-const postForm = document.querySelector('form[name=post-form]');
-
-console.log(postForm);
-
+// const postForm = document.querySelector('form[name=post-form]');
+const overlay = document.querySelector('#overlay');
 
 
 openPostBtn.addEventListener('click', (e) => {
   e.preventDefault();
   createPostForm.style.display = 'flex';
+  overlay.style.display = 'block';
   console.log('opened');
 });
 
