@@ -2,6 +2,7 @@
   padding: .5rem 1rem;
   border: none;
   border-radius: 2px;
+  cursor: pointer;
 
   &.green {
     background: $main_green;
@@ -15,3 +16,4 @@
 .form-btn {
   width: 100%;
 }
+

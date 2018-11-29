@@ -97,6 +97,48 @@ const getCountries = () => {
   });
 };
 
+const createEntity = (userId) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `INSERT INTO entity(
+        entityId,
+        userId)
+        VALUES (0, ?);`,
+      [userId], (err, results, fields) => {
+        if (err) {
+          reject(err);
+        }
+        if (results) {
+          connection.query(`
+          SELECT LAST_INSERT_ID();`,
+          ((err, results) => {
+            if (err) {
+              reject(err);
+            }
+            if (results) {
+              resolve(results);
+            }
+          }));
+        }
+      });
+  });
+};
+
+const createTextPost = (entityId, text) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(`
+      INSERT INTO textPost(
+        entityId,
+        text)
+        VALUES(?, ?);`,
+    [entityId, text],
+    (err, results) => {
+      if (err) reject(err);
+      if (results) resolve(results);
+    });
+  });
+};
+
 module.exports = {
   connection: connection,
   select: select,
@@ -106,4 +148,6 @@ module.exports = {
   getUserById: getUserById,
   createUser: createUser,
   getUserByIdWEmail: getUserByIdWEmail,
+  createEntity: createEntity,
+  createTextPost: createTextPost,
 };

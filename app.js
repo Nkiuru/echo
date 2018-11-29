@@ -66,6 +66,7 @@ app.get('/register', (req, res) => {
 });
 
 require('./src/user').init(app);
+require('./src/post').init(app);
 
 if (process.env.hasOwnProperty('HTTPS')) {
   const sslKey = fs.readFileSync(process.env.SSL_KEY);

@@ -1,0 +1,15 @@
+.post-container {
+  padding: 2rem;
+  background: $background_lightgrey;
+  border: $card-border;
+  max-width: 400px;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  position: absolute;
+  z-index: 10;
+  display: none;
+  flex-direction: column;
+}

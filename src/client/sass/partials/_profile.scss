@@ -14,7 +14,7 @@
 
   .info {
     @include mobile {
-      border: 1px solid $card-border;
+      border: 1px solid $card-border-color;
       border-radius: $card-border-radius;
       margin-right: 0;
     }
@@ -23,7 +23,7 @@
     padding: 1rem;
     margin-right: .5rem;
     background-color: $snow;
-    border: 1px solid $card-border;
+    border: 1px solid $card-border-color;
     border-top: none;
     border-radius: 0 0 $card-border-radius $card-border-radius;
     text-align: center;
@@ -84,7 +84,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        border: 1px solid $card-border;
+        border: 1px solid $card-border-color;
 
         @include sm-desktop {
           width: 8rem;

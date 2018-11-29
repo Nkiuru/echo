@@ -6,3 +6,10 @@ body {
   padding: 0;
   background-color: $background_lightgrey;
 }
+
+.add-post {
+  bottom: 0;
+  right: 0;
+  margin: 1rem;
+  position: absolute;
+}
