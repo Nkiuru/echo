@@ -8,7 +8,6 @@ const connection = mysql.createConnection({
   password: process.env.DB_PASS,
 });
 
-
 const select = () => {
   // simple query
   return new Promise((resolve, reject) => {
@@ -97,6 +96,17 @@ const getCountries = () => {
   });
 };
 
+const changePassword = (newPwd, userId) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      'UPDATE user SET password = ? WHERE userID = ?', [newPwd, userId],
+      (err, results, fields) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
 module.exports = {
   connection: connection,
   select: select,
@@ -106,4 +116,5 @@ module.exports = {
   getUserById: getUserById,
   createUser: createUser,
   getUserByIdWEmail: getUserByIdWEmail,
+  changePassword: changePassword,
 };

@@ -19,10 +19,9 @@ const createUser = (req, res) => {
         req.body.email,
       ];
       db.createUser(data).then(() => {
-        res.json({success: true});
+        res.json({ success: true });
         console.log(req.body.username + ' created');
         return res.end();
-
       }).catch((err) => {
         console.log('ERROR CREATING USER: ' + err);
         res.json({
@@ -47,7 +46,7 @@ const getOwnData = (req, res) => {
   db.getUserByIdWEmail(req.user.userId).then((result) => {
     res.send(result[0]);
   }).catch((err) => {
-    res.send({error: err});
+    res.send({ error: err });
   });
 };
 
@@ -55,7 +54,31 @@ const getUser = (req, res) => {
   db.getUserById(req.params.userId).then((result) => {
     res.send(result[0]);
   }).catch((err) => {
-    res.send({error: err});
+    res.send({ error: err });
+  });
+};
+
+const changePassword = (req, res) => {
+  const oldPwd = req.body.password;
+  db.getgetUserWPassword(req.user.username).then((result) => {
+    bcrypt.compare(oldPwd, result[0].password).then(() => {
+      bcrypt.hash(req.body.newPassword, 10).then((result) => {
+        db.changePassword(result, req.user.userId).then(() => {
+          res.send({ message: 'password successfully updated' });
+        }).catch((err) => {
+          console.log(err);
+          res.send({ error: err });
+        });
+      }).catch((err) => {
+        console.log(err);
+        res.send({ error: err });
+      });
+    }).catch((err) => {
+      console.log(err);
+      res.status(403).res.send({ error: err });
+    });
+  }).catch((err) => {
+    res.send({ error: err });
   });
 };
 
@@ -63,4 +86,5 @@ module.exports = {
   createUser: createUser,
   getUser: getUser,
   getOwnData: getOwnData,
+  changePassword: changePassword,
 };
