@@ -3,8 +3,9 @@ const authenticationMiddleware = () => {
     console.log(req.isAuthenticated());
     if (!req.isAuthenticated()) {
       res.status(403).send();
+    } else {
+      return next();
     }
-    return next();
   };
 };
 
