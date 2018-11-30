@@ -1,6 +1,8 @@
 'use strict';
 const passport = require('passport');
 const users = require('./users');
+const db = require('../modules/database.js');
+
 
 const initUser = (app) => {
   app.get('/', renderWelcome);
@@ -37,7 +39,9 @@ const initUser = (app) => {
           return res.end();
         }
 
-        res.json({success: true});
+        res.json({
+          success: true
+        });
         return res.end();
       });
     })(req, res, next);
@@ -62,7 +66,14 @@ const addUser = (req, res, next) => {
 };
 
 const getUser = (req, res) => {
-  res.render('profile');
+  console.log(req.user);
+  db.getUserTextPosts(req.user.userId)
+    .then((result) => {
+      console.log(result);
+      res.render('profile', {
+        posts: result,
+      });
+    });
 };
 
 const getUserData = (req, res) => {

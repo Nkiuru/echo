@@ -4,6 +4,21 @@ const submitBtn = document.querySelector('#submit-post');
 const overlay = document.querySelector('#overlay');
 const closeBtn = document.querySelector('.close');
 const fullscreen = document.querySelector('.fullscreen');
+const postText = document.querySelector('#single-post-container');
+
+let body = '';
+
+const closeOverlay = () => {
+  postForm.classList.add('closing');
+  overlay.classList.add('closing');
+
+  setTimeout(() => {
+    postForm.classList.remove('closing');
+    overlay.classList.remove('closing');
+    fullscreen.style.display = 'none';
+    overlay.style.display = 'none';
+  }, 500);
+};
 
 
 openPostBtn.addEventListener('click', (e) => {
@@ -15,21 +30,15 @@ openPostBtn.addEventListener('click', (e) => {
 
 closeBtn.addEventListener('click', (e) => {
   e.preventDefault();
-  postForm.classList.add('closing');
-  overlay.classList.add('closing');
-
-  setTimeout(() => {
-    postForm.classList.remove('closing');
-    overlay.classList.remove('closing');
-    fullscreen.style.display = 'none';
-    overlay.style.display = 'none';
-  }, 500);
+  closeOverlay();
 });
-
 
 submitBtn.addEventListener('click', (e) => {
   console.log('post');
   e.preventDefault();
+
+  closeOverlay();
+
   const settings = {
     method: 'POST',
     headers: {
@@ -47,8 +56,21 @@ submitBtn.addEventListener('click', (e) => {
         alert(json.error);
         return;
       }
+      console.log(json);
+      const markup = `
+          <div class="post-card">
+            <div class="text-container">
+              <p>${json.timestamp}</p>
+              <p>${json.text}</p>
+            </div>
+          </div>
+        `;
+      body += markup;
+      console.log('POST CREATED');
+      console.log(body);
+      postText.innerHTML = body;
     })
     .catch((err) => {
-      console.log(err);
+      console.log(`error ${err}`);
     });
 });

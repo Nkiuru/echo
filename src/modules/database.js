@@ -133,13 +133,41 @@ const createTextPost = (entityId, text) => {
     connection.execute(`
       INSERT INTO textPost(
         entityId,
-        text)
-        VALUES(?, ?);`,
+        text,
+        timestamp)
+        VALUES(?, ?, NOW());`,
     [entityId, text],
     (err, results) => {
       if (err) reject(err);
       if (results) resolve(results);
     });
+  });
+};
+
+const getTextPost = (entityId) => {
+  return new Promise((resolve, reject) => {
+    connection.query(`
+      SELECT * FROM textPost
+      WHERE textPost.entityId = ?;`,
+    [entityId],
+    (err, results) => {
+      if (err) reject(err);
+      if (results) resolve(results);
+    });
+  });
+};
+
+const getUserTextPosts = (userId) => {
+  console.log(userId);
+  return new Promise((resolve, reject) => {
+    connection.query(
+      `SELECT tp.* FROM entity e, textPost tp
+      WHERE e.userId = ? AND tp.entityId = e.entityId`,
+      [userId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
   });
 };
 
@@ -155,4 +183,6 @@ module.exports = {
   createEntity: createEntity,
   createTextPost: createTextPost,
   changePassword: changePassword,
+  getTextPost,
+  getUserTextPosts,
 };

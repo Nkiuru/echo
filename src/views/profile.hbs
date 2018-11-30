@@ -35,7 +35,11 @@
 
   </div>
   <div class="feed">
-    feed
+    {{#each posts}}
+      {{>_single-post}}
+    {{else}}
+      <p>no posts found</p>
+    {{/each}}
   </div>
 </div>
 {{>_add-post-btn}}

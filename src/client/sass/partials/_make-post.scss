@@ -1,0 +1,109 @@
+.fullscreen {
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  overflow: hidden;
+  display: none;
+  z-index: 6;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.post-container {
+  z-index: 10;
+  padding: 1rem;
+  background: $snow;
+  border: $card-border;
+  flex-direction: column;
+  border-radius: $card-border-radius;
+  animation: post-in $post-in-timing;
+
+  &.closing {
+    animation: post-out $post-out-timing;
+  }
+
+  .close {
+    right: .5rem;
+    top: .5rem;
+    z-index: 2;
+    cursor: pointer;
+    position: absolute;
+  }
+
+  h1 {
+    z-index: 1;
+    position: relative;
+    font-weight: $font-bold;
+    margin: 0;
+    margin-bottom: 2rem;
+    color: $main-darkblue;
+    text-align: center;
+
+    &::before {
+      content: url(/static/img/stroke-green-post.svg);
+      z-index: -1;
+      position: absolute;
+      left: -50%;
+      right: -50%;
+    }
+  }
+
+  .post-form {
+    flex-direction: column;
+
+    textarea {
+      border-radius: 2px;
+      letter-spacing: normal;
+
+      &:focus {
+        border-bottom: 1px solid $light_grey;
+      }
+    }
+
+    .upload-container {
+      display: flex;
+
+      .file-container,
+      .progress {
+        flex: 1;
+      }
+
+      .file-container {
+        flex: 1;
+        min-height: 200px;
+        padding: 1rem;
+        display: flex;
+        position: relative;
+        align-items: center;
+        margin-bottom: 1rem;
+        box-sizing: border-box;
+        border: 1px dashed $medium-grey;
+
+        .file-icons {
+          display: flex;
+          justify-content: space-evenly;
+          flex-wrap: wrap
+        }
+
+        input {
+          display: none;
+        }
+
+        input,
+        label {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          top: 0;
+          left: 0;
+          border: none;
+          cursor: pointer;
+
+        }
+      }
+    }
+  }
+}
