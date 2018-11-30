@@ -37,7 +37,8 @@ const createUser = (data) => {
 const getUserWPassword = (username) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      'SELECT * FROM user WHERE username = ?;', [username], (err, results) => {
+      'SELECT * FROM user WHERE username = ?;', [username],
+      (err, results) => {
         if (err) {
           reject(err.code);
         } else if (results) resolve(results);
@@ -106,12 +107,12 @@ const createEntity = (userId) => {
       [userId], (err, results, fields) => {
         if (err) reject(err);
         if (results) {
-          connection.query(`
-          SELECT LAST_INSERT_ID();`,
-          ((err, results) => {
-            if (err) reject(err);
-            if (results) resolve(results);
-          }));
+          connection.query(
+            `SELECT LAST_INSERT_ID();`,
+            ((err, results) => {
+              if (err) reject(err);
+              if (results) resolve(results);
+            }));
         }
       });
   });
@@ -130,39 +131,171 @@ const changePassword = (newPwd, userId) => {
 
 const createTextPost = (entityId, text) => {
   return new Promise((resolve, reject) => {
-    connection.execute(`
-      INSERT INTO textPost(
+    connection.execute(
+      `INSERT INTO textPost(
         entityId,
         text,
         timestamp)
         VALUES(?, ?, NOW());`,
-    [entityId, text],
-    (err, results) => {
-      if (err) reject(err);
-      if (results) resolve(results);
-    });
+      [entityId, text],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
   });
 };
 
 const getTextPost = (entityId) => {
   return new Promise((resolve, reject) => {
-    connection.query(`
-      SELECT * FROM textPost
-      WHERE textPost.entityId = ?;`,
-    [entityId],
-    (err, results) => {
-      if (err) reject(err);
-      if (results) resolve(results);
-    });
+    connection.execute(
+      `SELECT * FROM textPost
+      WHERE entityId = ?;`,
+      [entityId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
   });
 };
 
 const getUserTextPosts = (userId) => {
   console.log(userId);
   return new Promise((resolve, reject) => {
-    connection.query(
+    connection.execute(
       `SELECT tp.* FROM entity e, textPost tp
       WHERE e.userId = ? AND tp.entityId = e.entityId`,
+      [userId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
+const createVideoPost = (entityId, uploadId, text) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `INSERT INTO videoPost(
+        entityId,
+        uploadId,
+        text,
+        timestamp)
+        VALUES(?, ?, ?, NOW());`,
+      [entityId, uploadId, text],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
+const getVideoPost = (entityId) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `SELECT * FROM videoPost
+      WHERE entityId = ?;`,
+      [entityId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
+const getUserVideoPosts = (userId) => {
+  console.log(userId);
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `SELECT vp.* FROM entity e, videoPost vp
+      WHERE e.userId = ? AND vp.entityId = e.entityId`,
+      [userId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
+const createAudioPost = (entityId, songId, text) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `INSERT INTO audioPost(
+        entityId,
+        songId,
+        text,
+        timestamp)
+        VALUES(?, ?, ?, NOW());`,
+      [entityId, songId, text],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
+const getAudioPost = (entityId) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `SELECT * FROM audioPost
+      WHERE entityId = ?;`,
+      [entityId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
+const getUserAudioPosts = (userId) => {
+  console.log(userId);
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `SELECT tp.* FROM entity e, audioPost ap
+      WHERE e.userId = ? AND ap.entityId = e.entityId`,
+      [userId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
+const createImagePost = (entityId, albumId, text) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `INSERT INTO imagePost(
+        entityId,
+        albumId,
+        text,
+        timestamp)
+        VALUES(?, ?, ?, NOW());`,
+      [entityId, albumId, text],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
+const getImagePost = (entityId) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `SELECT * FROM imagePost
+      WHERE entityId = ?;`,
+      [entityId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
+const getUserImagePosts = (userId) => {
+  console.log(userId);
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `SELECT ip.* FROM entity e, imagePost ip
+      WHERE e.userId = ? AND ip.entityId = e.entityId`,
       [userId],
       (err, results) => {
         if (err) reject(err);
@@ -183,6 +316,15 @@ module.exports = {
   createEntity: createEntity,
   createTextPost: createTextPost,
   changePassword: changePassword,
-  getTextPost,
-  getUserTextPosts,
+  getTextPost: getTextPost,
+  getUserTextPosts: getUserTextPosts,
+  createVideoPost: createVideoPost,
+  getVideoPost: getVideoPost,
+  getUserVideoPosts: getUserVideoPosts,
+  createAudioPost: createAudioPost,
+  getAudioPost: getAudioPost,
+  getUserAudioPosts: getUserAudioPosts,
+  createImagePost: createImagePost,
+  getImagePost: getImagePost,
+  getUserImagePosts: getUserImagePosts,
 };

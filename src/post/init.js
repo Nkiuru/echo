@@ -1,42 +1,51 @@
 const passport = require('passport');
-const db = require('../modules/database.js');
+const multer = require('multer');
+const path = require('path');
+const upload = multer({ dest: (path.join(__dirname, '../../dist/img/uploads')) });
+const post = require('./posts');
 
 const initPost = (app) => {
   app.post('/post', passport.authenticationMiddleware(), createPost);
+  app.post('/post/video', passport.authenticationMiddleware(), upload.single('files'), videoPost);
+  app.post('/post/image', passport.authenticationMiddleware(), upload.array('images', 10), imagePost);
+  app.post('/post/audio', passport.authenticationMiddleware(), upload.single('audio'), audioPost);
 };
 
-const createPost = (req, res) => {
-  db.createEntity(req.user.userId)
-    .then((result) => {
-      const entityId = result[0]['LAST_INSERT_ID()'];
-      console.log(entityId);
-      db.createTextPost(entityId, req.body.postText)
-        .then((result) => {
-          db.getTextPost(entityId).then((data) => {
-            console.log(data);
-            res.json({
-              success: true,
-              text: req.body.postText,
-              timestamp: data[0].timestamp,
-            });
-            return res.end();
-          });
-        })
-        .catch((err) => {
-          res.json({
-            success: false,
-            error: err,
-          });
-          return res.end();
-        });
-    })
-    .catch((err) => {
-      res.json({
-        success: false,
-        error: err,
-      });
-      return res.end();
+const createPost = (req, res, next) => {
+  post.createTextPost(req.user.userId, req.body.postText).then((entityId) => {
+    return post.getPost(entityId);
+  }).then((textPost) => {
+    console.log(textPost);
+    res.json({
+      success: true,
+      text: textPost.text,
+      timestamp: textPost.timestamp,
     });
+    return res.end();
+  }).catch((err) => {
+    console.log(err);
+    res.json({
+      success: false,
+      error: err,
+    });
+    next(err);
+    return res.end();
+  });
+};
+
+const videoPost = (req, res, next) => {
+  // Insert into upload the video file from front-end
+  // Check if file is actually a video
+};
+
+const audioPost = (req, res, next) => {
+  // Before getting the actual file, front-end will create necessary album
+  // validate that the file is audio
+};
+
+const imagePost = (req, res, next) => {
+  // Create album out of the uploaded file(s)
+  // validate that the uploaded file is an image
 };
 
 module.exports = initPost;
