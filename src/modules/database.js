@@ -8,7 +8,6 @@ const connection = mysql.createConnection({
   password: process.env.DB_PASS,
 });
 
-
 const select = () => {
   // simple query
   return new Promise((resolve, reject) => {
@@ -120,6 +119,13 @@ const createEntity = (userId) => {
             }
           }));
         }
+const changePassword = (newPwd, userId) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      'UPDATE user SET password = ? WHERE userID = ?', [newPwd, userId],
+      (err, results, fields) => {
+        if (err) reject(err);
+        if (results) resolve(results);
       });
   });
 };
@@ -150,4 +156,5 @@ module.exports = {
   getUserByIdWEmail: getUserByIdWEmail,
   createEntity: createEntity,
   createTextPost: createTextPost,
+  changePassword: changePassword,
 };

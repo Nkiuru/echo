@@ -1,5 +1,6 @@
 'use strict';
 const passport = require('passport');
+const users = require('./users');
 
 const initUser = (app) => {
   app.get('/', renderWelcome);
@@ -45,6 +46,7 @@ const initUser = (app) => {
   app.get('/user/:username', passport.authenticationMiddleware(), getUser);
   app.get('/users/user', passport.authenticationMiddleware(), getOwnData);
   app.get('/users/:userId', passport.authenticationMiddleware(), getUserData);
+  app.post('/user/pwd', passport.authenticationMiddleware(), updatePassword);
 };
 
 const renderWelcome = (req, res) => {
@@ -56,7 +58,6 @@ const testAuth = (req, res) => {
 };
 
 const addUser = (req, res, next) => {
-  const users = require('./users');
   users.createUser(req, res);
 };
 
@@ -65,7 +66,6 @@ const getUser = (req, res) => {
 };
 
 const getUserData = (req, res) => {
-  const users = require('./users');
   if (req.params.hasOwnProperty('userId')) {
     users.getUser(req, res);
   } else {
@@ -74,7 +74,10 @@ const getUserData = (req, res) => {
 };
 
 const getOwnData = (req, res) => {
-  const users = require('./users');
   users.getOwnData(req, res);
+};
+
+const updatePassword = (req, res) => {
+  users.changePassword(req, res);
 };
 module.exports = initUser;
