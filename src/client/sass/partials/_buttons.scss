@@ -13,8 +13,11 @@
   }
 
   &:hover {
-    
+
     animation: btn-hover $btn-hover-timing;
+  }
+  &.white {
+    color: $snow;
   }
 }
 

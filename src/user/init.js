@@ -47,6 +47,7 @@ const initUser = (app) => {
     })(req, res, next);
   });
   app.post('/register', addUser);
+  app.post('/logout', passport.authenticationMiddleware(), logoutUser);
   app.get('/user/:username', passport.authenticationMiddleware(), getUser);
   app.get('/users/user', passport.authenticationMiddleware(), getOwnData);
   app.get('/users/:userId', passport.authenticationMiddleware(), getUserData);
@@ -91,4 +92,12 @@ const getOwnData = (req, res) => {
 const updatePassword = (req, res) => {
   users.changePassword(req, res);
 };
+
+const logoutUser = (req, res) => {
+  res.clearCookie('connect.sid');
+  res.json({ success: true });
+  req.logout();
+  res.end();
+};
+
 module.exports = initUser;
