@@ -104,21 +104,19 @@ const createEntity = (userId) => {
         userId)
         VALUES (0, ?);`,
       [userId], (err, results, fields) => {
-        if (err) {
-          reject(err);
-        }
+        if (err) reject(err);
         if (results) {
           connection.query(`
           SELECT LAST_INSERT_ID();`,
           ((err, results) => {
-            if (err) {
-              reject(err);
-            }
-            if (results) {
-              resolve(results);
-            }
+            if (err) reject(err);
+            if (results) resolve(results);
           }));
         }
+      });
+  });
+};
+
 const changePassword = (newPwd, userId) => {
   return new Promise((resolve, reject) => {
     connection.execute(
