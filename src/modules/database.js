@@ -111,7 +111,7 @@ const createEntity = (userId) => {
             `SELECT LAST_INSERT_ID();`,
             ((err, results) => {
               if (err) reject(err);
-              if (results) resolve(results);
+              if (results) resolve(results[0]);
             }));
         }
       });
@@ -304,6 +304,113 @@ const getUserImagePosts = (userId) => {
   });
 };
 
+const createUpload = (userId, fileName, filesize, thumbnail) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `INSERT INTO upload(uploadId, userId, timestamp, description, fileName, filesize, thumbnail )
+      VALUES(0, ?, NOW(), ?, ?, ?, ?)`, [userId, fileName, filesize, thumbnail],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) {
+          connection.query(
+            `SELECT LAST_INSERT_ID();`,
+            ((err, results) => {
+              if (err) reject(err);
+              if (results) resolve(results[0]);
+            }));
+        }
+      });
+  });
+};
+
+const createAlbum = (albumName, coverImageId, bandId, description) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `INSERT INTO albumn(albumId, albumnName, coverImageId, bandId, description)
+      VALUES(0, ?, ?, ?, ?)`, [albumName, coverImageId, bandId, description],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) {
+          connection.query(
+            `SELECT LAST_INSERT_ID();`,
+            ((err, results) => {
+              if (err) reject(err);
+              if (results) resolve(results[0]);
+            }));
+        }
+      });
+  });
+};
+
+const createSong = (title, albumId, genreId, uploadId, bandId) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `INSERT INTO song(songId, title, albumId, ,genreId, uploadId, bandId)
+      VALUES(0, ?, ?, ?, ?)`, [title, albumId, genreId, uploadId, bandId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) {
+          connection.query(
+            `SELECT LAST_INSERT_ID();`,
+            ((err, results) => {
+              if (err) reject(err);
+              if (results) resolve(results[0]);
+            }));
+        }
+      });
+  });
+};
+
+const createBand = (bandName, description, genreId) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `INSERT INTO band(bandId, bandName, description, genreId)
+      VALUES(0, ?, ?, ?)`, [bandName, description, genreId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) {
+          connection.query(
+            `SELECT LAST_INSERT_ID();`,
+            ((err, results) => {
+              if (err) reject(err);
+              if (results) resolve(results[0]);
+            }));
+        }
+      });
+  });
+};
+
+const createImage = (title, uploadId, description, imageAlbumId) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `INSERT INTO image(imageId, uploadId, description, imageAlbumId)
+      VALUES(?, ?, ?, ?)`, [uploadId, title, description, imageAlbumId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
+const createImageAlbum = (title, description) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `INSERT INTO imageAlbum(imageAlbumId)
+      VALUES(0)`, [],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) {
+          connection.query(
+            `SELECT LAST_INSERT_ID();`,
+            ((err, results) => {
+              if (err) reject(err);
+              if (results) resolve(results[0]);
+            }));
+        }
+      });
+  });
+};
+
 module.exports = {
   connection: connection,
   select: select,
@@ -327,4 +434,10 @@ module.exports = {
   createImagePost: createImagePost,
   getImagePost: getImagePost,
   getUserImagePosts: getUserImagePosts,
+  createUpload: createUpload,
+  createAlbum: createAlbum,
+  createSong: createSong,
+  createBand: createBand,
+  createImageAlbum: createImageAlbum,
+  createImage: createImage,
 };
