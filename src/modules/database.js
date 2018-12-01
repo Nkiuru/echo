@@ -106,14 +106,7 @@ const createEntity = (userId) => {
         VALUES (0, ?);`,
       [userId], (err, results, fields) => {
         if (err) reject(err);
-        if (results) {
-          connection.query(
-            `SELECT LAST_INSERT_ID();`,
-            ((err, results) => {
-              if (err) reject(err);
-              if (results) resolve(results[0]);
-            }));
-        }
+        if (results) resolve(results.insertId);
       });
   });
 };
@@ -323,14 +316,7 @@ const createAlbum = (albumName, coverImageId, bandId, description) => {
       VALUES(0, ?, ?, ?, ?)`, [albumName, coverImageId, bandId, description],
       (err, results) => {
         if (err) reject(err);
-        if (results) {
-          connection.query(
-            `SELECT LAST_INSERT_ID();`,
-            ((err, results) => {
-              if (err) reject(err);
-              if (results) resolve(results[0]);
-            }));
-        }
+        if (results) resolve(results.insertId);
       });
   });
 };
@@ -342,14 +328,7 @@ const createSong = (title, albumId, genreId, uploadId, bandId) => {
       VALUES(0, ?, ?, ?, ?, ?)`, [title, albumId, genreId, uploadId, bandId],
       (err, results) => {
         if (err) reject(err);
-        if (results) {
-          connection.query(
-            `SELECT LAST_INSERT_ID();`,
-            ((err, results) => {
-              if (err) reject(err);
-              if (results) resolve(results[0]);
-            }));
-        }
+        if (results) resolve(results.insertId);
       });
   });
 };
@@ -361,14 +340,7 @@ const createBand = (bandName, description, genreId) => {
       VALUES(0, ?, ?, ?)`, [bandName, description, genreId],
       (err, results) => {
         if (err) reject(err);
-        if (results) {
-          connection.query(
-            `SELECT LAST_INSERT_ID();`,
-            ((err, results) => {
-              if (err) reject(err);
-              if (results) resolve(results[0]);
-            }));
-        }
+        if (results) resolve(results.insertId);
       });
   });
 };
@@ -392,14 +364,7 @@ const createImageAlbum = (title, description) => {
       VALUES(0)`, [],
       (err, results) => {
         if (err) reject(err);
-        if (results) {
-          connection.query(
-            `SELECT LAST_INSERT_ID();`,
-            ((err, results) => {
-              if (err) reject(err);
-              if (results) resolve(results[0]);
-            }));
-        }
+        if (results) resolve(results.insertId);
       });
   });
 };

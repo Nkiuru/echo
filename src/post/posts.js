@@ -3,7 +3,7 @@ const db = require('../modules/database');
 const createEntity = (userId) => {
   return new Promise((resolve, reject) => {
     db.createEntity(userId).then((result) => {
-      resolve(result['LAST_INSERT_ID()']);
+      resolve(result);
     }).catch((err) => reject(err));
   });
 };

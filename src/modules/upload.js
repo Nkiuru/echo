@@ -52,7 +52,7 @@ const createSong = (req, res, next) => {
     createUpload(req, res, next).then((uploadId) => {
       return db.createSong(req.file.filename, null, req.body.genreId, uploadId, req.user.bandId);
     }).then((songId) => {
-      resolve(songId['LAST_INSERT_ID()']);
+      resolve(songId);
     }).catch((err) => reject(err));
   });
 };
@@ -60,7 +60,7 @@ const createSong = (req, res, next) => {
 const createImageAlbum = (req, res, next) => {
   return new Promise((resolve, reject) => {
     db.createImageAlbum().then((imageAlbumId) => {
-      resolve(imageAlbumId['LAST_INSERT_ID()']);
+      resolve(imageAlbumId);
     }).catch((err) => reject(err));
   });
 };
