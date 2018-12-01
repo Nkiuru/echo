@@ -51,7 +51,7 @@ const createAudioPost = (userId, songId, text) => {
 const getPost = (entityId) => {
   return new Promise((resolve, reject) => {
     const audio = db.getAudioPost(entityId);
-    const video = db.getImagePost(entityId);
+    const video = db.getVideoPost(entityId);
     const text = db.getTextPost(entityId);
     const image = db.getImagePost(entityId);
 

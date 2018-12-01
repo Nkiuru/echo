@@ -13,6 +13,7 @@ const initPost = (app) => {
 };
 
 const createPost = (req, res, next) => {
+  console.log(req.body);
   post.createTextPost(req.user.userId, req.body.postText).then((entityId) => {
     return post.getPost(entityId);
   }).then((textPost) => {
@@ -37,19 +38,31 @@ const createPost = (req, res, next) => {
 const videoPost = (req, res, next) => {
   uploads.createVideo(req, res, next).then((uploadId) => {
     post.createVideoPost(req.user.userId, uploadId, req.body.postText).then((entityId) => {
+      console.log(entityId);
       return post.getPost(entityId);
     }).then((videoPost) => {
       console.log(videoPost);
+      res.json([
+        {
+          success: true,
+        }, videoPost]);
+      return res.end();
     });
   }).catch((err) => next(err));
 };
 
 const audioPost = (req, res, next) => {
   uploads.createSong(req, res, next).then((songId) => {
+    console.log(songId);
     post.createAudioPost(req.user.userId, songId, req.body.postText).then((entityId) => {
       return post.getPost(entityId);
     }).then((audioPost) => {
       console.log(audioPost);
+      res.json([
+        {
+          success: true,
+        }, audioPost]);
+      return res.end();
     }).catch((err) => next(err));
   });
 };
@@ -64,6 +77,11 @@ const imagePost = (req, res, next) => {
     return post.getPost(entityId);
   }).then((imagePost) => {
     console.log(imagePost);
+    res.json([
+      {
+        success: true,
+      }, imagePost]);
+    return res.end();
   }).catch((err) => next(err));
 };
 

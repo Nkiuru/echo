@@ -49,7 +49,7 @@ const getUserWPassword = (username) => {
 const getUserById = (id) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      'SELECT userId, username, displayName, countryId, city, bio, isAdmin, profileImageId' +
+      'SELECT userId, username, displayName, countryId, city, bio, isAdmin, profileImageId, bandId' +
       ' FROM user WHERE userId = ?;', [id], (err, results) => {
         if (err) {
           reject(err.code);
@@ -61,7 +61,7 @@ const getUserById = (id) => {
 const getUserByIdWEmail = (id) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      'SELECT userId, username, displayName, countryId, city, bio, email, isAdmin, profileImageId' +
+      'SELECT userId, username, displayName, countryId, city, bio, email, isAdmin, profileImageId, bandId' +
       ' FROM user WHERE userId = ?;', [id], (err, results) => {
         if (err) {
           reject(err.code);
@@ -73,7 +73,7 @@ const getUserByIdWEmail = (id) => {
 const getUser = (username) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      'SELECT userId, username, displayName, countryId, city, bio, email, isAdmin, profileImageId' +
+      'SELECT userId, username, displayName, countryId, city, bio, email, isAdmin, profileImageId, bandId' +
       ' FROM user WHERE username = ?;', [username], (err, results) => {
         if (err) {
           reject(err.code);
@@ -265,7 +265,7 @@ const createImagePost = (entityId, albumId, text) => {
     connection.execute(
       `INSERT INTO imagePost(
         entityId,
-        albumId,
+        imageAlbulmId,
         text,
         timestamp)
         VALUES(?, ?, ?, NOW());`,
@@ -307,18 +307,11 @@ const getUserImagePosts = (userId) => {
 const createUpload = (userId, fileName, filesize, thumbnail) => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `INSERT INTO upload(uploadId, userId, timestamp, description, fileName, filesize, thumbnail )
-      VALUES(0, ?, NOW(), ?, ?, ?, ?)`, [userId, fileName, filesize, thumbnail],
+      `INSERT INTO upload(uploadId, userId, timestamp, fileName, filesize, thumbnail )
+      VALUES(0, ?, NOW(), ?, ?, ?)`, [userId, fileName, filesize, thumbnail],
       (err, results) => {
         if (err) reject(err);
-        if (results) {
-          connection.query(
-            `SELECT LAST_INSERT_ID();`,
-            ((err, results) => {
-              if (err) reject(err);
-              if (results) resolve(results[0]);
-            }));
-        }
+        if (results) resolve(results.insertId);
       });
   });
 };
@@ -326,7 +319,7 @@ const createUpload = (userId, fileName, filesize, thumbnail) => {
 const createAlbum = (albumName, coverImageId, bandId, description) => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `INSERT INTO albumn(albumId, albumnName, coverImageId, bandId, description)
+      `INSERT INTO album(albumId, albumName, coverImageId, bandId, description)
       VALUES(0, ?, ?, ?, ?)`, [albumName, coverImageId, bandId, description],
       (err, results) => {
         if (err) reject(err);
@@ -345,8 +338,8 @@ const createAlbum = (albumName, coverImageId, bandId, description) => {
 const createSong = (title, albumId, genreId, uploadId, bandId) => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `INSERT INTO song(songId, title, albumId, ,genreId, uploadId, bandId)
-      VALUES(0, ?, ?, ?, ?)`, [title, albumId, genreId, uploadId, bandId],
+      `INSERT INTO song(songId, title, albumId, genreId, uploadId, bandId)
+      VALUES(0, ?, ?, ?, ?, ?)`, [title, albumId, genreId, uploadId, bandId],
       (err, results) => {
         if (err) reject(err);
         if (results) {
@@ -383,7 +376,7 @@ const createBand = (bandName, description, genreId) => {
 const createImage = (title, uploadId, description, imageAlbumId) => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `INSERT INTO image(imageId, uploadId, description, imageAlbumId)
+      `INSERT INTO image(uploadId, title, description, imageAlbulmId)
       VALUES(?, ?, ?, ?)`, [uploadId, title, description, imageAlbumId],
       (err, results) => {
         if (err) reject(err);
@@ -395,7 +388,7 @@ const createImage = (title, uploadId, description, imageAlbumId) => {
 const createImageAlbum = (title, description) => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `INSERT INTO imageAlbum(imageAlbumId)
+      `INSERT INTO imageAlbum(imageAlbulmId)
       VALUES(0)`, [],
       (err, results) => {
         if (err) reject(err);
