@@ -1,7 +1,7 @@
 const passport = require('passport');
 const multer = require('multer');
 const path = require('path');
-const upload = multer({ dest: (path.join(__dirname, '../../dist/img/uploads')) });
+const upload = multer({ dest: (path.join(__dirname, '../../dist/uploads')) });
 const post = require('./posts');
 const uploads = require('../modules/upload');
 

@@ -1,7 +1,7 @@
 const db = require('./database');
 const path = require('path');
 const fs = require('fs');
-const uploadPath = path.join(__dirname, '../../dist/img/uploads');
+const uploadPath = path.join(__dirname, '../../dist/uploads');
 
 const createUpload = (req, res, next) => {
   return new Promise((resolve, reject) => {
