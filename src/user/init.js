@@ -70,7 +70,7 @@ const getUser = (req, res) => {
   console.log(req.user);
   db.getUserTextPosts(req.user.userId)
     .then((result) => {
-      console.log(result);
+      // console.log(result);
       res.render('profile', {
         posts: result,
       });

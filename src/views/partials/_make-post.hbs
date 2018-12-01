@@ -6,6 +6,21 @@
     <h1>Create a post</h1>
     <form name="post-form" class="form post-form">
       <textarea id="text" rows="4" cols="50" name="text" form="post-form" placeholder="Write a post..."></textarea>
+      <div class="filetype-selection-container">
+        <h4>Choose a filetype</h4>
+          <div class="radiobtn-container">
+            <input type="radio" id="filetype-img" name="filetype" value="image">
+            <label for="filetype-img">Image</label>
+          </div>
+          <div class="radiobtn-container">
+            <input type="radio" id="filetype-video" name="filetype" value="video">
+            <label for="filetype-video">Video</label>
+          </div>
+          <div class="radiobtn-container">
+            <input type="radio" id="filetype-audio" name="filetype" value="video">
+            <label for="filetype-audio">Audio</label>
+          </div>
+      </div>
       <div class="upload-container">
         <div class="file-container">
           <div class="file-icons">
@@ -14,7 +29,8 @@
             <img src="/static/img/icon-video.svg" alt="">
             <h3>Drop files here</h3>
           </div>
-          <input class="file" type="file" name="files[]" id="file" data-multiple-caption="{count} files selected" multiple />
+          <input class="file" type="file" name="files[]" id="file" data-multiple-caption="{count} files selected"
+            multiple />
           <label for="file"></label>
         </div>
         <div class="progress">stuff</div>

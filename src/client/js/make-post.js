@@ -6,7 +6,28 @@ const closeBtn = document.querySelector('.close');
 const fullscreen = document.querySelector('.fullscreen');
 const postText = document.querySelector('#single-post-container');
 
+const imgFiletype = document.querySelector('#filetype-img');
+const videoFiletype = document.querySelector('#filetype-video');
+const audioFiletype = document.querySelector('#filetype-audio');
+
 let body = '';
+
+// TODO: change accepted filetype according to checked radio button
+const fileSelection = () => {
+  imgFiletype.addEventListener('change', (e) => {
+    console.log('image radio button selected');
+  });
+
+  videoFiletype.addEventListener('change', (e) => {
+    console.log('video radio button selected');
+  });
+
+  audioFiletype.addEventListener('change', (e) => {
+    console.log('audio radio button selected');
+  });
+};
+
+fileSelection();
 
 const closeOverlay = () => {
   postForm.classList.add('closing');
@@ -19,7 +40,6 @@ const closeOverlay = () => {
     overlay.style.display = 'none';
   }, 500);
 };
-
 
 openPostBtn.addEventListener('click', (e) => {
   e.preventDefault();

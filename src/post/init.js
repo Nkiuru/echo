@@ -17,7 +17,7 @@ const createPost = (req, res, next) => {
   post.createTextPost(req.user.userId, req.body.postText).then((entityId) => {
     return post.getPost(entityId);
   }).then((textPost) => {
-    console.log(textPost);
+    // console.log(textPost);
     res.json({
       success: true,
       text: textPost.text,
