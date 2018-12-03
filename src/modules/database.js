@@ -199,8 +199,9 @@ const getUserVideoPosts = (userId) => {
   console.log(userId);
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT vp.* FROM entity e, videoPost vp
-      WHERE e.userId = ? AND vp.entityId = e.entityId`,
+      `SELECT vp.*, upload.fileName
+       FROM entity e, videoPost vp, upload
+       WHERE e.userId = ? AND vp.entityId = e.entityId AND vp.uploadId = upload.uploadId;`,
       [userId],
       (err, results) => {
         if (err) reject(err);
@@ -243,8 +244,11 @@ const getUserAudioPosts = (userId) => {
   console.log(userId);
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT tp.* FROM entity e, audioPost ap
-      WHERE e.userId = ? AND ap.entityId = e.entityId`,
+      `SELECT ap.*, song.title, upload.fileName, genre.genreName, band.bandName FROM 
+	      entity e, audioPost ap, song, upload,genre,band 
+	      WHERE e.userId = ? AND ap.entityId = e.entityId AND ap.songId = song.songId AND song.uploadId = upload.uploadId
+        AND song.genreId = genre.genreId
+        AND band.bandId = song.bandId;`,
       [userId],
       (err, results) => {
         if (err) reject(err);
@@ -287,8 +291,9 @@ const getUserImagePosts = (userId) => {
   console.log(userId);
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT ip.* FROM entity e, imagePost ip
-      WHERE e.userId = ? AND ip.entityId = e.entityId`,
+      `SELECT ip.*, image.title, image.description, upload.fileName FROM entity e, imagePost ip, image, upload
+       WHERE e.userId = 29 AND ip.entityId = e.entityId AND
+        image.imageAlbulmId = ip.imageAlbulmId AND image.uploadId = upload.uploadId`,
       [userId],
       (err, results) => {
         if (err) reject(err);

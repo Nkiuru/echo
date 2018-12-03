@@ -82,9 +82,70 @@ const changePassword = (req, res) => {
   });
 };
 
+const getOwnPosts = (req, res) => {
+  return new Promise((resolve, reject) => {
+    const audio = db.getUserAudioPosts(req.user.userId);
+    const video = db.getUserVideoPosts(req.user.userId);
+    const text = db.getUserTextPosts(req.user.userId);
+    const image = db.getUserImagePosts(req.user.userId);
+
+    Promise.all([audio, text, video, image]).then((results) => {
+      const posts = [];
+      results.forEach((p) => {
+        if (p.length > 0) {
+          let id = 0;
+          let first = true;
+          let prev = {};
+          let images = [];
+          p.forEach((p) => {
+            if (p.hasOwnProperty('imageAlbulmId')) {
+              if (id !== p.imageAlbulmId) {
+                id = p.imageAlbulmId;
+                if (!first) {
+                  posts.push({
+                    entityId: prev.entityId,
+                    imageAlbumId: prev.imageAlbulmId,
+                    text: prev.text,
+                    timestamp: prev.timestamp,
+                    images: images,
+                  });
+                  images = [];
+                }
+                first = false;
+              }
+              images.push({
+                title: p.title,
+                description: p.description,
+                fileName: p.fileName,
+              });
+              prev = p;
+            } else {
+              posts.push(p);
+            }
+          });
+        }
+      });
+      posts.sort((a, b) => {
+        const aDate = new Date(a.timestamp);
+        const bDate = new Date(b.timestamp);
+        if (aDate.getTime() < bDate.getTime()) {
+          return 1;
+        }
+        if (aDate.getTime() > bDate.getTime()) {
+          return -1;
+        }
+        return 0;
+      });
+      console.log(posts);
+      resolve(posts);
+    }).catch((err) => reject(err));
+  });
+};
+
 module.exports = {
   createUser: createUser,
   getUser: getUser,
   getOwnData: getOwnData,
   changePassword: changePassword,
+  getOwnPosts,
 };
