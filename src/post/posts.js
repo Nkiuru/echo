@@ -64,6 +64,7 @@ const getPost = (entityId) => {
               entityId: p[0].entityId,
               imageAlbulmId: p[0].imageAlbulmId,
               text: p[0].text,
+              timestamp: p[0].timestamp,
               images: [],
             };
             p.forEach((imagePost) => {

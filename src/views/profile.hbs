@@ -1,44 +1,47 @@
 {{>_header}}
 <div class="profile-wrapper">
-  <div class="info">
 
-    <div class="upper">
-      <div class="loc-name">
-        <h2 class="display-name">Name</h2>
-        <span class="stroke"></span>
-        <h4 class="location">City, Country</h4>
-      </div>
+  <div class="info-container">
+    <div class="info">
+      <div class="upper">
+        <div class="loc-name">
+          <h2 class="display-name">Name</h2>
+          <span class="stroke"></span>
+          <h4 class="location">City, Country</h4>
+        </div>
 
-      <div class="image-container">
-        <div class="inner">
-          <img class="img" src="/static/img/bbe.png">
+        <div class="image-container">
+          <div class="inner">
+            <img class="img" src="/static/img/bbe.png">
+          </div>
         </div>
       </div>
-    </div>
 
 
-    <div class="statistics">
-      <div class="followers">
-        <p class="number">666</p>
-        <p class="text">Followers</p>
+      <div class="statistics">
+        <div class="followers">
+          <p class="number">666</p>
+          <p class="text">Followers</p>
+        </div>
+        <div class="following">
+          <p class="number">666</p>
+          <p class="text">Following</p>
+        </div>
       </div>
-      <div class="following">
-        <p class="number">666</p>
-        <p class="text">Following</p>
+
+      <div class="bio">
+        <p class="title">Bio</p>
+        <p class="bio-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+          ut labore et dolore magna aliqua.</p>
       </div>
     </div>
-
-    <div class="bio">
-      <p class="title">Bio</p>
-      <p class="bio-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-    </div>
-
   </div>
+
   <div class="feed">
     {{#each posts}}
-      {{>_single-post}}
+    {{>_single-post}}
     {{else}}
-      <p>no posts found</p>
+    <p>no posts found</p>
     {{/each}}
   </div>
 </div>

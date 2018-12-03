@@ -24,19 +24,16 @@ let inputType = 'all';
 // TODO: change accepted filetype according to checked radio button
 const fileSelection = () => {
   imgFiletype.addEventListener('change', (e) => {
-    console.log('image radio button selected');
     fileInput.accept = img;
     inputType = fileInput.accept;
   });
 
   videoFiletype.addEventListener('change', (e) => {
-    console.log('video radio button selected');
     fileInput.accept = video;
     inputType = fileInput.accept;
   });
 
   audioFiletype.addEventListener('change', (e) => {
-    console.log('audio radio button selected');
     fileInput.accept = audio;
     inputType = fileInput.accept;
   });
@@ -75,9 +72,9 @@ submitBtn.addEventListener('click', (e) => {
 
   closeOverlay();
 
-  for (const [key, value] of fd.entries()) {
+  /* for (const [key, value] of fd.entries()) {
     console.log(key, value);
-  }
+  } */
 
 
   const textSettings = {
@@ -96,7 +93,6 @@ submitBtn.addEventListener('click', (e) => {
   };
 
   if (inputType == 'all') {
-    console.log('text');
     fetch('/post', textSettings)
       .then((response) => response.json())
       .then((json) => {
@@ -106,11 +102,12 @@ submitBtn.addEventListener('click', (e) => {
         }
 
         // const timestamp = JSON.parse(json);
-        console.log(json.timestamp);
         const markup = `
           <div class="post-card">
-            <div class="text-container">
-              <p>${json.timestamp}</p>
+          <div class="post-header">
+            <p>${json.timestamp}</p>
+          </div>
+            <div class="profile-container">
               <p>${json.text}</p>
             </div>
           </div>
@@ -123,7 +120,6 @@ submitBtn.addEventListener('click', (e) => {
         console.log(`error ${err}`);
       });
   } else if (inputType == img) {
-    console.log(fd.entries());
     fetch('/post/image', imgSettings)
       .then((response) => response.json())
       .then((json) => {
@@ -132,6 +128,27 @@ submitBtn.addEventListener('click', (e) => {
           return;
         }
         console.log(json);
+        const imageUrl = json[1].images[0].fileName;
+        console.log(imageUrl);
+        const timestamp = json[1].timestamp;
+        const text = json[1].text;
+        const markup = `
+        <div id="post-card">
+          <div class="post-header">
+            <div class="usr-time">
+              <p>${timestamp}</p>
+            </div>
+        </div>
+          <div class="text-container">
+            <p>${text}</p>
+          </div>
+          <div class="image-container">
+            <img src="/static/uploads/${imageUrl}">
+          </div>
+        </div>
+        `;
+        body += markup;
+        postText.innerHTML = body;
       })
       .catch((err) => {
         console.log(`error ${err}`);

@@ -1,7 +1,6 @@
 'use strict';
 const passport = require('passport');
 const users = require('./users');
-const db = require('../modules/database.js');
 
 const initUser = (app) => {
   app.get('/', renderWelcome);
@@ -66,11 +65,12 @@ const addUser = (req, res, next) => {
 };
 
 const getUser = (req, res) => {
-  console.log(req.user);
+  console.log(req.user.username);
   users.getOwnPosts(req, res).then((results) => {
-    console.log(results);
+    // console.log(results);
     res.render('profile', {
       posts: results,
+      user: req.user.username,
     });
   }).catch((err) => res.send(err));
 };

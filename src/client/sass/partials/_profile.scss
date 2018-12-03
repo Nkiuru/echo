@@ -12,165 +12,170 @@
     overflow: hidden;
   }
 
-  .info {
-    @include mobile {
-      border: 1px solid $card-border-color;
-      border-radius: $card-border-radius;
-      margin-right: 0;
-    }
-
+  .info-container {
     flex: 2;
-    padding: 1rem;
-    margin-right: .5rem;
-    background-color: $snow;
-    border: 1px solid $card-border-color;
-    border-top: none;
-    border-radius: 0 0 $card-border-radius $card-border-radius;
-    text-align: center;
-    font-size: $font-size-regular;
 
-    .upper {
+    .info {
       @include mobile {
-        display: flex;
-        flex-direction: row-reverse;
-        align-items: center;
-      }
-
-      .loc-name {
-        @include mobile {
-          flex: 1;
-        }
-
-        .display-name {
-          z-index: 1;
-          position: relative;
-          font-weight: $font-bold;
-          margin-bottom: .5rem;
-          color: $main-darkblue;
-    
-          &::before {
-            content: url(/static/img/stroke-green-profile.svg);
-            z-index: -1;
-            position: absolute;
-            left: -50%;
-            right: -50%;
-          }
-        }
-
-        .stroke {
-          background-image: url('/static/img/stroke-green-profile.svg');
-        }
-          
-    
-        .location {
-          font-family: $lato;
-          color: $medium-grey;
-        }
-      }
-
-      .display-name,
-      .location {
-        margin: 0;
-        margin-bottom: 1rem;
-        font-weight: $font-regular;
-      }
-  
-      .image-container {
-        border-radius: 100%;
-        width: 10rem;
-        height: 10rem;
-        margin: auto;
-        margin-bottom: 1rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
         border: 1px solid $card-border-color;
+        border-radius: $card-border-radius;
+        margin-right: 0;
+      }
 
-        @include sm-desktop {
-          width: 8rem;
-          height: 8rem;
-        }
+      padding: 1rem;
+      margin-right: .5rem;
+      background-color: $snow;
+      border: 1px solid $card-border-color;
+      border-top: none;
+      border-radius: 0 0 $card-border-radius $card-border-radius;
+      text-align: center;
+      font-size: $font-size-regular;
 
+      .upper {
         @include mobile {
-          width: 6rem;
-          height: 6rem;
-          margin: 0;
+          display: flex;
+          flex-direction: row-reverse;
+          align-items: center;
         }
-  
-        .inner {
-          overflow: hidden;
-          width: 90%;
-          height: 90%;
-          border-radius: 100%;
-  
-          .img {
-            width: 100%;
+
+        .loc-name {
+          @include mobile {
+            flex: 1;
+          }
+
+          .display-name {
+            z-index: 1;
+            position: relative;
+            font-weight: $font-bold;
+            margin-bottom: .5rem;
+            color: $main-darkblue;
+
+            &::before {
+              content: url(/static/img/stroke-green-profile.svg);
+              z-index: -1;
+              position: absolute;
+              left: -50%;
+              right: -50%;
+            }
+          }
+
+          .stroke {
+            background-image: url('/static/img/stroke-green-profile.svg');
+          }
+
+
+          .location {
+            font-family: $lato;
+            color: $medium-grey;
           }
         }
-      }  
-    }
 
+        .display-name,
+        .location {
+          margin: 0;
+          margin-bottom: 1rem;
+          font-weight: $font-regular;
+        }
 
-    .statistics {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 1rem;
+        .image-container {
+          border-radius: 100%;
+          width: 10rem;
+          height: 10rem;
+          margin: auto;
+          margin-bottom: 1rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border: 1px solid $card-border-color;
 
-      @include mobile {
-        justify-content: flex-start;
-        flex-direction: row;
-        margin-top: 1rem;
+          @include sm-desktop {
+            width: 8rem;
+            height: 8rem;
+          }
+
+          @include mobile {
+            width: 6rem;
+            height: 6rem;
+            margin: 0;
+          }
+
+          .inner {
+            overflow: hidden;
+            width: 90%;
+            height: 90%;
+            border-radius: 100%;
+
+            .img {
+              width: 100%;
+            }
+          }
+        }
       }
 
-      @include sm-desktop {
-        flex-direction: column;
-        align-items: center;
-      }
-      
-      .followers {
+
+      .statistics {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+
         @include mobile {
-          margin-right: 1rem;
+          justify-content: flex-start;
+          flex-direction: row;
+          margin-top: 1rem;
         }
 
         @include sm-desktop {
-          //margin-right: 1rem;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .followers {
+          @include mobile {
+            margin-right: 1rem;
+          }
+
+          @include sm-desktop {
+            //margin-right: 1rem;
+          }
+        }
+
+        .followers,
+        .following {
+          display: flex;
+          //margin: .25rem 0;
+
+          .number {
+            margin: 0 5px 0 0;
+            color: $main-darkblue;
+            font-weight: $font-bold;
+          }
+
+          .text {
+            color: $medium-grey;
+            margin: 0;
+          }
         }
       }
 
-      .followers,
-      .following {
-        display: flex;
-        //margin: .25rem 0;
-        
-        .number {
-          margin: 0 5px 0 0;
-          color: $main-darkblue;
-          font-weight: $font-bold;
-        }
-        .text {
-          color: $medium-grey;
+      .bio {
+        text-align: left;
+
+        .title,
+        .bio-text {
           margin: 0;
         }
+
+        .bio-text {
+          color: $medium-grey;
+        }
+
+        .title {
+          font-weight: $font-bold;
+          color: $main-darkblue;
+        }
       }
     }
 
-    .bio {
-      text-align: left;
-
-      .title,
-      .bio-text {
-        margin: 0;
-      }
-
-      .bio-text {
-        color: $medium-grey;
-      }
-
-      .title {
-        font-weight: $font-bold;
-        color: $main-darkblue;
-      }
-    }
   }
 
   .feed {

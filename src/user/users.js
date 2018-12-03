@@ -109,6 +109,8 @@ const getOwnPosts = (req, res) => {
                     timestamp: prev.timestamp,
                     images: images,
                   });
+                  // console.log(posts);
+                  // console.log('IMAGES ' + images[0].fileName);
                   images = [];
                 }
                 first = false;
@@ -136,7 +138,7 @@ const getOwnPosts = (req, res) => {
         }
         return 0;
       });
-      console.log(posts);
+      // console.log(posts);
       resolve(posts);
     }).catch((err) => reject(err));
   });
