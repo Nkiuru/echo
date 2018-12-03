@@ -91,42 +91,40 @@ const getOwnPosts = (req, res) => {
 
     Promise.all([audio, text, video, image]).then((results) => {
       const posts = [];
-      results.forEach((p) => {
-        if (p.length > 0) {
-          let id = 0;
-          let first = true;
-          let prev = {};
-          let images = [];
-          p.forEach((p) => {
-            if (p.hasOwnProperty('imageAlbulmId')) {
-              if (id !== p.imageAlbulmId) {
-                id = p.imageAlbulmId;
-                if (!first) {
-                  posts.push({
-                    entityId: prev.entityId,
-                    imageAlbumId: prev.imageAlbulmId,
-                    text: prev.text,
-                    timestamp: prev.timestamp,
-                    images: images,
-                  });
-                  // console.log(posts);
-                  // console.log('IMAGES ' + images[0].fileName);
-                  images = [];
-                }
-                first = false;
-              }
-              images.push({
-                title: p.title,
-                description: p.description,
-                fileName: p.fileName,
-              });
-              prev = p;
-            } else {
-              posts.push(p);
-            }
-          });
-        }
+      results[0].forEach((audioPost) => { // audio posts
+        posts.push(audioPost);
       });
+      results[1].forEach((textPost) => { // text posts
+        posts.push(textPost);
+      });
+      results[2].forEach((videoPost) => { // video posts
+        posts.push(videoPost);
+      });
+      const imagePosts = results[3];
+      for (let i = 0; i < imagePosts.length; i++) {
+        const lastItem = posts[posts.length - 1];
+        if (lastItem.imageAlbulmId === imagePosts[i].imageAlbulmId) {
+          lastItem.images.push({
+            title: imagePosts[i].title,
+            description: imagePosts[i].description,
+            fileName: imagePosts[i].fileName,
+          });
+        } else {
+          const post = {
+            entityId: imagePosts[i].entityId,
+            imageAlbulmId: imagePosts[i].imageAlbulmId,
+            text: imagePosts[i].text,
+            timestamp: imagePosts[i].timestamp,
+            images: [],
+          };
+          post.images.push({
+            title: imagePosts[i].title,
+            description: imagePosts[i].description,
+            fileName: imagePosts[i].fileName,
+          });
+          posts.push(post);
+        }
+      }
       posts.sort((a, b) => {
         const aDate = new Date(a.timestamp);
         const bDate = new Date(b.timestamp);
