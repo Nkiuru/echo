@@ -1,10 +1,27 @@
 'use strict';
 
 const loginForm = document.querySelector('form[name=login-form]');
+const input = document.querySelector('.login-input');
 const btn = document.querySelector('#submit');
 
-btn.addEventListener('click', (e) => {
+
+input.addEventListener('keyup', (e) => {
   e.preventDefault();
+  if (event.keyCode === 13) {
+    fetchUser();
+  }
+});
+
+const login = () => {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    fetchUser();
+  });
+};
+
+login();
+
+const fetchUser = () => {
   const settings = {
     method: 'POST',
     headers: {
@@ -15,7 +32,6 @@ btn.addEventListener('click', (e) => {
       password: loginForm.elements.namedItem('psw').value,
     }),
   };
-
   fetch('/login', settings)
     .then((response) => response.json())
     .then((json) => {
@@ -28,4 +44,4 @@ btn.addEventListener('click', (e) => {
     .catch((err) => {
       console.log(err);
     });
-});
+};

@@ -64,19 +64,26 @@ closeBtn.addEventListener('click', (e) => {
   closeOverlay();
 });
 
+const dateTimeReviver = (key, value) => {
+  if (typeof value === 'string') {
+    const x = /\/Date\((\d*)\)\//.exec(value);
+    if (x) {
+      return new Date(+x[1]);
+    }
+  }
+  return value;
+};
+
 
 submitBtn.addEventListener('click', (e) => {
   e.preventDefault();
+  closeOverlay();
 
   const fd = new FormData(postForm);
-
-  closeOverlay();
 
   /* for (const [key, value] of fd.entries()) {
     console.log(key, value);
   } */
-
-
   const textSettings = {
     method: 'POST',
     headers: {
@@ -92,7 +99,7 @@ submitBtn.addEventListener('click', (e) => {
     body: fd,
   };
 
-  if (inputType == 'all') {
+  const textPost = () => {
     fetch('/post', textSettings)
       .then((response) => response.json())
       .then((json) => {
@@ -100,12 +107,14 @@ submitBtn.addEventListener('click', (e) => {
           alert(json.error);
           return;
         }
-
-        // const timestamp = JSON.parse(json);
+        // const timestamp = JSON.parse(json.timestamp, dateTimeReviver);
+        // console.log('timestamp' + timestamp);
         const markup = `
-          <div class="post-card">
-          <div class="post-header">
-            <p>${json.timestamp}</p>
+          <div id="post-card">
+            <div class="post-header">
+              <div class="usr-time">
+                <p>${json.timestamp}</p>
+              </div>
           </div>
             <div class="profile-container">
               <p>${json.text}</p>
@@ -119,7 +128,9 @@ submitBtn.addEventListener('click', (e) => {
       .catch((err) => {
         console.log(`error ${err}`);
       });
-  } else if (inputType == img) {
+  };
+
+  const imgPost = () => {
     fetch('/post/image', imgSettings)
       .then((response) => response.json())
       .then((json) => {
@@ -153,6 +164,12 @@ submitBtn.addEventListener('click', (e) => {
       .catch((err) => {
         console.log(`error ${err}`);
       });
+  };
+
+  if (inputType == 'all') {
+    textPost();
+  } else if (inputType == img) {
+    imgPost();
   } else if (inputType == video) {
     console.log('video');
   } else {

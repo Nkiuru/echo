@@ -72,9 +72,9 @@ submit.addEventListener('click', (e) => {
     };
 
     console.log(settings);
-    fetch('/register', settings).
-      then(response => response.json()).
-      then((json) => {
+    fetch('/register', settings)
+      .then(response => response.json())
+      .then((json) => {
         if (!json.success) {
           alert(json.error);
           if (json.error === 'ER_DUP_ENTRY') {
@@ -85,7 +85,7 @@ submit.addEventListener('click', (e) => {
           error.style.display = 'block';
           return;
         }
-        window.location.replace('/users');
+        window.location.replace(`/users/`);
       }).
       catch((err) => {
         console.log('ERROR ' + err);

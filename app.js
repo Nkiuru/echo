@@ -49,19 +49,20 @@ app.use(passport.session());
 // Static folder
 app.use('/static', express.static(path.join(__dirname, '/dist')));
 
+
 app.get('/', (req, res) => {
   res.render('index');
 });
 
 app.get('/login', (req, res) => {
-  res.render('logregbase', {login: true});
+  res.render('logregbase', { login: true });
 });
 
 app.get('/register', (req, res) => {
   db.getCountries().then((result) => {
-    res.render('logregbase', {country: result});
+    res.render('logregbase', { country: result });
   }).catch((err) => {
-    res.render('logregbase', {error: err});
+    res.render('logregbase', { error: err });
   });
 });
 

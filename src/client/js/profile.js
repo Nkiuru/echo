@@ -5,8 +5,6 @@ const bio = document.querySelector('.bio-text');
 fetch('/users/user')
   .then((response) => response.json())
   .then((json) => {
-    // console.log(JSON.stringify(json));
-
     // set display name
     displayName.textContent = json.displayName;
 
