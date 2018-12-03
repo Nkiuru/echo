@@ -68,7 +68,6 @@ const audioPost = (req, res, next) => {
 };
 
 const imagePost = (req, res, next) => {
-  console.log(req.body);
   uploads.createImageAlbum(req, res, next).then((imageAlbumId) => {
     req.imageAlbumId = imageAlbumId;
     return uploads.createImages(req, res, next);
@@ -82,7 +81,7 @@ const imagePost = (req, res, next) => {
       {
         success: true,
       }, imagePost]);
-    console.log('image post' + imagePost);
+    // console.log('image post' + imagePost);
     return res.end();
   }).catch((err) => next(err));
 };

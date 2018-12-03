@@ -374,6 +374,7 @@ const createImageAlbum = (title, description) => {
   });
 };
 
+
 module.exports = {
   connection: connection,
   select: select,

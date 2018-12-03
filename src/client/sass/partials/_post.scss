@@ -1,6 +1,40 @@
-.post-card {
-  background: $snow;
+#post-card {
+  z-index: 10;
   padding: 1rem;
-  text-align: center;
+  background: $snow;
+  border: $card-border;
+  border-radius: $card-border-radius;
   margin-bottom: 1rem;
+
+  .post-header {
+    display: flex;
+
+    .profile-container {
+      width: 2.5rem;
+      height: 2.5rem;
+      margin-right: .8rem;
+    }
+
+    .usr-time {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      h4, p {
+        margin: 0;
+      }
+
+      p {
+        color: $card-border-color;
+        font-size: 12px;
+      }
+    }
+  }
+
+  .image-container {
+    text-align: center;
+    img {
+      border-radius: 2px;
+    }
+  }
 }

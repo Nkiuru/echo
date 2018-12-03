@@ -68,7 +68,7 @@ const addUser = (req, res, next) => {
 const getUser = (req, res) => {
   console.log(req.user);
   users.getOwnPosts(req, res).then((results) => {
-    // console.log(result);
+    console.log(results);
     res.render('profile', {
       posts: results,
     });

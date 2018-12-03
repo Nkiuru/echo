@@ -104,7 +104,9 @@ submitBtn.addEventListener('click', (e) => {
           alert(json.error);
           return;
         }
-        console.log(json);
+
+        // const timestamp = JSON.parse(json);
+        console.log(json.timestamp);
         const markup = `
           <div class="post-card">
             <div class="text-container">

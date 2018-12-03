@@ -25,30 +25,13 @@
       @include mobile {
         display: none;
       }
-  
-      width: 64px;
-      height: 64px;
-      border-radius: 100%;
       margin-top: 64px;
       margin-right: 1rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       background-color: $main_darkblue;
-  
+
       .inner {
         width: 80%;
         height: 80%;
-        border-radius: 100%;
-        background-color: pink;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-  
-        img {
-          width: 100%;
-        }
       }
     }
     .dropdown-toggle {

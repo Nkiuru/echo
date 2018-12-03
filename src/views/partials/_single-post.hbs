@@ -1,8 +1,21 @@
-<div id="single-post-container">
-  <div class="post-card">
-    <div class="text-container">
+<div id="post-card">
+  <div class="post-header">
+    <div class="profile-container">
+      <img src="/static/img/bbe.png" alt="">
+    </div>
+    <div class="usr-time">
+      <h4>username</h4>
       <p>{{timestamp}}</p>
-      <p>{{text}}</p>
     </div>
   </div>
+  <div class="text-container">
+    <p>{{text}}</p>
+  </div>
+  {{#if images}}
+  <div class="image-container">
+    <img src="/static/uploads/8c0103f8c4fe43efdc434078fe560af8">
+  </div>
+  {{else}}
+  <p>eipä ollu kuvia</p>
+  {{/if}}
 </div>
