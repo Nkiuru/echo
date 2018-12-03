@@ -18,7 +18,7 @@ gulp.task('js', () => {
   return gulp
     .src(path.js)
     .pipe(sourcemaps.init()) // create sourcemap
-    .pipe(babel({presets: ['@babel/env']}))
+    .pipe(babel({ presets: ['@babel/env'] }))
     .pipe(uglify()) // minify JS
     .pipe(sourcemaps.write('.')) // create external sourcemap
     .pipe(gulp.dest('dist/js')); // bundle destination
@@ -28,7 +28,7 @@ gulp.task('scss', () => {
   return gulp
     .src(path.scss)
     .pipe(
-      sass({includePaths: ['./src/client/sass']}).on('error', sass.logError) // look for sass imports
+      sass({ includePaths: ['./src/client/sass'] }).on('error', sass.logError) // look for sass imports
     )
     .pipe(gulp.dest('dist/css'));
 });

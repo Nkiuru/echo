@@ -4,8 +4,8 @@
       <img src="/static/img/x.svg" alt="">
     </a>
     <h1>Create a post</h1>
-    <form name="post-form" class="form post-form">
-      <textarea id="text" rows="4" cols="50" name="text" form="post-form" placeholder="Write a post..."></textarea>
+    <form name="post-form" class="form post-form" id="post-form">
+      <textarea id="postText" rows="4" cols="50" name="postText" form="post-form" placeholder="Write a post..."></textarea>
       <div class="filetype-selection-container">
         <h4>Choose a filetype</h4>
           <div class="radiobtn-container">
@@ -29,7 +29,7 @@
             <img src="/static/img/icon-video.svg" alt="">
             <h3>Drop files here</h3>
           </div>
-          <input class="file" type="file" name="files[]" id="file" data-multiple-caption="{count} files selected"
+          <input class="file" type="file" accept="all" name="file" id="file-input" data-multiple-caption="{count} files selected"
             multiple />
           <label for="file"></label>
         </div>

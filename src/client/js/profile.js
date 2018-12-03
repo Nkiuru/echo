@@ -2,12 +2,10 @@ const displayName = document.querySelector('.display-name');
 const locationElement = document.querySelector('.location');
 const bio = document.querySelector('.bio-text');
 
-console.log(displayName.innerHTML);
-
 fetch('/users/user')
   .then((response) => response.json())
   .then((json) => {
-    console.log(JSON.stringify(json));
+    // console.log(JSON.stringify(json));
 
     // set display name
     displayName.textContent = json.displayName;
@@ -20,6 +18,7 @@ fetch('/users/user')
     } else {
       locationElement.textContent = json.country;
     }
+
     // set bio text
     if (json.bio) {
       bio.textContent = json.bio;

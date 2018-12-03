@@ -40,7 +40,7 @@ const initUser = (app) => {
         }
 
         res.json({
-          success: true
+          success: true,
         });
         return res.end();
       });

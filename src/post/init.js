@@ -6,13 +6,13 @@ const post = require('./posts');
 const uploads = require('../modules/upload');
 
 const initPost = (app) => {
-  app.post('/post', passport.authenticationMiddleware(), createPost);
-  app.post('/post/video', passport.authenticationMiddleware(), upload.single('video'), videoPost);
-  app.post('/post/image', passport.authenticationMiddleware(), upload.array('images', 10), imagePost);
-  app.post('/post/audio', passport.authenticationMiddleware(), upload.single('audio'), audioPost);
+  app.post('/post', passport.authenticationMiddleware(), textPost);
+  app.post('/post/video', passport.authenticationMiddleware(), upload.single('file'), videoPost);
+  app.post('/post/image', passport.authenticationMiddleware(), upload.array('file', 10), imagePost);
+  app.post('/post/audio', passport.authenticationMiddleware(), upload.single('file'), audioPost);
 };
 
-const createPost = (req, res, next) => {
+const textPost = (req, res, next) => {
   console.log(req.body);
   post.createTextPost(req.user.userId, req.body.postText).then((entityId) => {
     return post.getPost(entityId);
@@ -68,6 +68,7 @@ const audioPost = (req, res, next) => {
 };
 
 const imagePost = (req, res, next) => {
+  console.log(req.body);
   uploads.createImageAlbum(req, res, next).then((imageAlbumId) => {
     req.imageAlbumId = imageAlbumId;
     return uploads.createImages(req, res, next);
@@ -81,6 +82,7 @@ const imagePost = (req, res, next) => {
       {
         success: true,
       }, imagePost]);
+    console.log('image post' + imagePost);
     return res.end();
   }).catch((err) => next(err));
 };

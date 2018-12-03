@@ -93,7 +93,7 @@
           cursor: pointer;
 
           &::before {
-            content:'';
+          content:'';
           -webkit-appearance: none;
           background-color: transparent;
           border: 1px solid $main_blue;
@@ -141,12 +141,12 @@
         border: 1px dashed $medium-grey;
 
         .file-icons {
-          display: flex;
+          display: none;
           justify-content: space-evenly;
           flex-wrap: wrap
         }
 
-        input {
+        /*input {
           display: none;
         }
 
@@ -160,7 +160,7 @@
           border: none;
           cursor: pointer;
 
-        }
+        } */
       }
     }
   }
