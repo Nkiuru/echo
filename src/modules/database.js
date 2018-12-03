@@ -199,8 +199,9 @@ const getUserVideoPosts = (userId) => {
   console.log(userId);
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT vp.* FROM entity e, videoPost vp
-      WHERE e.userId = ? AND vp.entityId = e.entityId`,
+      `SELECT vp.*, upload.fileName
+       FROM entity e, videoPost vp, upload
+       WHERE e.userId = ? AND vp.entityId = e.entityId AND vp.uploadId = upload.uploadId;`,
       [userId],
       (err, results) => {
         if (err) reject(err);
