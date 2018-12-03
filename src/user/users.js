@@ -93,8 +93,35 @@ const getOwnPosts = (req, res) => {
       const posts = [];
       results.forEach((p) => {
         if (p.length > 0) {
+          let id = 0;
+          let first = true;
+          let prev = {};
+          let images = [];
           p.forEach((p) => {
-            posts.push(p);
+            if (p.hasOwnProperty('imageAlbulmId')) {
+              if (id !== p.imageAlbulmId) {
+                id = p.imageAlbulmId;
+                if (!first) {
+                  posts.push({
+                    entityId: prev.entityId,
+                    imageAlbumId: prev.imageAlbulmId,
+                    text: prev.text,
+                    timestamp: prev.timestamp,
+                    images: images,
+                  });
+                  images = [];
+                }
+                first = false;
+              }
+              images.push({
+                title: p.title,
+                description: p.description,
+                fileName: p.fileName,
+              });
+              prev = p;
+            } else {
+              posts.push(p);
+            }
           });
         }
       });
@@ -109,6 +136,7 @@ const getOwnPosts = (req, res) => {
         }
         return 0;
       });
+      console.log(posts);
       resolve(posts);
     }).catch((err) => reject(err));
   });
