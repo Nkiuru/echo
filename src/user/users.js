@@ -82,9 +82,42 @@ const changePassword = (req, res) => {
   });
 };
 
+const getOwnPosts = (req, res) => {
+  return new Promise((resolve, reject) => {
+    const audio = db.getUserAudioPosts(req.user.userId);
+    const video = db.getUserVideoPosts(req.user.userId);
+    const text = db.getUserTextPosts(req.user.userId);
+    const image = db.getUserImagePosts(req.user.userId);
+
+    Promise.all([audio, text, video, image]).then((results) => {
+      const posts = [];
+      results.forEach((p) => {
+        if (p.length > 0) {
+          p.forEach((p) => {
+            posts.push(p);
+          });
+        }
+      });
+      posts.sort((a, b) => {
+        const aDate = new Date(a.timestamp);
+        const bDate = new Date(b.timestamp);
+        if (aDate.getTime() < bDate.getTime()) {
+          return 1;
+        }
+        if (aDate.getTime() > bDate.getTime()) {
+          return -1;
+        }
+        return 0;
+      });
+      resolve(posts);
+    }).catch((err) => reject(err));
+  });
+};
+
 module.exports = {
   createUser: createUser,
   getUser: getUser,
   getOwnData: getOwnData,
   changePassword: changePassword,
+  getOwnPosts,
 };

@@ -3,7 +3,6 @@ const passport = require('passport');
 const users = require('./users');
 const db = require('../modules/database.js');
 
-
 const initUser = (app) => {
   app.get('/', renderWelcome);
   app.get('/users', passport.authenticationMiddleware(), testAuth);
@@ -40,7 +39,7 @@ const initUser = (app) => {
         }
 
         res.json({
-          success: true
+          success: true,
         });
         return res.end();
       });
@@ -68,13 +67,12 @@ const addUser = (req, res, next) => {
 
 const getUser = (req, res) => {
   console.log(req.user);
-  db.getUserTextPosts(req.user.userId)
-    .then((result) => {
-      // console.log(result);
-      res.render('profile', {
-        posts: result,
-      });
+  users.getOwnPosts(req, res).then((results) => {
+    // console.log(result);
+    res.render('profile', {
+      posts: results,
     });
+  }).catch((err) => res.send(err));
 };
 
 const getUserData = (req, res) => {

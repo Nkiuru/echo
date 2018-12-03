@@ -243,7 +243,7 @@ const getUserAudioPosts = (userId) => {
   console.log(userId);
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT tp.* FROM entity e, audioPost ap
+      `SELECT ap.* FROM entity e, audioPost ap
       WHERE e.userId = ? AND ap.entityId = e.entityId`,
       [userId],
       (err, results) => {
