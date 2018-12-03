@@ -76,7 +76,6 @@ const imagePost = (req, res, next) => {
   }).then((entityId) => {
     return post.getPost(entityId);
   }).then((imagePost) => {
-    console.log(imagePost);
     res.json([
       {
         success: true,

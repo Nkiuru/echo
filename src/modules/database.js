@@ -185,8 +185,9 @@ const createVideoPost = (entityId, uploadId, text) => {
 const getVideoPost = (entityId) => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT * FROM videoPost
-      WHERE entityId = ?;`,
+      `SELECT vp.*, upload.fileName
+       FROM entity e, videoPost vp, upload
+       WHERE vp.entityId = ? AND vp.entityId = e.entityId AND vp.uploadId = upload.uploadId;`,
       [entityId],
       (err, results) => {
         if (err) reject(err);
@@ -230,8 +231,11 @@ const createAudioPost = (entityId, songId, text) => {
 const getAudioPost = (entityId) => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT * FROM audioPost
-      WHERE entityId = ?;`,
+      `SELECT ap.*, song.title, upload.fileName, genre.genreName, band.bandName FROM 
+	      entity e, audioPost ap, song, upload,genre,band 
+	      WHERE ap.entityId = ? AND ap.entityId = e.entityId AND ap.songId = song.songId AND song.uploadId = upload.uploadId
+        AND song.genreId = genre.genreId
+        AND band.bandId = song.bandId;`,
       [entityId],
       (err, results) => {
         if (err) reject(err);
@@ -277,8 +281,8 @@ const createImagePost = (entityId, albumId, text) => {
 const getImagePost = (entityId) => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT * FROM imagePost
-      WHERE entityId = ?;`,
+      `SELECT ip.*, image.title, image.description, upload.fileName FROM entity e, imagePost ip, image, upload
+       WHERE ip.entityId = ? AND e.entityId = ip.entityId AND image.imageAlbulmId = ip.imageAlbulmId AND image.uploadId = upload.uploadId`,
       [entityId],
       (err, results) => {
         if (err) reject(err);
@@ -292,7 +296,7 @@ const getUserImagePosts = (userId) => {
   return new Promise((resolve, reject) => {
     connection.execute(
       `SELECT ip.*, image.title, image.description, upload.fileName FROM entity e, imagePost ip, image, upload
-       WHERE e.userId = 29 AND ip.entityId = e.entityId AND
+       WHERE e.userId = ? AND ip.entityId = e.entityId AND
         image.imageAlbulmId = ip.imageAlbulmId AND image.uploadId = upload.uploadId`,
       [userId],
       (err, results) => {

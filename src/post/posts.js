@@ -59,7 +59,25 @@ const getPost = (entityId) => {
       let post = [];
       result.forEach((p) => {
         if (p.length > 0) {
-          post = p[0];
+          if (p[0].hasOwnProperty('imageAlbulmId')) { // This is an image post with possibly many images.
+            post = {
+              entityId: p[0].entityId,
+              imageAlbulmId: p[0].imageAlbulmId,
+              text: p[0].text,
+              images: [],
+            };
+            p.forEach((imagePost) => {
+              if (imagePost.imageAlbulmId === post.imageAlbulmId) {
+                post.images.push({
+                  title: imagePost.title,
+                  description: imagePost.description,
+                  fileName: imagePost.fileName,
+                });
+              }
+            });
+          } else {
+            post = p[0];
+          }
         }
       });
       resolve(post);
