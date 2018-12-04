@@ -381,8 +381,8 @@ const createImageAlbum = (title, description) => {
 const createComment = (entityId, userId, text) => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `INSERT INTO entityComment(commentId, entityId, comment, parentCommentId, userId)
-      VALUES(0, ?, ?, NULL, ?)`, [entityId, text, userId],
+      `INSERT INTO entityComment(commentId, entityId, comment, parentCommentId, userId, timestamp)
+      VALUES(0, ?, ?, NULL, ?, NOW())`, [entityId, text, userId],
       (err, results) => {
         if (err) reject(err);
         if (results) resolve(results.insertId);
@@ -393,8 +393,8 @@ const createComment = (entityId, userId, text) => {
 const createSubComment = (entityId, text, commentId, userId) => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `INSERT INTO entityComment(commentId, entityId, comment, parentCommentId, userId)
-      VALUES(0, ?, ?, ?, ?)`, [entityId, text, commentId, userId],
+      `INSERT INTO entityComment(commentId, entityId, comment, parentCommentId, userId, timestamp)
+      VALUES(0, ?, ?, ?, ?, NOW())`, [entityId, text, commentId, userId],
       (err, results) => {
         if (err) reject(err);
         if (results) resolve(results.insertId);
