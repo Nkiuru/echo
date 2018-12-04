@@ -1,12 +1,14 @@
 'use strict';
 const passport = require('passport');
 const users = require('./users');
-const db = require('../modules/database.js');
-
+const multer = require('multer');
+const path = require('path');
+const upload = multer({ dest: (path.join(__dirname, '../../dist/uploads')) });
+const db = require('../modules/database');
+const uploadJs = require('../modules/upload');
 
 const initUser = (app) => {
   app.get('/', renderWelcome);
-  app.get('/users', passport.authenticationMiddleware(), testAuth);
   app.post('/login', (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
       if (err) {
@@ -40,7 +42,7 @@ const initUser = (app) => {
         }
 
         res.json({
-          success: true
+          success: true,
         });
         return res.end();
       });
@@ -48,10 +50,21 @@ const initUser = (app) => {
   });
   app.post('/register', addUser);
   app.post('/logout', passport.authenticationMiddleware(), logoutUser);
+  app.get('/user/settings', passport.authenticationMiddleware(), (req, res) => {
+    res.render('usersettings');
+  });
   app.get('/user/:username', passport.authenticationMiddleware(), getUser);
   app.get('/users/user', passport.authenticationMiddleware(), getOwnData);
   app.get('/users/:userId', passport.authenticationMiddleware(), getUserData);
+  app.get('/users', passport.authenticationMiddleware(), testAuth);
+
   app.post('/user/pwd', passport.authenticationMiddleware(), updatePassword);
+  app.post('/login', passport.authenticate('local', {
+    successRedirect: '/users',
+    failureRedirect: '/',
+  }));
+  app.post('/users', addUser);
+  app.post('/user/settings', passport.authenticationMiddleware(), upload.single('mediafile'), uploadUserData);
 };
 
 const renderWelcome = (req, res) => {
@@ -98,6 +111,21 @@ const logoutUser = (req, res) => {
   res.json({ success: true });
   req.logout();
   res.end();
+};
+
+const uploadUserData = (req, res, next) => {
+  uploadJs.createUpload(req, res, next).then((uploadId)=> {
+    const data = [
+      req.body.displayName,
+      req.body.bio,
+      req.body.city,
+      uploadId,
+      req.user.userId,
+    ];
+    db.updateUsrData(data);
+    console.log(data);
+    res.send(data);
+  }).catch((err)=>console.log(err));
 };
 
 module.exports = initUser;
