@@ -11,12 +11,12 @@ body {
   bottom: 0;
   right: 0;
   margin: 5rem;
-  position: absolute;
+  position: fixed;
 
   img {
     border-radius: 100%;
   }
-  
+
   &:hover {
     img {
       //box-shadow: 0px 0px 10px rgba(42, 222, 146, 1);
