@@ -417,7 +417,7 @@ const getAllAudioPosts = () => {
   return new Promise((resolve, reject) => {
     connection.execute(
       `SELECT ap.*, song.title, upload.fileName, genre.genreName, band.bandName FROM 
-        entity e, audioPost ap, song, upload,genre,band 
+        entity e, audioPost ap, song, upload, genre, band
         WHERE ap.entityId = e.entityId AND ap.songId = song.songId AND song.uploadId = upload.uploadId
         AND song.genreId = genre.genreId
         AND band.bandId = song.bandId;`,

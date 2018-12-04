@@ -57,7 +57,7 @@ const getAllImagePosts = () => {
 };
 
 
-const getAllPosts = (req, res) => {
+const getAllPosts = () => {
   return new Promise((resolve, reject) => {
     const audio = db.getAllAudioPosts();
     const video = db.getAllVideoPosts();
@@ -80,9 +80,8 @@ const getAllPosts = (req, res) => {
       const imagePosts = results[3];
       console.log(imagePosts);
       for (let i = 0; i < imagePosts.length; i++) {
-        console.log('for loop :DD');
         const lastItem = posts[posts.length - 1] || {};
-        if (lastitem.hasOwnProperty('imageAlbulmId') && lastItem.imageAlbulmId === imagePosts[i].imageAlbulmId) {
+        if (lastItem.hasOwnProperty('imageAlbulmId') && lastItem.imageAlbulmId === imagePosts[i].imageAlbulmId) {
           lastItem.images.push({
             title: imagePosts[i].title,
             description: imagePosts[i].description,
