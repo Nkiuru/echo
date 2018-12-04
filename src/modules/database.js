@@ -122,6 +122,17 @@ const changePassword = (newPwd, userId) => {
   });
 };
 
+const updateUsrData = (data, userId) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      'UPDATE user SET displayName = ?, bio = ?, city = ?, profileImageId = ? WHERE userID = ?', data,
+      (err, results, fields) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
 const createTextPost = (entityId, text) => {
   return new Promise((resolve, reject) => {
     connection.execute(
@@ -398,4 +409,5 @@ module.exports = {
   createBand: createBand,
   createImageAlbum: createImageAlbum,
   createImage: createImage,
+  updateUsrData: updateUsrData,
 };
