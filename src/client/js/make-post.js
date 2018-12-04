@@ -144,19 +144,19 @@ submitBtn.addEventListener('click', (e) => {
         const timestamp = json[1].timestamp;
         const text = json[1].text;
         const markup = `
-        <div id="post-card">
-          <div class="post-header">
-            <div class="usr-time">
-              <p>${timestamp}</p>
+          <div id="post-card">
+            <div class="post-header">
+              <div class="usr-time">
+                <p>${timestamp}</p>
+              </div>
+          </div>
+            <div class="text-container">
+              <p>${text}</p>
             </div>
-        </div>
-          <div class="text-container">
-            <p>${text}</p>
+            <div class="image-container">
+              <img src="/static/uploads/${imageUrl}">
+            </div>
           </div>
-          <div class="image-container">
-            <img src="/static/uploads/${imageUrl}">
-          </div>
-        </div>
         `;
         body += markup;
         postText.innerHTML = body;

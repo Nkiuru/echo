@@ -1,5 +1,4 @@
 .profile-wrapper {
-  // margin: 0 25rem 0 15rem;
   display: flex;
   max-width: 60%;
   justify-content: center;
@@ -17,17 +16,17 @@
 
     .info {
       @include mobile {
-        border: 1px solid $card-border-color;
+        border: 1px solid $dark-card-border;
         border-radius: $card-border-radius;
         margin-right: 0;
       }
 
       padding: 1rem;
+      margin-top: 1rem;
       margin-right: .5rem;
-      background-color: $snow;
-      border: 1px solid $card-border-color;
-      border-top: none;
-      border-radius: 0 0 $card-border-radius $card-border-radius;
+      background-color: $main-darkblue;
+      border: 1px solid $dark-card-border;
+      border-radius: $card-border-radius;
       text-align: center;
       font-size: $font-size-regular;
 
@@ -48,10 +47,10 @@
             position: relative;
             font-weight: $font-bold;
             margin-bottom: .5rem;
-            color: $main-darkblue;
+            color: $snow;
 
             &::before {
-              content: url(/static/img/stroke-green-profile.svg);
+              content: url(/static/img/stroke-blue-profile.svg);
               z-index: -1;
               position: absolute;
               left: -50%;
@@ -59,14 +58,12 @@
             }
           }
 
-          .stroke {
-            background-image: url('/static/img/stroke-green-profile.svg');
-          }
+
 
 
           .location {
             font-family: $lato;
-            color: $medium-grey;
+            color: $profile-body;
           }
         }
 
@@ -86,6 +83,7 @@
           display: flex;
           justify-content: center;
           align-items: center;
+          background-color: $snow;
           border: 1px solid $card-border-color;
 
           @include sm-desktop {
@@ -146,12 +144,12 @@
 
           .number {
             margin: 0 5px 0 0;
-            color: $main-darkblue;
+            color: $profile-title;
             font-weight: $font-bold;
           }
 
           .text {
-            color: $medium-grey;
+            color: $profile-body;
             margin: 0;
           }
         }
@@ -166,12 +164,12 @@
         }
 
         .bio-text {
-          color: $medium-grey;
+          color: $profile-body;
         }
 
         .title {
           font-weight: $font-bold;
-          color: $main-darkblue;
+          color: $profile-title;
         }
       }
     }
