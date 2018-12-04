@@ -152,7 +152,6 @@ const getTextPost = (entityId) => {
 };
 
 const getUserTextPosts = (userId) => {
-  console.log(userId);
   return new Promise((resolve, reject) => {
     connection.execute(
       `SELECT tp.* FROM entity e, textPost tp
@@ -197,7 +196,6 @@ const getVideoPost = (entityId) => {
 };
 
 const getUserVideoPosts = (userId) => {
-  console.log(userId);
   return new Promise((resolve, reject) => {
     connection.execute(
       `SELECT vp.*, upload.fileName
@@ -245,7 +243,6 @@ const getAudioPost = (entityId) => {
 };
 
 const getUserAudioPosts = (userId) => {
-  console.log(userId);
   return new Promise((resolve, reject) => {
     connection.execute(
       `SELECT ap.*, song.title, upload.fileName, genre.genreName, band.bandName FROM 
@@ -292,7 +289,6 @@ const getImagePost = (entityId) => {
 };
 
 const getUserImagePosts = (userId) => {
-  console.log(userId);
   return new Promise((resolve, reject) => {
     connection.execute(
       `SELECT ip.*, image.title, image.description, upload.fileName FROM entity e, imagePost ip, image, upload
@@ -378,34 +374,92 @@ const createImageAlbum = (title, description) => {
   });
 };
 
+const getAllImagePosts = () => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `SELECT ip.*, image.title, image.description, upload.fileName FROM entity e, imagePost ip, image, upload
+       WHERE ip.entityId = e.entityId AND
+        image.imageAlbulmId = ip.imageAlbulmId AND image.uploadId = upload.uploadId;`,
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
+
+const getAllVideoPosts = () => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `SELECT vp.*, upload.fileName
+       FROM entity e, videoPost vp, upload
+       WHERE vp.entityId = e.entityId AND vp.uploadId = upload.uploadId;`,
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
+const getAllTextPosts = () => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `SELECT tp.* FROM entity e, textPost tp
+      WHERE tp.entityId = e.entityId`,
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
+const getAllAudioPosts = () => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `SELECT ap.*, song.title, upload.fileName, genre.genreName, band.bandName FROM 
+        entity e, audioPost ap, song, upload,genre,band 
+        WHERE ap.entityId = e.entityId AND ap.songId = song.songId AND song.uploadId = upload.uploadId
+        AND song.genreId = genre.genreId
+        AND band.bandId = song.bandId;`,
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
 
 module.exports = {
-  connection: connection,
-  select: select,
-  getCountries: getCountries,
-  getUser: getUser,
-  getgetUserWPassword: getUserWPassword,
-  getUserById: getUserById,
-  createUser: createUser,
-  getUserByIdWEmail: getUserByIdWEmail,
-  createEntity: createEntity,
-  createTextPost: createTextPost,
-  changePassword: changePassword,
-  getTextPost: getTextPost,
-  getUserTextPosts: getUserTextPosts,
-  createVideoPost: createVideoPost,
-  getVideoPost: getVideoPost,
-  getUserVideoPosts: getUserVideoPosts,
-  createAudioPost: createAudioPost,
-  getAudioPost: getAudioPost,
-  getUserAudioPosts: getUserAudioPosts,
-  createImagePost: createImagePost,
-  getImagePost: getImagePost,
-  getUserImagePosts: getUserImagePosts,
-  createUpload: createUpload,
-  createAlbum: createAlbum,
-  createSong: createSong,
-  createBand: createBand,
-  createImageAlbum: createImageAlbum,
-  createImage: createImage,
+  connection,
+  select,
+  getCountries,
+  getUser,
+  getUserWPassword,
+  getUserById,
+  createUser,
+  getUserByIdWEmail,
+  createEntity,
+  createTextPost,
+  changePassword,
+  getTextPost,
+  getUserTextPosts,
+  createVideoPost,
+  getVideoPost,
+  getUserVideoPosts,
+  createAudioPost,
+  getAudioPost,
+  getUserAudioPosts,
+  createImagePost,
+  getImagePost,
+  getUserImagePosts,
+  createUpload,
+  createAlbum,
+  createSong,
+  createBand,
+  createImageAlbum,
+  createImage,
+  getAllImagePosts,
+  getAllVideoPosts,
+  getAllTextPosts,
+  getAllAudioPosts,
 };

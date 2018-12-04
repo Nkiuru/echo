@@ -11,7 +11,7 @@ const initPassport = () => {
   passport.use(new LocalStrategy(
     {usernameField: 'username'},
     (username, password, done) => {
-      db.getgetUserWPassword(username)
+      db.getUserWPassword(username)
         .then((result) => {
           if (result.length > 0) {
             const user = result[0];

@@ -60,7 +60,7 @@ const getUser = (req, res) => {
 
 const changePassword = (req, res) => {
   const oldPwd = req.body.password;
-  db.getgetUserWPassword(req.user.username).then((result) => {
+  db.getUserWPassword(req.user.username).then((result) => {
     bcrypt.compare(oldPwd, result[0].password).then(() => {
       bcrypt.hash(req.body.newPassword, 10).then((result) => {
         db.changePassword(result, req.user.userId).then(() => {

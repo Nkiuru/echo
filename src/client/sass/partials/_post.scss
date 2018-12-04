@@ -33,9 +33,15 @@
 
   .image-container {
     text-align: center;
+    
     img {
       border-radius: 2px;
       width: 100%;
+    }
+
+    video {
+      width: 100%;
+      border-radius: 2px;
     }
   }
 }
