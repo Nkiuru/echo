@@ -378,6 +378,53 @@ const createImageAlbum = (title, description) => {
   });
 };
 
+const createComment = (entityId, userId, text) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `INSERT INTO entityComment(commentId, entityId, comment, parentCommentId, userId)
+      VALUES(0, ?, ?, NULL, ?)`, [entityId, text, userId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results.insertId);
+      });
+  });
+};
+
+const createSubComment = (entityId, text, commentId, userId) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `INSERT INTO entityComment(commentId, entityId, comment, parentCommentId, userId)
+      VALUES(0, ?, ?, ?, ?)`, [entityId, text, commentId, userId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results.insertId);
+      });
+  });
+};
+
+const getComment = (commentId) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `SELECT * FROM entityComment WHERE entityComment.commentId = ?`,
+      [commentId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
+const getComments = (entityId) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `SELECT * FROM entityComment WHERE entityComment.entityId = ?`,
+      [entityId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
 
 module.exports = {
   connection: connection,
@@ -408,4 +455,8 @@ module.exports = {
   createBand: createBand,
   createImageAlbum: createImageAlbum,
   createImage: createImage,
+  createComment,
+  createSubComment,
+  getComment,
+  getComments,
 };

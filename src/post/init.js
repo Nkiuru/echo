@@ -10,6 +10,8 @@ const initPost = (app) => {
   app.post('/post/video', passport.authenticationMiddleware(), upload.single('file'), videoPost);
   app.post('/post/image', passport.authenticationMiddleware(), upload.array('file', 10), imagePost);
   app.post('/post/audio', passport.authenticationMiddleware(), upload.single('file'), audioPost);
+  app.post('/post/comment', passport.authenticationMiddleware(), comment);
+  app.get('/post/:entityId', passport.authenticationMiddleware(), getPost);
 };
 
 const textPost = (req, res, next) => {
@@ -83,6 +85,42 @@ const imagePost = (req, res, next) => {
     // console.log('image post' + imagePost);
     return res.end();
   }).catch((err) => next(err));
+};
+
+const comment = (req, res, next) => {
+  if (req.body.hasOwnProperty('entityId')) {
+    if (req.body.hasOwnProperty('parentCommentId')) {
+      post.createSubComment(req.body.entityId, req.body.commentText, req.body.parentCommentId, req.user.userId).
+        then((commentId) => {
+          return post.getComment(commentId);
+        }).
+        then((comment) => {
+          res.json([
+            {
+              success: true,
+            }, comment]);
+          res.end();
+        }).catch((err) => next(err));
+    } else {
+      post.createComment(req.body.entityId, req.body.commentText, req.user.userId).then((commentId) => {
+        return post.getComment(commentId);
+      }).then((comment) => {
+        res.json([
+          {
+            success: true,
+          }, comment]);
+      }).catch((err) => next(err));
+    }
+  }
+};
+
+const getPost = (req, res, next) => {
+  post.getPost(req.params.entityId).then((post) => {
+    res.json([
+      { success: true },
+      post]);
+    res.end();
+  });
 };
 
 module.exports = initPost;

@@ -81,10 +81,49 @@ const getPost = (entityId) => {
           }
         }
       });
-      resolve(post);
+      db.getComments(post.entityId).then((comments) => {
+        post.comments = comments;
+        resolve(post);
+      }).catch((error) => reject(error));
     }).catch((err) => reject(err));
   });
 };
+
+const createComment = (entityId, text, userId) => {
+  return new Promise((resolve, reject) => {
+    if (text === '') {
+      reject({ error: 'Empty comment' });
+    } else {
+      db.createComment(entityId, userId, text).then((commentId) => resolve(commentId)).catch((err) => reject(err));
+    }
+  });
+};
+
+const createSubComment = (entityId, text, commentId, userId) => {
+  return new Promise((resolve, reject) => {
+    if (text === '') {
+      reject({ error: 'Empty comment' });
+    } else {
+      db.createSubComment(entityId, text, commentId, userId).
+        then((commentId) => resolve(commentId)).
+        catch((err) => reject(err));
+    }
+  });
+};
+
+const getComment = (commentId) => {
+  return db.getComment(commentId);
+};
+
+const getComments = (entityId) => {
+  return new Promise((resolve, reject) => {
+    db.getComments(entityId).then((comments) => {
+      console.log(comments);
+      resolve(comments);
+    }).catch((err) => reject(err));
+  });
+};
+
 module.exports = {
   createEntity: createEntity,
   createTextPost: createTextPost,
@@ -92,4 +131,8 @@ module.exports = {
   createImagePost: createImagePost,
   createVideoPost: createVideoPost,
   getPost: getPost,
+  createComment,
+  createSubComment,
+  getComment,
+  getComments,
 };

@@ -67,7 +67,7 @@ const addUser = (req, res, next) => {
 const getUser = (req, res) => {
   console.log(req.user.username);
   users.getOwnPosts(req, res).then((results) => {
-    // console.log(results);
+    console.log(results);
     res.render('profile', {
       posts: results.map(x => ({...x, username: req.user.username })),
     });
