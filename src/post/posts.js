@@ -56,7 +56,6 @@ const getAllImagePosts = () => {
   });
 };
 
-
 const getAllPosts = () => {
   return new Promise((resolve, reject) => {
     const audio = db.getAllAudioPosts();
@@ -93,6 +92,9 @@ const getAllPosts = () => {
             imageAlbulmId: imagePosts[i].imageAlbulmId,
             text: imagePosts[i].text,
             timestamp: imagePosts[i].timestamp,
+            username: imagePosts[i].username,
+            displayName: imagePosts[i].displayName,
+            userImg: imagePosts[i].userImg,
             images: [],
           };
           post.images.push({
