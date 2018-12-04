@@ -40,7 +40,7 @@ passport.serializeUser((userId, done) => {
 });
 
 passport.deserializeUser((id, done) => {
-  db.getUserById(id)
+  db.getUserByIdWEmail(id)
     .then((res) => done(null, res[0]))
     .catch((error) => done(error, false));
 });

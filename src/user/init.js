@@ -64,7 +64,8 @@ const initUser = (app) => {
     failureRedirect: '/',
   }));
   app.post('/users', addUser);
-  app.post('/user/settings', passport.authenticationMiddleware(), upload.single('mediafile'), uploadUserData);
+  app.post('/user/settings', passport.authenticationMiddleware(), uploadUserDataNoFile);
+  app.post('/user/settings/file', passport.authenticationMiddleware(), upload.single('mediafile'), uploadUserData);
 };
 
 const renderWelcome = (req, res) => {
@@ -81,13 +82,12 @@ const addUser = (req, res, next) => {
 
 const getUser = (req, res) => {
   console.log(req.user);
-  db.getUserTextPosts(req.user.userId)
-    .then((result) => {
-      console.log(result);
-      res.render('profile', {
-        posts: result,
-      });
+  db.getUserTextPosts(req.user.userId).then((result) => {
+    console.log(result);
+    res.render('profile', {
+      posts: result,
     });
+  });
 };
 
 const getUserData = (req, res) => {
@@ -114,18 +114,38 @@ const logoutUser = (req, res) => {
 };
 
 const uploadUserData = (req, res, next) => {
-  uploadJs.createUpload(req, res, next).then((uploadId)=> {
+  uploadJs.createUpload(req, res, next).then((uploadId) => {
     const data = [
-      req.body.displayName,
-      req.body.bio,
-      req.body.city,
+      req.user.displayName,
+      req.user.bio || null,
+      req.user.city || null,
       uploadId,
+      req.user.email,
       req.user.userId,
     ];
     db.updateUsrData(data);
     console.log(data);
     res.send(data);
-  }).catch((err)=>console.log(err));
+  }).catch((err) => console.log(err));
+};
+
+const uploadUserDataNoFile = (req, res, next) => {
+  console.log(req.body);
+  const data = [
+    req.body.displayName,
+    req.body.bio,
+    req.body.city,
+  ];
+  if (req.user.profileImageId) {
+    data.push(req.user.profileImageId);
+  } else {
+    data.push(null);
+  }
+  data.push(req.body.email);
+  data.push(req.user.userId);
+  db.updateUsrData(data);
+  console.log(data);
+  res.send(data);
 };
 
 module.exports = initUser;
