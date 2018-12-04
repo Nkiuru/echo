@@ -54,7 +54,7 @@ profileLink.addEventListener('click', (e) => {
   profile();
 });
 
-settings.addEventListener('click', (e) => {
+settingsLink.addEventListener('click', (e) => {
   e.preventDefault();
   settings();
 });
