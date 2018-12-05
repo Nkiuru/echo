@@ -15,7 +15,7 @@ dropdownToggle.addEventListener('click', (e) => {
 
 const getUser = () => {
   const img = document.querySelector('#profile-picture');
-  img.style='animation: spin 2s linear infinite;';
+  img.style = 'animation: spin 2s linear infinite;';
   fetch('/users/user').then((result) => result.json()).then((json) => {
     if (json.success === false) {
       dropdownToggle.style = 'display: none';
@@ -29,8 +29,10 @@ const getUser = () => {
       rightContainer.appendChild(btn);
     } else {
       dropdownToggle.style = 'display: flex';
-      img.setAttribute('src', `/static/uploads/${json.usrImg}`);
-      img.style='';
+      if (json.usrImg) {
+        img.setAttribute('src', `/static/uploads/${json.usrImg}`);
+      }
+      img.style = '';
     }
   }).catch((err) => {
     alert(err);
