@@ -90,41 +90,7 @@ const getOwnPosts = (req, res) => {
     const image = db.getUserImagePosts(req.user.userId);
 
     Promise.all([audio, text, video, image]).then((results) => {
-      const posts = [];
-      results[0].forEach((audioPost) => { // audio posts
-        posts.push(audioPost);
-      });
-      results[1].forEach((textPost) => { // text posts
-        posts.push(textPost);
-      });
-      results[2].forEach((videoPost) => { // video posts
-        posts.push(videoPost);
-      });
-      const imagePosts = results[3];
-      for (let i = 0; i < imagePosts.length; i++) {
-        const lastItem = posts[posts.length - 1];
-        if (lastItem.imageAlbulmId === imagePosts[i].imageAlbulmId) {
-          lastItem.images.push({
-            title: imagePosts[i].title,
-            description: imagePosts[i].description,
-            fileName: imagePosts[i].fileName,
-          });
-        } else {
-          const post = {
-            entityId: imagePosts[i].entityId,
-            imageAlbulmId: imagePosts[i].imageAlbulmId,
-            text: imagePosts[i].text,
-            timestamp: imagePosts[i].timestamp,
-            images: [],
-          };
-          post.images.push({
-            title: imagePosts[i].title,
-            description: imagePosts[i].description,
-            fileName: imagePosts[i].fileName,
-          });
-          posts.push(post);
-        }
-      }
+      const posts = resolvePosts(results);
       posts.sort((a, b) => {
         const aDate = new Date(a.timestamp);
         const bDate = new Date(b.timestamp);
@@ -150,6 +116,51 @@ const getOwnPosts = (req, res) => {
       }).catch((err) => reject(err));
     }).catch((err) => reject(err));
   });
+};
+
+const resolvePosts =(results) => {
+  const posts = [];
+  results[0].forEach((audioPost) => { // audio posts
+    posts.push(audioPost);
+  });
+  results[1].forEach((textPost) => { // text posts
+    posts.push(textPost);
+  });
+  results[2].forEach((videoPost) => { // video posts
+    posts.push(videoPost);
+  });
+  const imagePosts = results[3];
+  console.log(imagePosts);
+  for (let i = 0; i < imagePosts.length; i++) {
+    const lastItem = posts[posts.length - 1] || {};
+    if (lastItem.hasOwnProperty('imageAlbulmId') && lastItem.imageAlbulmId === imagePosts[i].imageAlbulmId) {
+      lastItem.images.push({
+        title: imagePosts[i].title,
+        description: imagePosts[i].description,
+        fileName: imagePosts[i].fileName,
+      });
+    } else {
+      const post = {
+        entityId: imagePosts[i].entityId,
+        imageAlbulmId: imagePosts[i].imageAlbulmId,
+        text: imagePosts[i].text,
+        timestamp: imagePosts[i].timestamp,
+        username: imagePosts[i].username,
+        displayName: imagePosts[i].displayName,
+        userImg: imagePosts[i].userImg,
+        likes: imagePosts[i].likes,
+        dislikes: imagePosts[i].dislikes,
+        images: [],
+      };
+      post.images.push({
+        title: imagePosts[i].title,
+        description: imagePosts[i].description,
+        fileName: imagePosts[i].fileName,
+      });
+      posts.push(post);
+    }
+  }
+  return posts;
 };
 
 module.exports = {
