@@ -1,8 +1,7 @@
 const authenticationMiddleware = () => {
   return (req, res, next) => {
-    console.log(req.isAuthenticated());
-    if (!req.isAuthenticated()) {
-      res.status(403).send();
+    if (!req.isAuthenticated() && req.path !== '/users/user') {
+      res.redirect('/');
     } else {
       return next();
     }
