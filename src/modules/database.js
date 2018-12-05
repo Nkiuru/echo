@@ -438,6 +438,74 @@ const getAllAudioPosts = () => {
   });
 };
 
+const addDislike = (entityId, userId) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `INSERT INTO dislikedEntity(entityId, userId)
+      VALUES(?, ?)`, [entityId, userId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
+const addLike = (entityId, userId) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `INSERT INTO likedEntity(entityId, userId)
+      VALUES(?, ?)`, [entityId, userId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
+const getLike = (entityId, userId) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `SELECT * FROM likedEntity WHERE entityId = ? AND userId = ?;`, [entityId, userId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
+const getDislike = (entityId, userId) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `SELECT * FROM dislikedEntity WHERE entityId = ? AND userId = ?;`, [entityId, userId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
+const deleteLike = (entityId, userId) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `DELETE FROM likedEntity WHERE entityId = ? AND userId = ?;`, [entityId, userId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
+const deleteDislike = (entityId, userId) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `DELETE FROM dislikedEntity WHERE entityId = ? AND userId = ?;`, [entityId, userId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
 
 module.exports = {
   connection,
@@ -472,4 +540,10 @@ module.exports = {
   getAllVideoPosts,
   getAllTextPosts,
   getAllAudioPosts,
+  addDislike,
+  addLike,
+  getLike,
+  getDislike,
+  deleteDislike,
+  deleteLike,
 };

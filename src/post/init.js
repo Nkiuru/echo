@@ -11,8 +11,31 @@ const initPost = (app) => {
   app.post('/post/image', passport.authenticationMiddleware(), upload.array('file', 10), imagePost);
   app.post('/post/audio', passport.authenticationMiddleware(), upload.single('file'), audioPost);
   app.get('/trending', getImages);
+  app.post('/post/like', passport.authenticationMiddleware(), likePost);
+  app.post('/post/dislike', passport.authenticationMiddleware(), dislikePost);
 };
 
+const likePost = (req, res) => {
+  post.likePost(req.body.entityId, req.user.userId).then(() => {
+    res.json({ success: true });
+    res.end();
+  }).catch((err) => {
+    console.log(err);
+    res.json({ success: false });
+    res.end();
+  });
+};
+
+const dislikePost = (req, res) => {
+  post.dislikePost(req.body.entityId, req.user.userId).then(() => {
+    res.json({ success: true });
+    res.end();
+  }).catch((err) => {
+    console.log(err);
+    res.json({ success: false });
+    res.end();
+  });
+};
 const getImages = (req, res) => {
   post.getAllPosts().then((results) => {
     res.json({
@@ -22,7 +45,6 @@ const getImages = (req, res) => {
     res.end();
   }).catch((err) => res.send(err));
 };
-
 
 const textPost = (req, res, next) => {
   console.log(req.body);

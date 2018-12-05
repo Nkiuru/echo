@@ -50,9 +50,7 @@ const createAudioPost = (userId, songId, text) => {
 
 const getAllImagePosts = () => {
   return new Promise((res, rej) => {
-    db.getAllImagePosts()
-      .then((results) => res(results))
-      .catch(() => rej(err));
+    db.getAllImagePosts().then((results) => res(results)).catch(() => rej(err));
   });
 };
 
@@ -122,7 +120,6 @@ const getAllPosts = () => {
   });
 };
 
-
 const getPost = (entityId) => {
   return new Promise((resolve, reject) => {
     const audio = db.getAudioPost(entityId);
@@ -160,6 +157,34 @@ const getPost = (entityId) => {
     }).catch((err) => reject(err));
   });
 };
+
+const dislikePost = (entityId, userId) => {
+  return new Promise((resolve, reject) => {
+    db.getLike(entityId, userId).then((result) => {
+      if (result.length > 0) {
+        return db.deleteLike(entityId, userId);
+      }
+    }).then(() => {
+      return db.addDislike(entityId, userId);
+    }).then(() => {
+      resolve();
+    }).catch((err) => reject(err));
+  });
+};
+
+const likePost = (entityId, userId) => {
+  return new Promise((resolve, reject) => {
+    db.getDislike(entityId, userId).then((result) => {
+      if (result.length > 0) {
+        return db.deleteDislike(entityId, userId);
+      }
+    }).then(() => {
+      return db.addLike(entityId, userId);
+    }).then(() => {
+      resolve();
+    }).catch((err) => reject(err));
+  });
+};
 module.exports = {
   createEntity: createEntity,
   createTextPost: createTextPost,
@@ -169,4 +194,6 @@ module.exports = {
   getPost: getPost,
   getAllImagePosts,
   getAllPosts,
+  dislikePost,
+  likePost,
 };
