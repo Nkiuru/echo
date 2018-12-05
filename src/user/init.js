@@ -85,7 +85,7 @@ const getUser = (req, res) => {
   users.getOwnPosts(req, res).then((results) => {
     console.log(results);
     res.render('profile', {
-      posts: results.map(x => ({...x, username: req.user.username })),
+      posts: results.map(x => ({ ...x, username: req.user.username })),
     });
   }).catch((err) => res.send(err));
 };

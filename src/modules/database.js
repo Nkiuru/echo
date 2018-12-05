@@ -6,6 +6,7 @@ const connection = mysql.createConnection({
   user: process.env.DB_USER,
   database: process.env.DB_NAME,
   password: process.env.DB_PASS,
+  multipleStatements: true,
 });
 
 const select = () => {
@@ -152,8 +153,13 @@ const createTextPost = (entityId, text) => {
 const getTextPost = (entityId) => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT * FROM textPost
-      WHERE entityId = ?;`,
+      `SELECT tp.*, u.username, 
+      (SELECT COUNT(userId) FROM dislikedEntity WHERE entityId = tp.entityId) AS dislikes, 
+      (SELECT COUNT(userId) FROM likedEntity WHERE entityId = tp.entityId) AS likes, 
+      u.displayName, uf.fileName as userImg 
+      FROM entity e, textPost tp, 
+      user u LEFT JOIN upload uf ON uf.uploadId = u.profileImageId 
+      WHERE tp.entityId = ? AND tp.entityId = e.entityId AND u.userId = e.userId`,
       [entityId],
       (err, results) => {
         if (err) reject(err);
@@ -165,8 +171,13 @@ const getTextPost = (entityId) => {
 const getUserTextPosts = (userId) => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT tp.* FROM entity e, textPost tp
-      WHERE e.userId = ? AND tp.entityId = e.entityId`,
+      `SELECT tp.*, u.username, 
+      (SELECT COUNT(userId) FROM dislikedEntity WHERE entityId = tp.entityId) AS dislikes, 
+      (SELECT COUNT(userId) FROM likedEntity WHERE entityId = tp.entityId) AS likes, 
+      u.displayName, uf.fileName as userImg 
+      FROM entity e, textPost tp, 
+      user u LEFT JOIN upload uf ON uf.uploadId = u.profileImageId 
+      WHERE e.userId = ? AND tp.entityId = e.entityId AND u.userId = e.userId`,
       [userId],
       (err, results) => {
         if (err) reject(err);
@@ -195,9 +206,12 @@ const createVideoPost = (entityId, uploadId, text) => {
 const getVideoPost = (entityId) => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT vp.*, upload.fileName
-       FROM entity e, videoPost vp, upload
-       WHERE vp.entityId = ? AND vp.entityId = e.entityId AND vp.uploadId = upload.uploadId;`,
+      `SELECT vp.*, upload.fileName, 
+      (SELECT COUNT(userId) FROM dislikedEntity WHERE entityId = vp.entityId) AS dislikes, 
+      (SELECT COUNT(userId) FROM likedEntity WHERE entityId = vp.entityId) AS likes, 
+      u.username, u.displayName, uf.fileName as userImg FROM entity e, videoPost vp, upload, 
+      user u LEFT JOIN upload uf ON uf.uploadId = u.profileImageId WHERE vp.entityId = ? AND vp.entityId = e.entityId 
+      AND vp.uploadId = upload.uploadId AND u.userId = e.userId`,
       [entityId],
       (err, results) => {
         if (err) reject(err);
@@ -209,9 +223,12 @@ const getVideoPost = (entityId) => {
 const getUserVideoPosts = (userId) => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT vp.*, upload.fileName
-       FROM entity e, videoPost vp, upload
-       WHERE e.userId = ? AND vp.entityId = e.entityId AND vp.uploadId = upload.uploadId;`,
+      `SELECT vp.*, upload.fileName, 
+      (SELECT COUNT(userId) FROM dislikedEntity WHERE entityId = vp.entityId) AS dislikes, 
+      (SELECT COUNT(userId) FROM likedEntity WHERE entityId = vp.entityId) AS likes, 
+      u.username, u.displayName, uf.fileName as userImg FROM entity e, videoPost vp, upload, 
+      user u LEFT JOIN upload uf ON uf.uploadId = u.profileImageId WHERE e.userId = ? AND vp.entityId = e.entityId 
+      AND vp.uploadId = upload.uploadId AND u.userId = e.userId`,
       [userId],
       (err, results) => {
         if (err) reject(err);
@@ -240,11 +257,15 @@ const createAudioPost = (entityId, songId, text) => {
 const getAudioPost = (entityId) => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT ap.*, song.title, upload.fileName, genre.genreName, band.bandName FROM 
-	      entity e, audioPost ap, song, upload,genre,band 
-	      WHERE ap.entityId = ? AND ap.entityId = e.entityId AND ap.songId = song.songId AND song.uploadId = upload.uploadId
-        AND song.genreId = genre.genreId
-        AND band.bandId = song.bandId;`,
+      `SELECT ap.*, song.title, upload.fileName, genre.genreName, band.bandName, 
+      (SELECT COUNT(userId) FROM dislikedEntity WHERE entityId = ap.entityId) AS dislikes, 
+      (SELECT COUNT(userId) FROM likedEntity WHERE entityId = ap.entityId) AS likes, 
+      u.displayName, uf.fileName as userImg 
+      FROM entity e, audioPost ap, song, upload, genre, band, 
+      user u LEFT JOIN upload uf ON uf.uploadId = u.profileImageId 
+      WHERE ap.entityId = ? AND ap.entityId = e.entityId 
+      AND ap.songId = song.songId AND song.uploadId = upload.uploadId 
+      AND song.genreId = genre.genreId AND band.bandId = song.bandId`,
       [entityId],
       (err, results) => {
         if (err) reject(err);
@@ -256,11 +277,14 @@ const getAudioPost = (entityId) => {
 const getUserAudioPosts = (userId) => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT ap.*, song.title, upload.fileName, genre.genreName, band.bandName FROM 
-	      entity e, audioPost ap, song, upload,genre,band 
-	      WHERE e.userId = ? AND ap.entityId = e.entityId AND ap.songId = song.songId AND song.uploadId = upload.uploadId
-        AND song.genreId = genre.genreId
-        AND band.bandId = song.bandId;`,
+      `SELECT ap.*, song.title, upload.fileName, genre.genreName, band.bandName, 
+      (SELECT COUNT(userId) FROM dislikedEntity WHERE entityId = ap.entityId) AS dislikes, 
+      (SELECT COUNT(userId) FROM likedEntity WHERE entityId = ap.entityId) AS likes, 
+      u.displayName, uf.fileName as userImg 
+      FROM entity e, audioPost ap, song, upload, genre, band, 
+      user u LEFT JOIN upload uf ON uf.uploadId = u.profileImageId 
+      WHERE e.userId = ? AND ap.entityId = e.entityId AND ap.songId = song.songId AND song.uploadId = upload.uploadId 
+      AND song.genreId = genre.genreId AND band.bandId = song.bandId`,
       [userId],
       (err, results) => {
         if (err) reject(err);
@@ -289,8 +313,13 @@ const createImagePost = (entityId, albumId, text) => {
 const getImagePost = (entityId) => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT ip.*, image.title, image.description, upload.fileName FROM entity e, imagePost ip, image, upload
-       WHERE ip.entityId = ? AND e.entityId = ip.entityId AND image.imageAlbulmId = ip.imageAlbulmId AND image.uploadId = upload.uploadId`,
+      `SELECT ip.*, image.title, image.description, upload.fileName, 
+       (SELECT COUNT(userId) FROM dislikedEntity WHERE entityId = ip.entityId) AS dislikes, 
+       (SELECT COUNT(userId) FROM likedEntity WHERE entityId = ip.entityId) AS likes, 
+       u.username, u.displayName, uf.fileName as userImg FROM entity e, imagePost ip, image, upload,
+       user u LEFT JOIN upload uf ON uf.uploadId = u.profileImageId 
+       WHERE ip.entityId = ? AND ip.entityId = e.entityId 
+       AND image.imageAlbulmId = ip.imageAlbulmId AND image.uploadId = upload.uploadId AND u.userId = e.userId`,
       [entityId],
       (err, results) => {
         if (err) reject(err);
@@ -302,9 +331,13 @@ const getImagePost = (entityId) => {
 const getUserImagePosts = (userId) => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT ip.*, image.title, image.description, upload.fileName FROM entity e, imagePost ip, image, upload
-       WHERE e.userId = ? AND ip.entityId = e.entityId AND
-        image.imageAlbulmId = ip.imageAlbulmId AND image.uploadId = upload.uploadId`,
+      `SELECT ip.*, image.title, image.description, upload.fileName, 
+       (SELECT COUNT(userId) FROM dislikedEntity WHERE entityId = ip.entityId) AS dislikes, 
+       (SELECT COUNT(userId) FROM likedEntity WHERE entityId = ip.entityId) AS likes, 
+       u.username, u.displayName, uf.fileName as userImg FROM entity e, imagePost ip, image, upload,
+       user u LEFT JOIN upload uf ON uf.uploadId = u.profileImageId 
+       WHERE e.userId = ? AND ip.entityId = e.entityId 
+       AND image.imageAlbulmId = ip.imageAlbulmId AND image.uploadId = upload.uploadId AND u.userId = e.userId`,
       [userId],
       (err, results) => {
         if (err) reject(err);
@@ -400,13 +433,12 @@ const createComment = (entityId, userId, text) => {
 const getAllImagePosts = () => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT ip.*, image.title, image.description, upload.fileName, u.username, u.displayName, uf.fileName as userImg
-      FROM entity e, imagePost ip, image, upload, user u
-      LEFT JOIN upload uf ON uf.uploadId = u.profileImageId
-      WHERE ip.entityId = e.entityId
-      AND image.imageAlbulmId = ip.imageAlbulmId
-      AND image.uploadId = upload.uploadId
-      AND u.userId = e.userId;`,
+      `SELECT ip.*, image.title, image.description, upload.fileName, 
+      (SELECT COUNT(userId) FROM dislikedEntity WHERE entityId = ip.entityId) AS dislikes, 
+      (SELECT COUNT(userId) FROM likedEntity WHERE entityId = ip.entityId) AS likes, 
+      u.username, u.displayName, uf.fileName as userImg FROM entity e, imagePost ip, image, upload,
+       user u LEFT JOIN upload uf ON uf.uploadId = u.profileImageId WHERE ip.entityId = e.entityId 
+       AND image.imageAlbulmId = ip.imageAlbulmId AND image.uploadId = upload.uploadId AND u.userId = e.userId`,
       (err, results) => {
         if (err) reject(err);
         if (results) resolve(results);
@@ -429,12 +461,12 @@ const createSubComment = (entityId, text, commentId, userId) => {
 const getAllVideoPosts = () => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT vp.*, upload.fileName, u.username, u.displayName, uf.fileName as userImg
-       FROM entity e, videoPost vp, upload, user u
-       LEFT JOIN upload uf ON uf.uploadId = u.profileImageId
-       WHERE vp.entityId = e.entityId
-       AND vp.uploadId = upload.uploadId
-       AND u.userId = e.userId;`,
+      `SELECT vp.*, upload.fileName, 
+      (SELECT COUNT(userId) FROM dislikedEntity WHERE entityId = vp.entityId) AS dislikes, 
+      (SELECT COUNT(userId) FROM likedEntity WHERE entityId = vp.entityId) AS likes, 
+      u.username, u.displayName, uf.fileName as userImg FROM entity e, videoPost vp, upload, 
+      user u LEFT JOIN upload uf ON uf.uploadId = u.profileImageId WHERE vp.entityId = e.entityId 
+      AND vp.uploadId = upload.uploadId AND u.userId = e.userId`,
       (err, results) => {
         if (err) reject(err);
         if (results) resolve(results);
@@ -445,7 +477,9 @@ const getAllVideoPosts = () => {
 const getComment = (commentId) => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT * FROM entityComment WHERE entityComment.commentId = ?`,
+      `SELECT entityComment.*, u.displayName, uf.fileName as userImg 
+      FROM entityComment, user u LEFT JOIN upload uf ON uf.uploadId = u.profileImageId 
+      WHERE entityComment.commentId = ? AND entityComment.userId = u.userId`,
       [commentId],
       (err, results) => {
         if (err) reject(err);
@@ -457,11 +491,13 @@ const getComment = (commentId) => {
 const getAllTextPosts = () => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT tp.*, u.username, u.displayName, uf.fileName as userImg
-      FROM entity e, textPost tp, user u
-      LEFT JOIN upload uf ON uf.uploadId = u.profileImageId
-      WHERE tp.entityId = e.entityId
-      AND u.userId = e.userId;`,
+      `SELECT tp.*, u.username, 
+      (SELECT COUNT(userId) FROM dislikedEntity WHERE entityId = tp.entityId) AS dislikes, 
+      (SELECT COUNT(userId) FROM likedEntity WHERE entityId = tp.entityId) AS likes, 
+      u.displayName, uf.fileName as userImg 
+      FROM entity e, textPost tp, 
+      user u LEFT JOIN upload uf ON uf.uploadId = u.profileImageId 
+      WHERE tp.entityId = e.entityId AND u.userId = e.userId`,
       (err, results) => {
         if (err) reject(err);
         if (results) resolve(results);
@@ -472,7 +508,9 @@ const getAllTextPosts = () => {
 const getComments = (entityId) => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT * FROM entityComment WHERE entityComment.entityId = ?`,
+      `SELECT entityComment.* , u.displayName, uf.fileName as userImg 
+      FROM entityComment, user u LEFT JOIN upload uf ON uf.uploadId = u.profileImageId 
+      WHERE entityComment.entityId = ? AND entityComment.userId = u.userId`,
       [entityId],
       (err, results) => {
         if (err) reject(err);
@@ -484,11 +522,14 @@ const getComments = (entityId) => {
 const getAllAudioPosts = () => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT ap.*, song.title, upload.fileName, genre.genreName, band.bandName
-      FROM entity e, audioPost ap, song, upload, genre, band
-      WHERE ap.entityId = e.entityId AND ap.songId = song.songId AND song.uploadId = upload.uploadId
-      AND song.genreId = genre.genreId
-      AND band.bandId = song.bandId;`,
+      `SELECT ap.*, song.title, upload.fileName, genre.genreName, band.bandName, 
+      (SELECT COUNT(userId) FROM dislikedEntity WHERE entityId = ap.entityId) AS dislikes, 
+      (SELECT COUNT(userId) FROM likedEntity WHERE entityId = ap.entityId) AS likes, 
+      u.displayName, uf.fileName as userImg 
+      FROM entity e, audioPost ap, song, upload, genre, band, 
+      user u LEFT JOIN upload uf ON uf.uploadId = u.profileImageId 
+      WHERE ap.entityId = e.entityId AND ap.songId = song.songId AND song.uploadId = upload.uploadId 
+      AND song.genreId = genre.genreId AND band.bandId = song.bandId`,
       (err, results) => {
         if (err) reject(err);
         if (results) resolve(results);
@@ -564,6 +605,28 @@ const deleteDislike = (entityId, userId) => {
   });
 };
 
+const deletePost = (entityId) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      `DELETE FROM textPost WHERE entityId = ?; DELETE FROM audioPost WHERE entityId = ?; DELETE FROM videoPost WHERE entityId = ?; DELETE FROM imagePost WHERE entityId = ?; DELETE FROM entity WHERE entityId = ?;`, [entityId, entityId, entityId, entityId, entityId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve();
+      });
+  });
+};
+
+const deleteComment = (commentId) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `UPDATE entityComment set comment = "[REDACTED]" WHERE commentId = ?`, [commentId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve();
+      },
+    );
+  });
+};
 
 module.exports = {
   connection,
@@ -608,4 +671,6 @@ module.exports = {
   createSubComment,
   getComment,
   getComments,
+  deletePost,
+  deleteComment,
 };

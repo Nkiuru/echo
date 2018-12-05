@@ -15,8 +15,39 @@ const initPost = (app) => {
   app.get('/trending', getImages);
   app.post('/post/like', passport.authenticationMiddleware(), likePost);
   app.post('/post/dislike', passport.authenticationMiddleware(), dislikePost);
+  app.delete('/post/delete/:entityId', passport.authenticationMiddleware(), deletePost);
+  app.delete('/post/comment/:commentId', passport.authenticationMiddleware(), deleteComment);
 };
 
+const deletePost = (req, res) => {
+  if (req.user.isAdmin === 1) {
+    post.deletePost(req.params.entityId).then(() => {
+      res.json({ success: true });
+      res.end();
+    }).catch((err) => {
+      res.json({ success: false, error: err });
+      res.end();
+    });
+  } else {
+    res.json({ success: false, error: 'VERBOTEN!' });
+    res.end();
+  }
+};
+
+const deleteComment = (req, res) => {
+  if (req.user.isAdmin === 1) {
+    post.deleteComment(req.params.commentId).then(() => {
+      res.json({ success: true });
+      res.end();
+    }).catch((err) => {
+      res.json({ success: false, error: err });
+      res.end();
+    });
+  } else {
+    res.json({ success: false, error: 'VERBOTEN!' });
+    res.end();
+  }
+};
 const likePost = (req, res) => {
   post.likePost(req.body.entityId, req.user.userId).then(() => {
     res.json({ success: true });

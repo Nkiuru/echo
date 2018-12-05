@@ -63,46 +63,7 @@ const getAllPosts = () => {
 
     Promise.all([audio, video, text, image]).then((results) => {
       // console.log(results);
-      const posts = [];
-
-      results[0].forEach((audioPost) => { // audio posts
-        posts.push(audioPost);
-      });
-      results[1].forEach((textPost) => { // text posts
-        posts.push(textPost);
-      });
-      results[2].forEach((videoPost) => { // video posts
-        posts.push(videoPost);
-      });
-      const imagePosts = results[3];
-      // console.log(imagePosts);
-      for (let i = 0; i < imagePosts.length; i++) {
-        const lastItem = posts[posts.length - 1] || {};
-        if (lastItem.hasOwnProperty('imageAlbulmId') && lastItem.imageAlbulmId === imagePosts[i].imageAlbulmId) {
-          lastItem.images.push({
-            title: imagePosts[i].title,
-            description: imagePosts[i].description,
-            fileName: imagePosts[i].fileName,
-          });
-        } else {
-          const post = {
-            entityId: imagePosts[i].entityId,
-            imageAlbulmId: imagePosts[i].imageAlbulmId,
-            text: imagePosts[i].text,
-            timestamp: imagePosts[i].timestamp,
-            username: imagePosts[i].username,
-            displayName: imagePosts[i].displayName,
-            userImg: imagePosts[i].userImg,
-            images: [],
-          };
-          post.images.push({
-            title: imagePosts[i].title,
-            description: imagePosts[i].description,
-            fileName: imagePosts[i].fileName,
-          });
-          posts.push(post);
-        }
-      }
+      const posts = resolvePosts(results);
       posts.sort((a, b) => {
         const aDate = new Date(a.timestamp);
         const bDate = new Date(b.timestamp);
@@ -130,6 +91,51 @@ const getAllPosts = () => {
   });
 };
 
+const resolvePosts = (results) => {
+  const posts = [];
+  results[0].forEach((audioPost) => { // audio posts
+    posts.push(audioPost);
+  });
+  results[1].forEach((textPost) => { // text posts
+    posts.push(textPost);
+  });
+  results[2].forEach((videoPost) => { // video posts
+    posts.push(videoPost);
+  });
+  const imagePosts = results[3];
+  console.log(imagePosts);
+  for (let i = 0; i < imagePosts.length; i++) {
+    const lastItem = posts[posts.length - 1] || {};
+    if (lastItem.hasOwnProperty('imageAlbulmId') && lastItem.imageAlbulmId === imagePosts[i].imageAlbulmId) {
+      lastItem.images.push({
+        title: imagePosts[i].title,
+        description: imagePosts[i].description,
+        fileName: imagePosts[i].fileName,
+      });
+    } else {
+      const post = {
+        entityId: imagePosts[i].entityId,
+        imageAlbulmId: imagePosts[i].imageAlbulmId,
+        text: imagePosts[i].text,
+        timestamp: imagePosts[i].timestamp,
+        username: imagePosts[i].username,
+        displayName: imagePosts[i].displayName,
+        userImg: imagePosts[i].userImg,
+        likes: imagePosts[i].likes,
+        dislikes: imagePosts[i].dislikes,
+        images: [],
+      };
+      post.images.push({
+        title: imagePosts[i].title,
+        description: imagePosts[i].description,
+        fileName: imagePosts[i].fileName,
+      });
+      posts.push(post);
+    }
+  }
+  return posts;
+};
+
 const getPost = (entityId) => {
   return new Promise((resolve, reject) => {
     const audio = db.getAudioPost(entityId);
@@ -143,10 +149,15 @@ const getPost = (entityId) => {
         if (p.length > 0) {
           if (p[0].hasOwnProperty('imageAlbulmId')) { // This is an image post with possibly many images.
             post = {
-              entityId: p[0].entityId,
-              imageAlbulmId: p[0].imageAlbulmId,
-              text: p[0].text,
-              timestamp: p[0].timestamp,
+              entityId: post[0].entityId,
+              imageAlbulmId: post[0].imageAlbulmId,
+              text: post[0].text,
+              timestamp: post[0].timestamp,
+              username: post[0].username,
+              displayName: post[0].displayName,
+              userImg: post[0].userImg,
+              likes: post[0].likes,
+              dislikes: p[0].dislikes,
               images: [],
             };
             p.forEach((imagePost) => {
@@ -234,6 +245,18 @@ const likePost = (entityId, userId) => {
   });
 };
 
+const deletePost = (entityId) => {
+  return new Promise((resolve, reject) => {
+    db.deletePost(entityId).then(() => resolve()).catch((err) => reject(err));
+  });
+};
+
+const deleteComment = (entityId) => {
+  return new Promise((resolve, reject) => {
+    db.deleteComment(entityId).then(() => resolve()).catch((err) => reject(err));
+  });
+};
+
 module.exports = {
   createEntity: createEntity,
   createTextPost: createTextPost,
@@ -249,4 +272,6 @@ module.exports = {
   getAllPosts,
   dislikePost,
   likePost,
+  deletePost,
+  deleteComment,
 };
