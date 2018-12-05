@@ -28,7 +28,7 @@ const settings = (e) => {
     .then((result) => result.json())
     .then((json) => {
       console.log(json);
-      window.location.replace(`/user/${json.username}`);
+      window.location.replace(`/user/settings`);
     }).catch(() => {
       alert('Something went fucksie wucksie');
     });
