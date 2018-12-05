@@ -13,6 +13,7 @@ const getUserData = () => {
   const settings = {
     method: 'get',
   };
+  image.style ='animation: spin 2s linear infinite;';
   fetch('/users/user', settings).then((response) => {
     return response.json();
   }).then((json) => {
@@ -22,7 +23,8 @@ const getUserData = () => {
     frm.elements.namedItem('email').value = oldUserData.email;
     frm.elements.namedItem('city').value = oldUserData.city;
     console.log(oldUserData.usrImg);
-    image.setAttribute('src', `/static/uploads/${oldUserData.usrImg}`)
+    image.setAttribute('src', `/static/uploads/${oldUserData.usrImg}`);
+    image.style='';
   });
 };
 
