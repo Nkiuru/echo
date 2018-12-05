@@ -122,6 +122,17 @@ const changePassword = (newPwd, userId) => {
   });
 };
 
+const updateUsrData = (data) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      'UPDATE user SET displayName = ?, bio = ?, city = ?, profileImageId = ?, email = ? WHERE userId = ?', data,
+      (err, results, fields) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
 const createTextPost = (entityId, text) => {
   return new Promise((resolve, reject) => {
     connection.execute(
@@ -391,7 +402,6 @@ const getAllImagePosts = () => {
   });
 };
 
-
 const getAllVideoPosts = () => {
   return new Promise((resolve, reject) => {
     connection.execute(
@@ -438,7 +448,6 @@ const getAllAudioPosts = () => {
   });
 };
 
-
 module.exports = {
   connection,
   select,
@@ -472,4 +481,5 @@ module.exports = {
   getAllVideoPosts,
   getAllTextPosts,
   getAllAudioPosts,
+  updateUsrData,
 };
