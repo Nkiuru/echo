@@ -628,6 +628,18 @@ const deleteComment = (commentId) => {
   });
 };
 
+const getGenres = () => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `SELECT * FROM genre`,
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      },
+    );
+  });
+};
+
 module.exports = {
   connection,
   select,
@@ -673,4 +685,5 @@ module.exports = {
   getComments,
   deletePost,
   deleteComment,
+  getGenres,
 };

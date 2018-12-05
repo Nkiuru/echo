@@ -49,9 +49,7 @@ app.use(passport.session());
 // Static folder
 app.use('/static', express.static(path.join(__dirname, '/dist')));
 
-
 // app.get('/', getImages);
-
 
 app.get('/login', (req, res) => {
   res.render('logregbase', { login: true });
@@ -62,6 +60,12 @@ app.get('/register', (req, res) => {
     res.render('logregbase', { country: result });
   }).catch((err) => {
     res.render('logregbase', { error: err });
+  });
+});
+
+app.get('/genres', passport.authenticationMiddleware(), (req, res) => {
+  db.getGenres().then((genres) => {
+    res.json([{ success: true }, genres]);
   });
 });
 
