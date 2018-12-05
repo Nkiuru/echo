@@ -39,7 +39,7 @@ const fetchUser = () => {
         alert(json.error);
         return;
       }
-      window.location.replace('/user/' + username.value);
+      window.location.replace('/');
     })
     .catch((err) => {
       console.log(err);

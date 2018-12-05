@@ -85,7 +85,7 @@ submit.addEventListener('click', (e) => {
           error.style.display = 'block';
           return;
         }
-        window.location.replace(`/users/`);
+        window.location.replace(`/users/${username}`);
       }).
       catch((err) => {
         console.log('ERROR ' + err);
