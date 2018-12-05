@@ -99,7 +99,12 @@ const getUserData = (req, res) => {
 };
 
 const getOwnData = (req, res) => {
-  users.getOwnData(req, res);
+  if (req.user) {
+    users.getOwnData(req, res);
+  }else {
+    res.json({success:false});
+    res.end();
+  }
 };
 
 const updatePassword = (req, res) => {
