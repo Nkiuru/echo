@@ -122,6 +122,17 @@ const changePassword = (newPwd, userId) => {
   });
 };
 
+const updateUsrData = (data) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      'UPDATE user SET displayName = ?, bio = ?, city = ?, profileImageId = ?, email = ? WHERE userId = ?', data,
+      (err, results, fields) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
 const createTextPost = (entityId, text) => {
   return new Promise((resolve, reject) => {
     connection.execute(
@@ -374,6 +385,18 @@ const createImageAlbum = (title, description) => {
   });
 };
 
+const createComment = (entityId, userId, text) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `INSERT INTO entityComment(commentId, entityId, comment, parentCommentId, userId, timestamp)
+      VALUES(0, ?, ?, NULL, ?, NOW())`, [entityId, text, userId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results.insertId);
+      });
+  });
+};
+
 const getAllImagePosts = () => {
   return new Promise((resolve, reject) => {
     connection.execute(
@@ -391,6 +414,17 @@ const getAllImagePosts = () => {
   });
 };
 
+const createSubComment = (entityId, text, commentId, userId) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `INSERT INTO entityComment(commentId, entityId, comment, parentCommentId, userId, timestamp)
+      VALUES(0, ?, ?, ?, ?, NOW())`, [entityId, text, commentId, userId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results.insertId);
+      });
+  });
+};
 
 const getAllVideoPosts = () => {
   return new Promise((resolve, reject) => {
@@ -408,6 +442,18 @@ const getAllVideoPosts = () => {
   });
 };
 
+const getComment = (commentId) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `SELECT * FROM entityComment WHERE entityComment.commentId = ?`,
+      [commentId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
 const getAllTextPosts = () => {
   return new Promise((resolve, reject) => {
     connection.execute(
@@ -416,6 +462,18 @@ const getAllTextPosts = () => {
       LEFT JOIN upload uf ON uf.uploadId = u.profileImageId
       WHERE tp.entityId = e.entityId
       AND u.userId = e.userId;`,
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
+  });
+};
+
+const getComments = (entityId) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `SELECT * FROM entityComment WHERE entityComment.entityId = ?`,
+      [entityId],
       (err, results) => {
         if (err) reject(err);
         if (results) resolve(results);
@@ -546,4 +604,8 @@ module.exports = {
   getDislike,
   deleteDislike,
   deleteLike,
+  updateUsrData, createComment,
+  createSubComment,
+  getComment,
+  getComments,
 };

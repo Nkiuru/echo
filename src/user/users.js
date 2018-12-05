@@ -136,8 +136,18 @@ const getOwnPosts = (req, res) => {
         }
         return 0;
       });
-      // console.log(posts);
-      resolve(posts);
+      const promises = [];
+      posts.forEach((post) => {
+        promises.push(new Promise((resolve, reject) => {
+          db.getComments(post.entityId).then((comments) => {
+            post.comments = comments;
+            resolve(post);
+          }).catch((err) => reject(err));
+        }));
+      });
+      Promise.all(promises).then((postsWithComments) => {
+        resolve(postsWithComments);
+      }).catch((err) => reject(err));
     }).catch((err) => reject(err));
   });
 };
