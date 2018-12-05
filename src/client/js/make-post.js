@@ -149,7 +149,7 @@ submitBtn.addEventListener('click', (e) => {
             <div class="text-container">
               <p>${text}</p>
             </div>
-            <div class="image-container">
+            <div class="media-container">
               <img src="/static/uploads/${imgUrl}">
             </div>
           </div>
@@ -183,7 +183,7 @@ submitBtn.addEventListener('click', (e) => {
             <div class="text-container">
               <p>${text}</p>
             </div>
-            <div class="image-container">
+            <div class="media-container">
               <video controls>
                 <source src="/static/uploads/${videoUrl}" type="video/mp4">
               </video>

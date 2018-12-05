@@ -103,7 +103,6 @@ const resolvePosts = (results) => {
     posts.push(videoPost);
   });
   const imagePosts = results[3];
-  console.log(imagePosts);
   for (let i = 0; i < imagePosts.length; i++) {
     const lastItem = posts[posts.length - 1] || {};
     if (lastItem.hasOwnProperty('imageAlbulmId') && lastItem.imageAlbulmId === imagePosts[i].imageAlbulmId) {

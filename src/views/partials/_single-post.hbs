@@ -14,7 +14,7 @@
     </div>
     
     {{#if images}}
-      <div class="image-container">
+      <div class="media-container">
         
         {{#each images}}
         {{!-- {{title}} --}}
@@ -23,7 +23,7 @@
       </div>
     {{/if}}
     {{#if fileName}}
-      <div class="image-container">
+      <div class="media-container">
         <video controls>
           <source src="/static/uploads/{{fileName}}" type="video/mp4">
         </video>
