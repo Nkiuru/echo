@@ -62,8 +62,10 @@ const getUserById = (id) => {
 const getUserByIdWEmail = (id) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      'SELECT userId, username, displayName, countryId, city, bio, email, isAdmin, profileImageId, bandId' +
-      ' FROM user WHERE userId = ?;', [id], (err, results) => {
+      `SELECT u.userId, u.username, u.displayName, u.countryId, u.city, u.bio, u.email, u.isAdmin, 
+      upload.fileName as usrImg, u.bandId 
+      FROM user u LEFT JOIN upload ON upload.uploadId=u.profileImageId 
+      WHERE u.userId = 29`, [id], (err, results) => {
         if (err) {
           reject(err.code);
         } else if (results) resolve(results);
@@ -608,7 +610,8 @@ const deleteDislike = (entityId, userId) => {
 const deletePost = (entityId) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      `DELETE FROM textPost WHERE entityId = ?; DELETE FROM audioPost WHERE entityId = ?; DELETE FROM videoPost WHERE entityId = ?; DELETE FROM imagePost WHERE entityId = ?; DELETE FROM entity WHERE entityId = ?;`, [entityId, entityId, entityId, entityId, entityId],
+      `DELETE FROM textPost WHERE entityId = ?; DELETE FROM audioPost WHERE entityId = ?; DELETE FROM videoPost WHERE entityId = ?; DELETE FROM imagePost WHERE entityId = ?; DELETE FROM entity WHERE entityId = ?;`,
+      [entityId, entityId, entityId, entityId, entityId],
       (err, results) => {
         if (err) reject(err);
         if (results) resolve();

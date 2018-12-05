@@ -1,0 +1,45 @@
+.settings-wrapper {
+  width: 60%;
+  display: flex;
+  margin: 1rem auto;
+  flex-direction: column;
+  align-items: center;
+
+  .row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+
+    label {
+      max-width: 25%;
+    }
+  }
+
+  .divider {
+    border-bottom: $dark-card-border 1px solid;
+    margin-bottom: 20px;
+  }
+  .column {
+    display: flex;
+    flex-direction: column;
+    flex:1;
+  }
+
+  .settings-title {
+   justify-content: space-between;
+  }
+
+  .button {
+    align-self: center;
+  }
+  img {
+    width: 128px;
+    height: 128px;
+    margin-right: 0.5rem;
+  }
+  form {
+    width: 100%;
+  }
+}
+
