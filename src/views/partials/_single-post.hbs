@@ -12,14 +12,22 @@
     <div class="text-container">
       <p>{{text}}</p>
     </div>
+    
     {{#if images}}
-    <div class="image-container">
-      {{#each images}}
-      <img src="/static/uploads/{{fileName}}">
-      {{/each}}
-    </div>
-    {{else}}
-    <p>eipä ollu kuvia</p>
+      <div class="image-container">
+        
+        {{#each images}}
+        {{!-- {{title}} --}}
+        <img src="/static/uploads/{{fileName}}">
+        {{/each}}
+      </div>
     {{/if}}
+    {{#if fileName}}
+      <div class="image-container">
+        <video controls>
+          <source src="/static/uploads/{{fileName}}" type="video/mp4">
+        </video>
+      </div>
+      {{/if}}
   </div>
 </div>

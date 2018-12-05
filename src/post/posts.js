@@ -48,6 +48,81 @@ const createAudioPost = (userId, songId, text) => {
   });
 };
 
+const getAllImagePosts = () => {
+  return new Promise((res, rej) => {
+    db.getAllImagePosts()
+      .then((results) => res(results))
+      .catch(() => rej(err));
+  });
+};
+
+const getAllPosts = () => {
+  return new Promise((resolve, reject) => {
+    const audio = db.getAllAudioPosts();
+    const video = db.getAllVideoPosts();
+    const text = db.getAllTextPosts();
+    const image = db.getAllImagePosts();
+
+    Promise.all([audio, video, text, image]).then((results) => {
+      // console.log(results);
+      const posts = [];
+
+      results[0].forEach((audioPost) => { // audio posts
+        posts.push(audioPost);
+      });
+      results[1].forEach((textPost) => { // text posts
+        posts.push(textPost);
+      });
+      results[2].forEach((videoPost) => { // video posts
+        posts.push(videoPost);
+      });
+      const imagePosts = results[3];
+      console.log(imagePosts);
+      for (let i = 0; i < imagePosts.length; i++) {
+        const lastItem = posts[posts.length - 1] || {};
+        if (lastItem.hasOwnProperty('imageAlbulmId') && lastItem.imageAlbulmId === imagePosts[i].imageAlbulmId) {
+          lastItem.images.push({
+            title: imagePosts[i].title,
+            description: imagePosts[i].description,
+            fileName: imagePosts[i].fileName,
+          });
+        } else {
+          const post = {
+            entityId: imagePosts[i].entityId,
+            imageAlbulmId: imagePosts[i].imageAlbulmId,
+            text: imagePosts[i].text,
+            timestamp: imagePosts[i].timestamp,
+            username: imagePosts[i].username,
+            displayName: imagePosts[i].displayName,
+            userImg: imagePosts[i].userImg,
+            images: [],
+          };
+          post.images.push({
+            title: imagePosts[i].title,
+            description: imagePosts[i].description,
+            fileName: imagePosts[i].fileName,
+          });
+          posts.push(post);
+        }
+      }
+      posts.sort((a, b) => {
+        const aDate = new Date(a.timestamp);
+        const bDate = new Date(b.timestamp);
+        if (aDate.getTime() < bDate.getTime()) {
+          return 1;
+        }
+        if (aDate.getTime() > bDate.getTime()) {
+          return -1;
+        }
+        return 0;
+      });
+      console.log(posts);
+      resolve(posts);
+    }).catch((err) => reject(err));
+  });
+};
+
+
 const getPost = (entityId) => {
   return new Promise((resolve, reject) => {
     const audio = db.getAudioPost(entityId);
@@ -135,4 +210,6 @@ module.exports = {
   createSubComment,
   getComment,
   getComments,
+  getAllImagePosts,
+  getAllPosts,
 };

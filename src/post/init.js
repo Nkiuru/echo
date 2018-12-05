@@ -12,7 +12,19 @@ const initPost = (app) => {
   app.post('/post/audio', passport.authenticationMiddleware(), upload.single('file'), audioPost);
   app.post('/post/comment', passport.authenticationMiddleware(), comment);
   app.get('/post/:entityId', passport.authenticationMiddleware(), getPost);
+  app.get('/trending', getImages);
 };
+
+const getImages = (req, res) => {
+  post.getAllPosts().then((results) => {
+    res.json({
+      success: true,
+      posts: results,
+    });
+    res.end();
+  }).catch((err) => res.send(err));
+};
+
 
 const textPost = (req, res, next) => {
   console.log(req.body);
@@ -54,6 +66,7 @@ const videoPost = (req, res, next) => {
 };
 
 const audioPost = (req, res, next) => {
+  console.log(req.body);
   uploads.createSong(req, res, next).then((songId) => {
     console.log(songId);
     post.createAudioPost(req.user.userId, songId, req.body.postText).then((entityId) => {

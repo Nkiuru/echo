@@ -11,7 +11,7 @@ const initPassport = () => {
   passport.use(new LocalStrategy(
     {usernameField: 'username'},
     (username, password, done) => {
-      db.getgetUserWPassword(username)
+      db.getUserWPassword(username)
         .then((result) => {
           if (result.length > 0) {
             const user = result[0];
@@ -40,7 +40,7 @@ passport.serializeUser((userId, done) => {
 });
 
 passport.deserializeUser((id, done) => {
-  db.getUserById(id)
+  db.getUserByIdWEmail(id)
     .then((res) => done(null, res[0]))
     .catch((error) => done(error, false));
 });

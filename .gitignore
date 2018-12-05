@@ -73,3 +73,7 @@ dist/
 
 # Ignore session files
 sessions/
+
+# Ignore uploaded files
+public/uploads
+public/thumbnails

@@ -13,6 +13,7 @@ const audioFiletype = document.querySelector('#filetype-audio');
 
 const fileInput = document.querySelector('#file-input');
 
+// song title, genreId, bandId, text (post)
 
 const img = 'image/*,.pdf';
 const video = '.mp4,.webm';
@@ -64,26 +65,21 @@ closeBtn.addEventListener('click', (e) => {
   closeOverlay();
 });
 
-const dateTimeReviver = (key, value) => {
-  if (typeof value === 'string') {
-    const x = /\/Date\((\d*)\)\//.exec(value);
-    if (x) {
-      return new Date(+x[1]);
-    }
-  }
-  return value;
-};
-
-
 submitBtn.addEventListener('click', (e) => {
   e.preventDefault();
   closeOverlay();
 
   const fd = new FormData(postForm);
 
+  const mediaSettings = {
+    method: 'POST',
+    body: fd,
+  };
+
   /* for (const [key, value] of fd.entries()) {
     console.log(key, value);
   } */
+
   const textSettings = {
     method: 'POST',
     headers: {
@@ -94,10 +90,6 @@ submitBtn.addEventListener('click', (e) => {
     }),
   };
 
-  const imgSettings = {
-    method: 'POST',
-    body: fd,
-  };
 
   const textPost = () => {
     fetch('/post', textSettings)
@@ -131,7 +123,7 @@ submitBtn.addEventListener('click', (e) => {
   };
 
   const imgPost = () => {
-    fetch('/post/image', imgSettings)
+    fetch('/post/image', mediaSettings)
       .then((response) => response.json())
       .then((json) => {
         if (!json[0].success) {
@@ -139,24 +131,28 @@ submitBtn.addEventListener('click', (e) => {
           return;
         }
         console.log(json);
-        const imageUrl = json[1].images[0].fileName;
-        console.log(imageUrl);
+        const imgUrl = json[1].images[0].fileName;
         const timestamp = json[1].timestamp;
+        // const imgTitle = json[1].images[0].title;
         const text = json[1].text;
         const markup = `
-        <div id="post-card">
-          <div class="post-header">
-            <div class="usr-time">
-              <p>${timestamp}</p>
+          <div id="post-card">
+            <div class="post-header">
+              <div class="profile-container">
+                <img src="/static/img/bbe.png" alt="">
+              </div>
+              <div class="usr-time">
+                <h4>username</h4>
+                <p>${timestamp}</p>
+              </div>
+          </div>
+            <div class="text-container">
+              <p>${text}</p>
             </div>
-        </div>
-          <div class="text-container">
-            <p>${text}</p>
+            <div class="image-container">
+              <img src="/static/uploads/${imgUrl}">
+            </div>
           </div>
-          <div class="image-container">
-            <img src="/static/uploads/${imageUrl}">
-          </div>
-        </div>
         `;
         body += markup;
         postText.innerHTML = body;
@@ -166,13 +162,65 @@ submitBtn.addEventListener('click', (e) => {
       });
   };
 
+  const videoPost = () => {
+    fetch('/post/video', mediaSettings)
+      .then((response) => response.json())
+      .then((json) => {
+        if (!json[0].success) {
+          alert(json.error);
+          return;
+        }
+        const timestamp = json[1].timestamp;
+        const text = json[1].text;
+        const videoUrl = json[1].fileName;
+        const markup = `
+          <div id="post-card">
+            <div class="post-header">
+              <div class="usr-time">
+                <p>${timestamp}</p>
+              </div>
+          </div>
+            <div class="text-container">
+              <p>${text}</p>
+            </div>
+            <div class="image-container">
+              <video controls>
+                <source src="/static/uploads/${videoUrl}" type="video/mp4">
+              </video>
+            </div>
+          </div>`;
+        body += markup;
+        postText.innerHTML = body;
+        console.log(json);
+      })
+      .catch((err) => {
+        console.log(`error: ${err}`);
+      });
+  };
+
+  const audioPost = () => {
+    fetch('/post/audio', mediaSettings)
+      .then((results) => results.json())
+      .then((json) => {
+        if (!json[0].success) {
+          alert(json.error);
+          return;
+        }
+        console.log(json);
+      })
+      .catch((err) => {
+        console.log(`err ${err}`);
+      });
+  };
+
   if (inputType == 'all') {
     textPost();
   } else if (inputType == img) {
     imgPost();
   } else if (inputType == video) {
-    console.log('video');
-  } else {
-    console.log('audio');
+    videoPost();
+  } else if (inputType == audio) {
+    console.log('audio post');
+    audioPost();
   }
 });

@@ -41,7 +41,7 @@ app.engine(
 app.set('views', __dirname + '/src/views');
 app.set('view engine', 'hbs');
 
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
@@ -50,9 +50,8 @@ app.use(passport.session());
 app.use('/static', express.static(path.join(__dirname, '/dist')));
 
 
-app.get('/', (req, res) => {
-  res.render('index');
-});
+// app.get('/', getImages);
+
 
 app.get('/login', (req, res) => {
   res.render('logregbase', { login: true });
