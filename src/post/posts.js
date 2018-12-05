@@ -245,6 +245,18 @@ const likePost = (entityId, userId) => {
   });
 };
 
+const deletePost = (entityId) => {
+  return new Promise((resolve, reject) => {
+    db.deletePost(entityId).then(() => resolve()).catch((err) => reject(err));
+  });
+};
+
+const deleteComment = (entityId) => {
+  return new Promise((resolve, reject) => {
+    db.deleteComment(entityId).then(() => resolve()).catch((err) => reject(err));
+  });
+};
+
 module.exports = {
   createEntity: createEntity,
   createTextPost: createTextPost,
@@ -260,4 +272,6 @@ module.exports = {
   getAllPosts,
   dislikePost,
   likePost,
+  deletePost,
+  deleteComment,
 };

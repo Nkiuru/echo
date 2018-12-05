@@ -6,6 +6,7 @@ const connection = mysql.createConnection({
   user: process.env.DB_USER,
   database: process.env.DB_NAME,
   password: process.env.DB_PASS,
+  multipleStatements: true,
 });
 
 const select = () => {
@@ -604,6 +605,29 @@ const deleteDislike = (entityId, userId) => {
   });
 };
 
+const deletePost = (entityId) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      `DELETE FROM textPost WHERE entityId = ?; DELETE FROM audioPost WHERE entityId = ?; DELETE FROM videoPost WHERE entityId = ?; DELETE FROM imagePost WHERE entityId = ?; DELETE FROM entity WHERE entityId = ?;`, [entityId, entityId, entityId, entityId, entityId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve();
+      });
+  });
+};
+
+const deleteComment = (commentId) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `UPDATE entityComment set comment = "[REDACTED]" WHERE commentId = ?`, [commentId],
+      (err, results) => {
+        if (err) reject(err);
+        if (results) resolve();
+      },
+    );
+  });
+};
+
 module.exports = {
   connection,
   select,
@@ -647,4 +671,6 @@ module.exports = {
   createSubComment,
   getComment,
   getComments,
+  deletePost,
+  deleteComment,
 };
