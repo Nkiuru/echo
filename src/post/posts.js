@@ -96,6 +96,7 @@ const resolvePosts = (results) => {
   results[0].forEach((audioPost) => { // audio posts
     posts.push(audioPost);
   });
+  console.log(posts);
   results[1].forEach((textPost) => { // text posts
     posts.push(textPost);
   });

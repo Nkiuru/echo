@@ -37,9 +37,53 @@ const fileSelection = () => {
   audioFiletype.addEventListener('change', (e) => {
     fileInput.accept = audio;
     inputType = fileInput.accept;
+    addFieldsForAudio();
   });
 };
 
+const addFieldsForAudio = () => {
+  const settings = {
+    method: 'GET',
+  };
+  fetch('/genres', settings).then((response) => response.json()).then((json) => {
+    if (json[0].success) {
+      const select = createGenreSelect(json[1]);
+      const songName = document.createElement('input');
+      songName.setAttribute('type', 'text');
+      songName.setAttribute('form', 'post-form');
+      songName.setAttribute('name', 'songTitle');
+      songName.setAttribute('placeholder', 'Song title');
+      songName.required = true;
+      const container = document.querySelector('.progress');
+      container.appendChild(select);
+      container.appendChild(songName);
+    } else {
+      throw new Error('something went wrong');
+    }
+  }).catch((err) => alert(err));
+};
+
+const createGenreSelect = (genres) => {
+  const select = document.createElement('select');
+  select.setAttribute('name', 'genreId');
+  select.required = true;
+  const opt = document.createElement('option');
+  opt.classList.add('placeholder');
+  opt.setAttribute('value', '');
+  opt.selected = true;
+  opt.disabled = true;
+  opt.hidden = true;
+  opt.innerText = 'Genre';
+  select.appendChild(opt);
+
+  genres.forEach((genre) => {
+    const option = document.createElement('option');
+    option.setAttribute('value', genre.genreId);
+    option.innerText = genre.genreName;
+    select.appendChild(option);
+  });
+  return select;
+};
 fileSelection();
 
 const closeOverlay = () => {
@@ -90,18 +134,15 @@ submitBtn.addEventListener('click', (e) => {
     }),
   };
 
-
   const textPost = () => {
-    fetch('/post', textSettings)
-      .then((response) => response.json())
-      .then((json) => {
-        if (!json.success) {
-          alert(json.error);
-          return;
-        }
-        // const timestamp = JSON.parse(json.timestamp, dateTimeReviver);
-        // console.log('timestamp' + timestamp);
-        const markup = `
+    fetch('/post', textSettings).then((response) => response.json()).then((json) => {
+      if (!json.success) {
+        alert(json.error);
+        return;
+      }
+      // const timestamp = JSON.parse(json.timestamp, dateTimeReviver);
+      // console.log('timestamp' + timestamp);
+      const markup = `
           <div id="post-card">
             <div class="post-header">
               <div class="usr-time">
@@ -113,29 +154,26 @@ submitBtn.addEventListener('click', (e) => {
             </div>
           </div>
         `;
-        body += markup;
-        console.log(body);
-        postText.innerHTML = body;
-      })
-      .catch((err) => {
-        console.log(`error ${err}`);
-      });
+      body += markup;
+      console.log(body);
+      postText.innerHTML = body;
+    }).catch((err) => {
+      console.log(`error ${err}`);
+    });
   };
 
   const imgPost = () => {
-    fetch('/post/image', mediaSettings)
-      .then((response) => response.json())
-      .then((json) => {
-        if (!json[0].success) {
-          alert(json.error);
-          return;
-        }
-        console.log(json);
-        const imgUrl = json[1].images[0].fileName;
-        const timestamp = json[1].timestamp;
-        // const imgTitle = json[1].images[0].title;
-        const text = json[1].text;
-        const markup = `
+    fetch('/post/image', mediaSettings).then((response) => response.json()).then((json) => {
+      if (!json[0].success) {
+        alert(json.error);
+        return;
+      }
+      console.log(json);
+      const imgUrl = json[1].images[0].fileName;
+      const timestamp = json[1].timestamp;
+      // const imgTitle = json[1].images[0].title;
+      const text = json[1].text;
+      const markup = `
           <div id="post-card">
             <div class="post-header">
               <div class="profile-container">
@@ -154,26 +192,23 @@ submitBtn.addEventListener('click', (e) => {
             </div>
           </div>
         `;
-        body += markup;
-        postText.innerHTML = body;
-      })
-      .catch((err) => {
-        console.log(`error ${err}`);
-      });
+      body += markup;
+      postText.innerHTML = body;
+    }).catch((err) => {
+      console.log(`error ${err}`);
+    });
   };
 
   const videoPost = () => {
-    fetch('/post/video', mediaSettings)
-      .then((response) => response.json())
-      .then((json) => {
-        if (!json[0].success) {
-          alert(json.error);
-          return;
-        }
-        const timestamp = json[1].timestamp;
-        const text = json[1].text;
-        const videoUrl = json[1].fileName;
-        const markup = `
+    fetch('/post/video', mediaSettings).then((response) => response.json()).then((json) => {
+      if (!json[0].success) {
+        alert(json.error);
+        return;
+      }
+      const timestamp = json[1].timestamp;
+      const text = json[1].text;
+      const videoUrl = json[1].fileName;
+      const markup = `
           <div id="post-card">
             <div class="post-header">
               <div class="usr-time">
@@ -189,28 +224,24 @@ submitBtn.addEventListener('click', (e) => {
               </video>
             </div>
           </div>`;
-        body += markup;
-        postText.innerHTML = body;
-        console.log(json);
-      })
-      .catch((err) => {
-        console.log(`error: ${err}`);
-      });
+      body += markup;
+      postText.innerHTML = body;
+      console.log(json);
+    }).catch((err) => {
+      console.log(`error: ${err}`);
+    });
   };
 
   const audioPost = () => {
-    fetch('/post/audio', mediaSettings)
-      .then((results) => results.json())
-      .then((json) => {
-        if (!json[0].success) {
-          alert(json.error);
-          return;
-        }
-        console.log(json);
-      })
-      .catch((err) => {
-        console.log(`err ${err}`);
-      });
+    fetch('/post/audio', mediaSettings).then((results) => results.json()).then((json) => {
+      if (!json[0].success) {
+        alert(json.error);
+        return;
+      }
+      console.log(json);
+    }).catch((err) => {
+      console.log(`err ${err}`);
+    });
   };
 
   if (inputType == 'all') {

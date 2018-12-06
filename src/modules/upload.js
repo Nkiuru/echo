@@ -50,7 +50,7 @@ const createSong = (req, res, next) => {
   return new Promise((resolve, reject) => {
     // validateAudio(req, res, next);
     createUpload(req, res, next).then((uploadId) => {
-      return db.createSong(req.file.filename, null, req.body.genreId, uploadId, req.user.bandId);
+      return db.createSong(req.body.songTitle, null, req.body.genreId, uploadId, req.user.bandId);
     }).then((songId) => {
       resolve(songId);
     }).catch((err) => reject(err));
