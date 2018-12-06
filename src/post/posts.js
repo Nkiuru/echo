@@ -149,17 +149,18 @@ const getPost = (entityId) => {
         if (p.length > 0) {
           if (p[0].hasOwnProperty('imageAlbulmId')) { // This is an image post with possibly many images.
             post = {
-              entityId: post[0].entityId,
-              imageAlbulmId: post[0].imageAlbulmId,
-              text: post[0].text,
-              timestamp: post[0].timestamp,
-              username: post[0].username,
-              displayName: post[0].displayName,
-              userImg: post[0].userImg,
-              likes: post[0].likes,
+              entityId: p[0].entityId,
+              imageAlbulmId: p[0].imageAlbulmId,
+              text: p[0].text,
+              timestamp: p[0].timestamp,
+              username: p[0].username,
+              displayName: p[0].displayName,
+              userImg: p[0].userImg,
+              likes: p[0].likes,
               dislikes: p[0].dislikes,
               images: [],
             };
+
             p.forEach((imagePost) => {
               if (imagePost.imageAlbulmId === post.imageAlbulmId) {
                 post.images.push({

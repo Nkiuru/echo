@@ -142,7 +142,7 @@ const imagePost = (req, res, next) => {
     return uploads.createImages(req, res, next);
   }).then(() => {
     return post.createImagePost(req.user.userId, req.imageAlbumId, req.body.postText);
-  }).then((entityId) => {
+    }).then((entityId) => {
     return post.getPost(entityId);
   }).then((imagePost) => {
     res.json([
