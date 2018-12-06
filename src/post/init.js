@@ -69,6 +69,7 @@ const dislikePost = (req, res) => {
     res.end();
   });
 };
+
 const getImages = (req, res) => {
   post.getAllPosts().then((results) => {
     res.json({
@@ -80,7 +81,7 @@ const getImages = (req, res) => {
 };
 
 const textPost = (req, res, next) => {
-  console.log(req.body);
+  // console.log(req.body);
   post.createTextPost(req.user.userId, req.body.postText).then((entityId) => {
     return post.getPost(entityId);
   }).then((textPost) => {
@@ -108,7 +109,7 @@ const videoPost = (req, res, next) => {
       console.log(entityId);
       return post.getPost(entityId);
     }).then((videoPost) => {
-      console.log(videoPost);
+      // console.log(videoPost);
       res.json([
         {
           success: true,

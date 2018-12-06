@@ -1,7 +1,6 @@
 const trendingFeed = document.querySelector('#trending-feed');
-let body = '';
 
-const singleImgPost = (json, images, i) => {
+const createPost = (json, i) => {
   const singlePostContainer = document.createElement('div');
   singlePostContainer.id = 'single-post-container';
 
@@ -34,17 +33,10 @@ const singleImgPost = (json, images, i) => {
   const textContainer = document.createElement('div');
   textContainer.classList.add('text-container');
 
-  const img = document.createElement('img');
-  img.setAttribute('src', `/static/uploads/${images[0].fileName}`);
-
-  const imageContainer = document.createElement('div');
-  imageContainer.classList.add('media-container');
-
   const text = document.createElement('p');
   text.textContent = json.posts[i].text;
 
   textContainer.appendChild(text);
-  imageContainer.appendChild(img);
   usrTime.appendChild(username);
   usrTime.appendChild(timestamp);
   profileContainer.appendChild(userImg);
@@ -52,47 +44,62 @@ const singleImgPost = (json, images, i) => {
   postHeader.appendChild(usrTime);
   postCard.appendChild(postHeader);
   postCard.appendChild(textContainer);
-  postCard.appendChild(imageContainer);
+
+  if (json.posts[i].hasOwnProperty('images')) {
+    const images = json.posts[i].images;
+    multipleImgPost(json, images, i, postCard);
+  } else if (json.posts[i].hasOwnProperty('fileName')) {
+    if (json.posts[i].hasOwnProperty('songId')) {
+      audioPost(json, i, postCard);
+    } else {
+      videoPost(json, i, postCard);
+    }
+  }
+
   singlePostContainer.appendChild(postCard);
   trendingFeed.appendChild(singlePostContainer);
 };
 
-const multipleImgPost = (json, images, i) => {
-  const singlePostContainer = document.createElement('div');
-  singlePostContainer.id = 'single-post-container';
+const audioPost = (json, i, postCard) => {
+  const audioContainer = document.createElement('div');
+  audioContainer.classList.add('media-container');
 
-  const postCard = document.createElement('div');
-  postCard.id = 'post-card';
+  const waveformContainer = document.createElement('div');
+  waveformContainer.id = 'waveform';
 
-  const postHeader = document.createElement('div');
-  postHeader.classList.add('post-header');
+  const controls = document.createElement('div');
+  controls.classList.add('audiopost-controls');
 
-  const profileContainer = document.createElement('div');
-  profileContainer.classList.add('profile-container');
+  const toggle = document.createElement('button');
 
-  const userImg = document.createElement('img');
+  const volumeContainer = document.createElement('div');
+  volumeContainer.classList.add('volume-container');
 
-  if (json.posts[i].userImg) {
-    userImg.setAttribute('src', `/static/uploads/${json.posts[i].userImg}`);
-  } else {
-    userImg.setAttribute('src', `/static/img/bbe.png`);
-  }
+  const hr = document.createElement('hr');
 
-  const usrTime = document.createElement('div');
-  usrTime.classList.add('usr-time');
+  const volume = document.createElement('input');
+  volume.classList.add('volume');
+  volume.setAttribute('type', 'range');
+  volume.setAttribute('min', '0');
+  volume.setAttribute('max', '1');
+  volume.setAttribute('value', '1');
+  volume.setAttribute('step', '.1');
 
-  const username = document.createElement('h4');
-  username.textContent = json.posts[i].displayName;
+  toggle.classList.add('button', 'btn-toggle', 'blue');
 
-  const timestamp = document.createElement('p');
-  timestamp.textContent = json.posts[i].timestamp;
+  controls.appendChild(toggle);
+  volumeContainer.appendChild(volume);
+  controls.appendChild(volumeContainer);
+  audioContainer.appendChild(waveformContainer);
+  postCard.appendChild(audioContainer);
+  postCard.appendChild(hr);
+  postCard.appendChild(controls);
 
-  const textContainer = document.createElement('div');
-  textContainer.classList.add('text-container');
+  createAudiowave(json, i, waveformContainer, toggle, volume);
+};
 
-  const text = document.createElement('p');
-  text.textContent = json.posts[i].text;
 
+const multipleImgPost = (json, images, i, postCard) => {
   const imageContainer = document.createElement('div');
   imageContainer.classList.add('media-container');
 
@@ -102,55 +109,10 @@ const multipleImgPost = (json, images, i) => {
     imageContainer.appendChild(img);
   }
 
-  textContainer.appendChild(text);
-  usrTime.appendChild(username);
-  usrTime.appendChild(timestamp);
-  profileContainer.appendChild(userImg);
-  postHeader.appendChild(profileContainer);
-  postHeader.appendChild(usrTime);
-  postCard.appendChild(postHeader);
-  postCard.appendChild(textContainer);
   postCard.appendChild(imageContainer);
-  singlePostContainer.appendChild(postCard);
-  trendingFeed.appendChild(singlePostContainer);
 };
 
-const videoPost = (json, i) => {
-  const singlePostContainer = document.createElement('div');
-  singlePostContainer.id = 'single-post-container';
-
-  const postCard = document.createElement('div');
-  postCard.id = 'post-card';
-
-  const postHeader = document.createElement('div');
-  postHeader.classList.add('post-header');
-
-  const profileContainer = document.createElement('div');
-  profileContainer.classList.add('profile-container');
-
-  const userImg = document.createElement('img');
-
-  if (json.posts[i].userImg) {
-    userImg.setAttribute('src', `/static/uploads/${json.posts[i].userImg}`);
-  } else {
-    userImg.setAttribute('src', `/static/img/bbe.png`);
-  }
-
-  const usrTime = document.createElement('div');
-  usrTime.classList.add('usr-time');
-
-  const username = document.createElement('h4');
-  username.textContent = json.posts[i].displayName;
-
-  const timestamp = document.createElement('p');
-  timestamp.textContent = json.posts[i].timestamp;
-
-  const textContainer = document.createElement('div');
-  textContainer.classList.add('text-container');
-
-  const text = document.createElement('p');
-  text.textContent = json.posts[i].text;
-
+const videoPost = (json, i, postCard) => {
   const mediaContainer = document.createElement('div');
   mediaContainer.classList.add('media-container');
 
@@ -159,65 +121,7 @@ const videoPost = (json, i) => {
   video.setAttribute('controls', 'controls');
   mediaContainer.appendChild(video);
 
-  textContainer.appendChild(text);
-  usrTime.appendChild(username);
-  usrTime.appendChild(timestamp);
-  profileContainer.appendChild(userImg);
-  postHeader.appendChild(profileContainer);
-  postHeader.appendChild(usrTime);
-  postCard.appendChild(postHeader);
-  postCard.appendChild(textContainer);
   postCard.appendChild(mediaContainer);
-  singlePostContainer.appendChild(postCard);
-  trendingFeed.appendChild(singlePostContainer);
-};
-
-const textPost = (json, i) => {
-  const singlePostContainer = document.createElement('div');
-  singlePostContainer.id = 'single-post-container';
-
-  const postCard = document.createElement('div');
-  postCard.id = 'post-card';
-
-  const postHeader = document.createElement('div');
-  postHeader.classList.add('post-header');
-
-  const profileContainer = document.createElement('div');
-  profileContainer.classList.add('profile-container');
-
-  const userImg = document.createElement('img');
-
-  if (json.posts[i].userImg) {
-    userImg.setAttribute('src', `/static/uploads/${json.posts[i].userImg}`);
-  } else {
-    userImg.setAttribute('src', `/static/img/bbe.png`);
-  }
-
-  const usrTime = document.createElement('div');
-  usrTime.classList.add('usr-time');
-
-  const username = document.createElement('h4');
-  username.textContent = json.posts[i].displayName;
-
-  const timestamp = document.createElement('p');
-  timestamp.textContent = json.posts[i].timestamp;
-
-  const textContainer = document.createElement('div');
-  textContainer.classList.add('text-container');
-
-  const text = document.createElement('p');
-  text.textContent = json.posts[i].text;
-
-  textContainer.appendChild(text);
-  usrTime.appendChild(username);
-  usrTime.appendChild(timestamp);
-  profileContainer.appendChild(userImg);
-  postHeader.appendChild(profileContainer);
-  postHeader.appendChild(usrTime);
-  postCard.appendChild(postHeader);
-  postCard.appendChild(textContainer);
-  singlePostContainer.appendChild(postCard);
-  trendingFeed.appendChild(singlePostContainer);
 };
 
 const getFeed = () => {
@@ -230,32 +134,13 @@ const getFeed = () => {
         alert(json.error);
         return;
       }
-
       for (let i = 0; i < json.posts.length; i++) {
-        // console.log(json);
-        if (json.posts[i].hasOwnProperty('images')) {
-          const images = json.posts[i].images;
-          if (images.length > 1) {
-            for (let i = 0; i < images.length; i++) {
-              // multiple images
-              multipleImgPost(json, images, i);
-            }
-          } else {
-            // one image
-            singleImgPost(json, images, i);
-          }
-        } else if (json.posts[i].hasOwnProperty('fileName')) {
-          // video post
-          videoPost(json, i);
-        } else {
-          // text post
-          textPost(json, i);
-        }
+        createPost(json, i);
       };
       loading.classList.remove('loading');
     })
     .catch((err) => {
-      alert(`SOS ${err} SOS`);
+      console.error(err);
     });
 };
 

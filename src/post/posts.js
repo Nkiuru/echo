@@ -96,7 +96,7 @@ const resolvePosts = (results) => {
   results[0].forEach((audioPost) => { // audio posts
     posts.push(audioPost);
   });
-  console.log(posts);
+  // console.log(posts);
   results[1].forEach((textPost) => { // text posts
     posts.push(textPost);
   });
@@ -211,7 +211,7 @@ const getComment = (commentId) => {
 const getComments = (entityId) => {
   return new Promise((resolve, reject) => {
     db.getComments(entityId).then((comments) => {
-      console.log(comments);
+      // console.log(comments);
       resolve(comments);
     }).catch((err) => reject(err));
   });

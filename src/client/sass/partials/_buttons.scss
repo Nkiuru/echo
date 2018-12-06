@@ -25,3 +25,32 @@
   width: 100%;
 }
 
+.btn-toggle {
+  border-radius: 100%;
+  margin-left: 1rem;
+  padding: 1rem;
+  background-image: url('/static/img/Vector-fill.svg') !important;
+  background-position-x: 9px !important;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.start-audiowave, .stop-audiowave, .btn-toggle {
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-position-x: 10px !important;
+}
+
+.start-audiowave {
+  background-image: url('/static/img/pause.svg') !important;
+  background-position-x: center !important;
+}
+
+.stop-audiowave {
+  background-image: url('/static/img/play.svg') !important;
+}
+
+
+

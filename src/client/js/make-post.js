@@ -13,6 +13,8 @@ const audioFiletype = document.querySelector('#filetype-audio');
 
 const fileInput = document.querySelector('#file-input');
 
+let isAudio = false;
+
 // song title, genreId, bandId, text (post)
 
 const img = 'image/*,.pdf';
@@ -22,7 +24,7 @@ const audio = 'audio/*';
 let body = '';
 let inputType = 'all';
 
-// TODO: change accepted filetype according to checked radio button
+// change accepted filetype according to checked radio button
 const fileSelection = () => {
   imgFiletype.addEventListener('change', (e) => {
     fileInput.accept = img;
@@ -37,7 +39,11 @@ const fileSelection = () => {
   audioFiletype.addEventListener('change', (e) => {
     fileInput.accept = audio;
     inputType = fileInput.accept;
-    addFieldsForAudio();
+    if (!isAudio) {
+      addFieldsForAudio();
+    } else {
+      isAudio = true;
+    }
   });
 };
 
@@ -45,6 +51,7 @@ const addFieldsForAudio = () => {
   const settings = {
     method: 'GET',
   };
+
   fetch('/genres', settings).then((response) => response.json()).then((json) => {
     if (json[0].success) {
       const select = createGenreSelect(json[1]);
@@ -55,8 +62,9 @@ const addFieldsForAudio = () => {
       songName.setAttribute('placeholder', 'Song title');
       songName.required = true;
       const container = document.querySelector('.progress');
-      container.appendChild(select);
       container.appendChild(songName);
+      container.appendChild(select);
+      isAudio = true;
     } else {
       throw new Error('something went wrong');
     }
@@ -84,6 +92,7 @@ const createGenreSelect = (genres) => {
   });
   return select;
 };
+
 fileSelection();
 
 const closeOverlay = () => {
@@ -120,10 +129,6 @@ submitBtn.addEventListener('click', (e) => {
     body: fd,
   };
 
-  /* for (const [key, value] of fd.entries()) {
-    console.log(key, value);
-  } */
-
   const textSettings = {
     method: 'POST',
     headers: {
@@ -140,8 +145,7 @@ submitBtn.addEventListener('click', (e) => {
         alert(json.error);
         return;
       }
-      // const timestamp = JSON.parse(json.timestamp, dateTimeReviver);
-      // console.log('timestamp' + timestamp);
+
       const markup = `
           <div id="post-card">
             <div class="post-header">
@@ -234,11 +238,48 @@ submitBtn.addEventListener('click', (e) => {
 
   const audioPost = () => {
     fetch('/post/audio', mediaSettings).then((results) => results.json()).then((json) => {
+
+      console.log(mediaSettings);
       if (!json[0].success) {
         alert(json.error);
         return;
       }
+      console.log('audio post bbyyy');
       console.log(json);
+
+      const timestamp = json[1].timestamp;
+      const text = json[1].text;
+
+      const cont = document.createElement('div');
+      cont.id = 'waveform';
+
+      const wavesurfer = WaveSurfer.create({
+        container: '#waveform',
+        waveColor: 'violet',
+        progressColor: 'purple',
+      });
+
+      const audioFile = wavesurfer.load(`/static/uploads/${json[1].fileName}`);
+
+      const markup = `
+        <div id="post-card">
+          <div class="post-header">
+            <div class="usr-time">
+              <p>${timestamp}</p>
+            </div>
+        </div>
+          <div class="text-container">
+            <p>${text}</p>
+          </div>
+          <div class="media-container">
+            <p>${json[1].title}</p>
+            ${cont.appendChild(audioFile)}
+          </div>
+        </div>`;
+
+      body += markup;
+      postText.innerHTML = body;
+
     }).catch((err) => {
       console.log(`err ${err}`);
     });
