@@ -13,7 +13,8 @@ const getUserData = () => {
   const settings = {
     method: 'get',
   };
-  image.style = 'animation: spin 2s linear infinite;';
+  const loading = document.querySelector('#loading');
+  loading.classList.add('loading');
   fetch('/users/user', settings).then((response) => {
     return response.json();
   }).then((json) => {
@@ -25,7 +26,8 @@ const getUserData = () => {
     if (oldUserData.usrImg) {
       image.setAttribute('src', `/static/uploads/${oldUserData.usrImg}`);
     }
-    image.style = '';
+    window.localStorage.setItem('userData', JSON.stringify(oldUserData));
+    loading.classList.remove('loading');
   });
 };
 

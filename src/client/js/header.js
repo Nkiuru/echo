@@ -14,47 +14,55 @@ dropdownToggle.addEventListener('click', (e) => {
 });
 
 const getUser = () => {
-  const img = document.querySelector('#profile-picture');
-  img.style = 'animation: spin 2s linear infinite;';
-  fetch('/users/user').then((result) => result.json()).then((json) => {
-    if (json.success === false) {
-      dropdownToggle.style = 'display: none';
-      const btn = document.createElement('button');
-      btn.innerText = 'Login';
-      btn.classList.add('button');
-      btn.classList.add('blue');
-      btn.classList.add('white');
-      btn.style = 'margin-right: 1rem';
-      btn.addEventListener('click', () => window.location.replace('/login'));
-      rightContainer.appendChild(btn);
-    } else {
-      dropdownToggle.style = 'display: flex';
-      if (json.usrImg) {
-        img.setAttribute('src', `/static/uploads/${json.usrImg}`);
+  if (window.localStorage.getItem('userData')) {
+    setProfilePicture();
+  } else {
+    fetch('/users/user').then((result) => result.json()).then((json) => {
+      if (json.success === false) {
+        dropdownToggle.style = 'display: none';
+        const btn = document.createElement('button');
+        btn.innerText = 'Login';
+        btn.classList.add('button');
+        btn.classList.add('blue');
+        btn.classList.add('white');
+        btn.style = 'margin-right: 1rem';
+        btn.addEventListener('click', () => window.location.replace('/login'));
+        rightContainer.appendChild(btn);
+      } else {
+        window.localStorage.setItem('userData', JSON.stringify(json));
+        dropdownToggle.style = 'display: flex';
+        setProfilePicture();
       }
-      img.style = '';
-    }
-  }).catch((err) => {
-    alert(err);
-  });
+    }).catch((err) => {
+      alert(err);
+    });
+  }
+};
+
+const setProfilePicture = () => {
+  const userData = JSON.parse(window.localStorage.getItem('userData'));
+  const img = document.querySelector('#profile-picture');
+  if (userData.usrImg) {
+    img.setAttribute('src', `/static/uploads/${userData.usrImg}`);
+  }
 };
 
 const profile = (e) => {
-  fetch('/users/user').then((result) => result.json()).then((json) => {
-    console.log(json);
-    window.location.replace(`/user/${json.username}`);
-  }).catch(() => {
-    alert('Something went fucksie wucksie');
-  });
+  if (window.localStorage.getItem('userData')) {
+    const userData = JSON.parse(window.localStorage.getItem('userData'));
+    window.location.replace(`/user/${userData.username}`);
+  } else {
+    fetch('/users/user').then((result) => result.json()).then((json) => {
+      console.log(json);
+      window.location.replace(`/user/${json.username}`);
+    }).catch(() => {
+      alert('Something went fucksie wucksie');
+    });
+  }
 };
 
 const settings = (e) => {
-  fetch('/users/user').then((result) => result.json()).then((json) => {
-    console.log(json);
-    window.location.replace(`/user/settings`);
-  }).catch(() => {
-    alert('Something went fucksie wucksie');
-  });
+  window.location.replace('/user/settings');
 };
 
 const logout = (e) => {

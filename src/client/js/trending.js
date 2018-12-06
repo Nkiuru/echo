@@ -221,6 +221,8 @@ const textPost = (json, i) => {
 };
 
 const getFeed = () => {
+  const loading = document.querySelector('#loading');
+  loading.classList.add('loading');
   fetch('/trending')
     .then((response) => response.json())
     .then((json) => {
@@ -250,6 +252,7 @@ const getFeed = () => {
           textPost(json, i);
         }
       };
+      loading.classList.remove('loading');
     })
     .catch((err) => {
       alert(`SOS ${err} SOS`);
