@@ -27,11 +27,13 @@ const fileSelection = () => {
   imgFiletype.addEventListener('change', (e) => {
     fileInput.accept = img;
     inputType = fileInput.accept;
+    removeAudioFields();
   });
 
   videoFiletype.addEventListener('change', (e) => {
     fileInput.accept = video;
     inputType = fileInput.accept;
+    removeAudioFields();
   });
 
   audioFiletype.addEventListener('change', (e) => {
@@ -84,6 +86,19 @@ const createGenreSelect = (genres) => {
   });
   return select;
 };
+
+const removeAudioFields = () => {
+  const container = document.querySelector('.progress');
+  const select = container.querySelector('select');
+  if (select) {
+    container.removeChild(select);
+  }
+  const songName = container.querySelector('input');
+  if (songName) {
+    container.removeChild(songName);
+  }
+};
+
 fileSelection();
 
 const closeOverlay = () => {
