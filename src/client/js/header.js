@@ -73,6 +73,7 @@ const logout = (e) => {
     return result.json();
   }).then((json) => {
     if (json.success) {
+      window.localStorage.clear();
       window.location.replace('/login');
     }
   }).catch((err) => {
