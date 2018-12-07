@@ -58,6 +58,14 @@ const getUser = (req, res) => {
   });
 };
 
+const getUserWithUsername = (username) => {
+  return new Promise((resolve, reject) => {
+    db.getUser(username).then((user) => {
+      resolve(user);
+    }).catch((err) => reject(err));
+  });
+};
+
 const changePassword = (req, res) => {
   const oldPwd = req.body.password;
   db.getUserWPassword(req.user.username).then((result) => {
@@ -82,12 +90,12 @@ const changePassword = (req, res) => {
   });
 };
 
-const getOwnPosts = (req, res) => {
+const getOwnPosts = (userId) => {
   return new Promise((resolve, reject) => {
-    const audio = db.getUserAudioPosts(req.user.userId);
-    const video = db.getUserVideoPosts(req.user.userId);
-    const text = db.getUserTextPosts(req.user.userId);
-    const image = db.getUserImagePosts(req.user.userId);
+    const audio = db.getUserAudioPosts(userId);
+    const video = db.getUserVideoPosts(userId);
+    const text = db.getUserTextPosts(userId);
+    const image = db.getUserImagePosts(userId);
 
     Promise.all([audio, text, video, image]).then((results) => {
       const posts = resolvePosts(results);
@@ -169,4 +177,5 @@ module.exports = {
   getOwnData: getOwnData,
   changePassword: changePassword,
   getOwnPosts,
+  getUserWithUsername,
 };

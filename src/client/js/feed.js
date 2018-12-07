@@ -148,7 +148,9 @@ const getTrendingFeed = () => {
 
 const getUserFeed = () => {
   loading.classList.add('loading');
-  fetch('/userPosts')
+  const path = window.location.pathname.split('/')[2];
+  console.log(path);
+  fetch(`/user/posts/${path}`)
     .then((response) => response.json())
     .then((json) => {
       console.log(json);

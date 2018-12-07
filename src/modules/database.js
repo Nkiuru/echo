@@ -74,13 +74,16 @@ const getUserByIdWEmail = (id) => {
 };
 
 const getUser = (username) => {
+  console.log(username);
   return new Promise((resolve, reject) => {
-    connection.query(
-      'SELECT userId, username, displayName, countryId, city, bio, email, isAdmin, profileImageId, bandId' +
-      ' FROM user WHERE username = ?;', [username], (err, results) => {
+    connection.execute(
+      `SELECT u.userId, u.username, u.displayName, u.countryId, u.city, u.bio, u.email, u.isAdmin, 
+      upload.fileName as usrImg, u.bandId 
+      FROM user u LEFT JOIN upload ON upload.uploadId=u.profileImageId 
+      WHERE u.username = ?`, [username], (err, results) => {
         if (err) {
           reject(err.code);
-        } else if (results) resolve(results);
+        } else if (results) resolve(results[0]);
       });
   });
 };
