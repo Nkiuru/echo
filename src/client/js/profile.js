@@ -3,14 +3,16 @@ const locationElement = document.querySelector('.location');
 const bio = document.querySelector('.bio-text');
 const profileImg = document.querySelector('#usrImg');
 
+
 const getUser = () => {
-  if (window.localStorage.getItem('userData')) {
+  /* if (window.localStorage.getItem('userData')) {
+    console.log(JSON.parse(window.localStorage.getItem('userData')));
     updateProfile(JSON.parse(window.localStorage.getItem('userData')));
-  } else {
-    fetch('/users/user').then((response) => response.json()).then((json) => {
-      updateProfile(json);
-    }).catch((err) => console.log(err));
-  }
+  } else { */
+  fetch('/users/user').then((response) => response.json()).then((json) => {
+    updateProfile(json);
+  }).catch((err) => console.log(err));
+  // }
 };
 
 const updateProfile = (json) => {

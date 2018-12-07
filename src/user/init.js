@@ -57,6 +57,7 @@ const initUser = (app) => {
   app.get('/users/user', passport.authenticationMiddleware(), getOwnData);
   app.get('/users/:userId', passport.authenticationMiddleware(), getUserData);
   app.get('/users', passport.authenticationMiddleware(), testAuth);
+  app.get('/userPosts', passport.authenticationMiddleware(), getUserPosts);
 
   app.post('/user/pwd', passport.authenticationMiddleware(), updatePassword);
   app.post('/login', passport.authenticate('local', {
@@ -85,8 +86,20 @@ const getUser = (req, res) => {
   users.getOwnPosts(req, res).then((results) => {
     // console.log(results);
     res.render('profile', {
-      posts: results.map(x => ({ ...x, username: req.user.username })),
+      // posts: results.map(x => ({ ...x, username: req.user.username })),
     });
+  }).catch((err) => res.send(err));
+};
+
+const getUserPosts = (req, res) => {
+  console.log(req.user.username);
+  users.getOwnPosts(req, res).then((results) => {
+    // console.log(results);
+    res.json({
+      success: true,
+      posts: results,
+    });
+    res.end();
   }).catch((err) => res.send(err));
 };
 
@@ -101,7 +114,7 @@ const getUserData = (req, res) => {
 const getOwnData = (req, res) => {
   if (req.user) {
     users.getOwnData(req, res);
-  }else {
+  } else {
     res.json({success:false});
     res.end();
   }

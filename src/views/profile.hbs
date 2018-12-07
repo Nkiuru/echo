@@ -39,16 +39,17 @@
     </div>
   </div>
 
-  <div class="feed">
-    {{#each posts}}
-    {{>_single-post}}
-    {{else}}
-    <p>no posts found</p>
-    {{/each}}
+
+  <div id="profile-feed-container" class="feed-container">
+    {{>_feed}}
   </div>
+
 </div>
 {{>_add-post-btn}}
 <script src="/static/js/profile.js"></script>
+<script src="/static/js/wavesurfer.js"></script>
+<script src="/static/js/feed.js"></script>
+
 <script src="/static/js/make-post.js"></script>
 <script src="https://unpkg.com/wavesurfer.js"></script>
 

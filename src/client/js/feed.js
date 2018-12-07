@@ -1,4 +1,7 @@
-const trendingFeed = document.querySelector('#trending-feed');
+// const feed = document.querySelector('#trending-feed');
+const feedContainer = document.querySelector('.feed-container');
+const feed = document.createElement('div');
+const loading = document.querySelector('#loading');
 
 const createPost = (json, i) => {
   const singlePostContainer = document.createElement('div');
@@ -57,7 +60,8 @@ const createPost = (json, i) => {
   }
 
   singlePostContainer.appendChild(postCard);
-  trendingFeed.appendChild(singlePostContainer);
+  feed.appendChild(singlePostContainer);
+  feedContainer.appendChild(feed);
 };
 
 const audioPost = (json, i, postCard) => {
@@ -98,7 +102,6 @@ const audioPost = (json, i, postCard) => {
   createAudiowave(json, i, waveformContainer, toggle, volume);
 };
 
-
 const multipleImgPost = (json, images, i, postCard) => {
   const imageContainer = document.createElement('div');
   imageContainer.classList.add('media-container');
@@ -124,8 +127,7 @@ const videoPost = (json, i, postCard) => {
   postCard.appendChild(mediaContainer);
 };
 
-const getFeed = () => {
-  const loading = document.querySelector('#loading');
+const getTrendingFeed = () => {
   loading.classList.add('loading');
   fetch('/trending')
     .then((response) => response.json())
@@ -144,4 +146,35 @@ const getFeed = () => {
     });
 };
 
-getFeed();
+const getUserFeed = () => {
+  loading.classList.add('loading');
+  fetch('/userPosts')
+    .then((response) => response.json())
+    .then((json) => {
+      console.log(json);
+      if (!json.success) {
+        alert(json.error);
+        return;
+      }
+      for (let i = 0; i < json.posts.length; i++) {
+        createPost(json, i);
+      };
+      loading.classList.remove('loading');
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
+
+const getLocation = () => {
+  if (/user/.test(self.location.href)) {
+    feed.id = 'profile-feed';
+    console.log('user');
+    getUserFeed();
+  } else {
+    feed.id = 'trending-feed';
+    getTrendingFeed();
+  }
+};
+getLocation();
+

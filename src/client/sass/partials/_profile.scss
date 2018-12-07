@@ -1,8 +1,9 @@
 .profile-wrapper {
   display: flex;
-  max-width: 60%;
+  max-width: 50%;
   justify-content: center;
-  margin-left: 15%;
+  margin-left: 20%;
+  
 
   @include mobile {
     margin: .5rem;
@@ -57,9 +58,6 @@
               right: -50%;
             }
           }
-
-
-
 
           .location {
             font-family: $lato;
@@ -173,11 +171,14 @@
         }
       }
     }
-
   }
 
-  .feed {
-    flex: 5;
+  #profile-feed-container {
+        flex: 5;
     margin: 1rem 1rem 1rem .5rem;
+  }
+
+  #profile-feed {
+
   }
 }
