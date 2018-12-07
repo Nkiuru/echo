@@ -221,9 +221,7 @@ const getComments = (entityId) => {
 const dislikePost = (entityId, userId) => {
   return new Promise((resolve, reject) => {
     db.getLike(entityId, userId).then((result) => {
-      if (result.length > 0) {
-        return db.deleteLike(entityId, userId);
-      }
+      return db.deleteLike(entityId, userId);
     }).then(() => {
       return db.addDislike(entityId, userId);
     }).then(() => {
@@ -233,6 +231,7 @@ const dislikePost = (entityId, userId) => {
 };
 
 const likePost = (entityId, userId) => {
+  console.log(entityId, userId);
   return new Promise((resolve, reject) => {
     db.getDislike(entityId, userId).then((result) => {
       if (result.length > 0) {
@@ -257,6 +256,7 @@ const deleteComment = (entityId) => {
     db.deleteComment(entityId).then(() => resolve()).catch((err) => reject(err));
   });
 };
+
 
 module.exports = {
   createEntity: createEntity,

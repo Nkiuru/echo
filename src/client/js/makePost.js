@@ -16,7 +16,6 @@ const fileInput = document.querySelector('#file-input');
 let isAudio = false;
 
 // song title, genreId, bandId, text (post)
-
 const img = 'image/*,.pdf';
 const video = '.mp4,.webm';
 const audio = 'audio/*';

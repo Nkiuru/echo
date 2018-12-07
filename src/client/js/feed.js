@@ -3,6 +3,41 @@ const feedContainer = document.querySelector('.feed-container');
 const feed = document.createElement('div');
 const loading = document.querySelector('#loading');
 
+const likeElements = [];
+
+let dislikeIcon = '';
+let likeIcon = '';
+let likeIconCircle = '';
+
+const createLikes = () => {
+  const likeIconSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  likeIconSvg.setAttribute('width', '24px');
+  likeIconSvg.setAttribute('height', '24px');
+  likeIconSvg.setAttribute('viewBox', '0 0 24 24');
+  likeIconSvg.setAttribute('fill', 'none');
+  likeIconSvg.setAttribute('stroke-width', '2');
+  likeIconSvg.style.stroke = '#6C6E86';
+
+  likeIconCircle = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  likeIconCircle.setAttribute('d', `M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z`);
+
+  const likeIconPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  likeIconPath.setAttribute('d', 'M8 12L12 16L16 12');
+  likeIconPath.setAttribute('stroke-linecap', 'round');
+  likeIconPath.setAttribute('stroke-linejoin', 'round');
+
+  const likePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  likePath.setAttribute('d', 'M12 8V16');
+  likePath.setAttribute('stroke-linecap', 'round');
+  likePath.setAttribute('stroke-linejoin', 'round');
+
+  likeIconSvg.appendChild(likeIconCircle);
+  likeIconSvg.appendChild(likeIconPath);
+  likeIconSvg.appendChild(likePath);
+
+  return likeIconSvg;
+};
+
 const createPost = (json, i) => {
   const singlePostContainer = document.createElement('div');
   singlePostContainer.id = 'single-post-container';
@@ -39,6 +74,43 @@ const createPost = (json, i) => {
   const text = document.createElement('p');
   text.textContent = json.posts[i].text;
 
+  const hr = document.createElement('hr');
+
+  const votes = document.createElement('div');
+  votes.classList.add('votes-container');
+
+  const dislike = document.createElement('div');
+  dislike.classList.add('dislike');
+
+  const like = document.createElement('div');
+  like.classList.add('like');
+
+  dislikeIcon = createLikes();
+  dislikeIcon.classList.add('dislikeIcon');
+
+  likeIcon = createLikes();
+  likeIcon.classList.add('likeIcon');
+  likeIcon.style.transform = 'rotate(180deg)';
+
+  const dislikeCount = document.createElement('p');
+  dislikeCount.classList.add('asd');
+  dislikeCount.textContent = json.posts[i].dislikes;
+
+  const likeCount = document.createElement('p');
+  likeCount.classList.add('dsa');
+  likeCount.textContent = json.posts[i].likes;
+
+  likeEventListener(likeIcon, dislikeIcon, json.posts[i], likeCount, dislikeCount);
+
+  dislike.appendChild(dislikeIcon);
+  dislike.appendChild(dislikeCount);
+
+  like.appendChild(likeIcon);
+  like.appendChild(likeCount);
+
+  votes.appendChild(dislike);
+  votes.appendChild(like);
+
   textContainer.appendChild(text);
   usrTime.appendChild(username);
   usrTime.appendChild(timestamp);
@@ -58,11 +130,13 @@ const createPost = (json, i) => {
       videoPost(json, i, postCard);
     }
   }
-
+  postCard.appendChild(hr);
+  postCard.appendChild(votes);
   singlePostContainer.appendChild(postCard);
   feed.appendChild(singlePostContainer);
   feedContainer.appendChild(feed);
 };
+
 
 const audioPost = (json, i, postCard) => {
   const audioContainer = document.createElement('div');
@@ -127,6 +201,48 @@ const videoPost = (json, i, postCard) => {
   postCard.appendChild(mediaContainer);
 };
 
+const likeEventListener = (likeElement, dislikeElement, post, likeCount, dislikeCount) => {
+  const settings = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      entityId: post.entityId,
+    }),
+  };
+
+  likeElement.addEventListener('click', () => {
+    likeElement.style.stroke = '#1ED689';
+    fetch('/post/like', settings)
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.success) {
+          likeCount.textContent = post.likes + 1;
+        }
+      })
+      .catch((err) => {
+        console.log('nopedi nope go get the rope ' + err);
+      });
+  });
+
+  dislikeElement.addEventListener('click', () => {
+    dislikeElement.style.stroke = '#FF3939';
+    fetch('/post/dislike', settings)
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.success) {
+          console.log(dislikeCount.textContent);
+          const count = post.dislikes + 1;
+          dislikeCount.textContent = '-' + count;
+        }
+      })
+      .catch((err) => {
+        console.log('nopedi nope go get the rope ' + err);
+      });
+  });
+};
+
 const getTrendingFeed = () => {
   loading.classList.add('loading');
   fetch('/trending')
@@ -136,6 +252,7 @@ const getTrendingFeed = () => {
         alert(json.error);
         return;
       }
+      console.log(`post likes: ${json.posts[0].text} ${json.posts[0].likes}`);
       for (let i = 0; i < json.posts.length; i++) {
         createPost(json, i);
       };
@@ -151,7 +268,6 @@ const getUserFeed = () => {
   fetch('/userPosts')
     .then((response) => response.json())
     .then((json) => {
-      console.log(json);
       if (!json.success) {
         alert(json.error);
         return;
@@ -159,7 +275,9 @@ const getUserFeed = () => {
       for (let i = 0; i < json.posts.length; i++) {
         createPost(json, i);
       };
+
       loading.classList.remove('loading');
+      console.log(likeElements.length);
     })
     .catch((err) => {
       console.error(err);
@@ -169,12 +287,11 @@ const getUserFeed = () => {
 const getLocation = () => {
   if (/user/.test(self.location.href)) {
     feed.id = 'profile-feed';
-    console.log('user');
     getUserFeed();
   } else {
     feed.id = 'trending-feed';
     getTrendingFeed();
   }
 };
-getLocation();
 
+getLocation();
