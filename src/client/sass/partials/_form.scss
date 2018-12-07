@@ -5,12 +5,14 @@
 
   .wrapper {
     width: 40%;
-    padding: 5rem 0;
+    max-width: 250px;
+    // padding: 5rem 0;
 
     h1 {
       z-index: 1;
       position: relative;
-
+      margin-bottom: 3rem;
+      
       &::before {
         content: url('/static/img/brush-stroke-green.svg');
         z-index: -1;

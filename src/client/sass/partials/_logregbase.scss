@@ -19,6 +19,7 @@
 
   .aside-container {
     flex-basis: 60%;
+    position: relative;
     background: $main_darkblue;
 
     @include mobile {
