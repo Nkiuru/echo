@@ -5,7 +5,6 @@ const submitBtn = document.querySelector('#submit-post');
 const overlay = document.querySelector('#overlay');
 const closeBtn = document.querySelector('.close');
 const fullscreen = document.querySelector('.fullscreen');
-const postText = document.querySelector('#single-post-container');
 
 const imgFiletype = document.querySelector('#filetype-img');
 const videoFiletype = document.querySelector('#filetype-video');
@@ -20,7 +19,6 @@ const img = 'image/*,.pdf';
 const video = '.mp4,.webm';
 const audio = 'audio/*';
 
-let body = '';
 let inputType = 'all';
 
 // change accepted filetype according to checked radio button

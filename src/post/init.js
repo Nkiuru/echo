@@ -19,7 +19,6 @@ const initPost = (app) => {
   app.delete('/post/comment/:commentId', passport.authenticationMiddleware(), deleteComment);
 };
 
-
 const deletePost = (req, res) => {
   if (req.user.isAdmin === 1) {
     post.deletePost(req.params.entityId).then(() => {
@@ -74,7 +73,7 @@ const dislikePost = (req, res) => {
 };
 
 const getImages = (req, res) => {
-  post.getAllPosts().then((results) => {
+  post.getAllPosts(req.user.userId).then((results) => {
     res.json({
       success: true,
       posts: results,

@@ -54,7 +54,7 @@ const getAllImagePosts = () => {
   });
 };
 
-const getAllPosts = () => {
+const getAllPosts = (userId) => {
   return new Promise((resolve, reject) => {
     const audio = db.getAllAudioPosts();
     const video = db.getAllVideoPosts();
@@ -83,9 +83,21 @@ const getAllPosts = () => {
             resolve(post);
           }).catch((err) => reject(err));
         }));
+        promises.push(new Promise((resolve, reject) => {
+          db.getLike(post.entityId, userId).then((likes) => {
+            post.like = likes[0];
+            resolve();
+          }).catch((err) => reject(err));
+        }));
+        promises.push(new Promise((resolve, reject) => {
+          db.getDislike(post.entityId, userId).then((dislikes) => {
+            post.dislike = dislikes[0];
+            resolve();
+          }).catch((err) => reject(err));
+        }));
       });
       Promise.all(promises).then((postsWithComments) => {
-        resolve(postsWithComments);
+        resolve(postsWithComments.filter((x) => !!x));
       }).catch((err) => reject(err));
     }).catch((err) => reject(err));
   });
@@ -245,6 +257,20 @@ const likePost = (entityId, userId) => {
   });
 };
 
+const getLike = (entityId, userId) => {
+  return new Promise((resolve, reject) => {
+    db.getLike(entityId, userId)
+      .then((result) => {
+        console.log(result);
+      })
+      .then(() => {
+        resolve();
+      })
+      .catch((err) => reject(err));
+  });
+};
+
+
 const deletePost = (entityId) => {
   return new Promise((resolve, reject) => {
     db.deletePost(entityId).then(() => resolve()).catch((err) => reject(err));
@@ -275,4 +301,5 @@ module.exports = {
   likePost,
   deletePost,
   deleteComment,
+  getLike,
 };

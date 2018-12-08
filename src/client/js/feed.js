@@ -40,7 +40,7 @@ const createLikes = () => {
 
 const createPost = (json, i) => {
   const singlePostContainer = document.createElement('div');
-  singlePostContainer.id = 'single-post-container';
+  singlePostContainer.classList.add('single-post-container');
 
   const postCard = document.createElement('div');
   postCard.id = 'post-card';
@@ -68,6 +68,33 @@ const createPost = (json, i) => {
   const timestamp = document.createElement('p');
   timestamp.textContent = json.posts[i].timestamp;
 
+  const moreBtn = document.createElement('div');
+  moreBtn.classList.add('more-btn');
+  moreBtn.style.backgroundImage = "url('/static/img/more-vertical.svg')";
+
+  const morePopup = document.createElement('div');
+  morePopup.classList.add('more-popup');
+  const deleteThis = document.createElement('p');
+  deleteThis.classList.add('delete-this');
+  deleteThis.textContent = 'DELETE THIS';
+
+  morePopup.appendChild(deleteThis);
+  morePopup.style.display = 'none';
+
+
+  moreBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    morePopup.style.display = 'flex';
+    morePopup.addEventListener('click', (e) => {
+      console.log('DELETE');
+      singlePostContainer.classList.add('post-anime-out');
+      setTimeout(() => {
+        // do some stuff and actually delete the post
+        window.location.replace(window.location.pathname);
+      }, 1000);
+    });
+  });
+
   const textContainer = document.createElement('div');
   textContainer.classList.add('text-container');
 
@@ -91,6 +118,9 @@ const createPost = (json, i) => {
   likeIcon = createLikes();
   likeIcon.classList.add('likeIcon');
   likeIcon.style.transform = 'rotate(180deg)';
+
+  if (json.posts[i].like) likeIcon.style.stroke = '#1ED689';
+  if (json.posts[i].dislike) dislikeIcon.style.stroke = '#FF3939';
 
   const dislikeCount = document.createElement('p');
   dislikeCount.classList.add('asd');
@@ -117,6 +147,8 @@ const createPost = (json, i) => {
   profileContainer.appendChild(userImg);
   postHeader.appendChild(profileContainer);
   postHeader.appendChild(usrTime);
+  postHeader.appendChild(moreBtn);
+  postHeader.appendChild(morePopup);
   postCard.appendChild(postHeader);
   postCard.appendChild(textContainer);
 
@@ -233,8 +265,7 @@ const likeEventListener = (likeElement, dislikeElement, post, likeCount, dislike
       .then((json) => {
         if (json.success) {
           console.log(dislikeCount.textContent);
-          const count = post.dislikes + 1;
-          dislikeCount.textContent = '-' + count;
+          dislikeCount.textContent = post.dislikes + 1;
         }
       })
       .catch((err) => {
@@ -248,11 +279,14 @@ const getTrendingFeed = () => {
   fetch('/trending')
     .then((response) => response.json())
     .then((json) => {
+      console.log(json);
       if (!json.success) {
+        console.log(json);
+        console.log('terve');
         alert(json.error);
         return;
       }
-      console.log(`post likes: ${json.posts[0].text} ${json.posts[0].likes}`);
+      // console.log(`post likes: ${json.posts[0].text} ${json.posts[0].likes}`);
       for (let i = 0; i < json.posts.length; i++) {
         createPost(json, i);
       };
