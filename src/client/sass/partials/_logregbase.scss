@@ -25,5 +25,58 @@
     @include mobile {
       display: none;
     }
+
+    #to-trending-container {
+      position: absolute;
+      background: #F2F2F2;
+      z-index: 10;
+      right: 0;
+      margin-top: 2rem;
+      width: 10rem;
+      padding: 1rem;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      border-radius: $card-border-radius 0 0 $card-border-radius;
+      border: $card-border;
+      cursor: pointer;
+
+      img {
+        width: 50px;
+        opacity: 0;
+
+        &:nth-of-type(1) {
+          z-index: 5;
+          animation: .4s cubic-bezier(.57,.21,.69,1.25) 1 logoFirst forwards;
+          animation-delay: .2s
+        }
+        &:nth-of-type(2) {
+          animation: .4s cubic-bezier(.57,.21,.69,1.25) 1 logoMiddle forwards;
+          animation-delay: .3s;
+          z-index: 3;
+        }
+        &:nth-of-type(3) {
+          transform: translateX(-76px);
+          animation: .4s cubic-bezier(.57,.21,.69,1.25) 1 logoLast forwards;
+          animation-delay: .4s;
+          z-index: 2;
+        }
+      }
+
+      h4 {
+        margin: 0;
+        opacity: 0;
+        color: $medium_grey;
+        transform: translateX(-100px);
+        animation: .4s cubic-bezier(.57,.21,.69,1.25) trending forwards;
+        animation-delay: .2s;
+      }
+
+      &:hover {
+        h4 {
+          // move a little bit to the right
+        }
+      }
+    }
   }
 }

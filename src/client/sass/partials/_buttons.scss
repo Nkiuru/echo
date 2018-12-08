@@ -3,6 +3,7 @@
   border: none;
   border-radius: 2px;
   cursor: pointer;
+  font-size: 16px;
 
   &.green {
     background: $main_green;
@@ -13,11 +14,21 @@
   }
 
   &:hover {
-
     animation: btn-hover $btn-hover-timing;
   }
+
   &.white {
     color: $snow;
+  }
+
+  &.secondary {
+    border: 2px solid $main_green;
+    font-family: $roboto-condensed;
+    font-weight: $font-bold;
+  }
+
+  &.register-btn {
+    margin-top: 1rem;
   }
 }
 

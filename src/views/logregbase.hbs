@@ -1,15 +1,25 @@
 <div class="login-page">
   <div class="form-container">
-      {{#if login}}
-          {{> _login}}
-      {{else}}
-          {{> _register}}
-      {{/if}}
+    {{#if login}}
+      {{> _login}}
+    {{else}}
+      {{> _register}}
+    {{/if}}
   </div>
   <div class="aside-container">
-    <div id="landing-overlay"></div>
-    <div id="grid-container"></div>
-
+    <a href="/">
+      <div id="to-trending-container">
+        <div class="ohboy"></div>
+        <img id="logo-first" src="/static/img/logo_first.svg">
+        <img id="logo-middle" src="/static/img/logo_middle.svg">
+        <img id="logo-last" src="/static/img/logo_last.svg">
+        <h4>Trending</h4>
+      </div>
+      <div id="landing-overlay"></div>
+      <div id="grid-container"></div>
   </div>
+  </a>
+
 </div>
 <script src="/static/js/imgGallery.js"></script>
+<script src="/static/js/logo.js"></script>
