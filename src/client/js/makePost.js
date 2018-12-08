@@ -135,8 +135,11 @@ closeBtn.addEventListener('click', (e) => {
 submitBtn.addEventListener('click', (e) => {
   e.preventDefault();
   closeOverlay();
+  console.log('eyy');
 
   const fd = new FormData(postForm);
+
+  window.location.replace(window.location.pathname);
 
   const mediaSettings = {
     method: 'POST',
@@ -159,22 +162,6 @@ submitBtn.addEventListener('click', (e) => {
         alert(json.error);
         return;
       }
-
-      const markup = `
-          <div id="post-card">
-            <div class="post-header">
-              <div class="usr-time">
-                <p>${json.timestamp}</p>
-              </div>
-          </div>
-            <div class="profile-container">
-              <p>${json.text}</p>
-            </div>
-          </div>
-        `;
-      body += markup;
-      console.log(body);
-      postText.innerHTML = body;
     }).catch((err) => {
       console.log(`error ${err}`);
     });
@@ -186,32 +173,6 @@ submitBtn.addEventListener('click', (e) => {
         alert(json.error);
         return;
       }
-      console.log(json);
-      const imgUrl = json[1].images[0].fileName;
-      const timestamp = json[1].timestamp;
-      // const imgTitle = json[1].images[0].title;
-      const text = json[1].text;
-      const markup = `
-          <div id="post-card">
-            <div class="post-header">
-              <div class="profile-container">
-                <img src="/static/img/bbe.png" alt="">
-              </div>
-              <div class="usr-time">
-                <h4>username</h4>
-                <p>${timestamp}</p>
-              </div>
-          </div>
-            <div class="text-container">
-              <p>${text}</p>
-            </div>
-            <div class="media-container">
-              <img src="/static/uploads/${imgUrl}">
-            </div>
-          </div>
-        `;
-      body += markup;
-      postText.innerHTML = body;
     }).catch((err) => {
       console.log(`error ${err}`);
     });
@@ -223,28 +184,6 @@ submitBtn.addEventListener('click', (e) => {
         alert(json.error);
         return;
       }
-      const timestamp = json[1].timestamp;
-      const text = json[1].text;
-      const videoUrl = json[1].fileName;
-      const markup = `
-          <div id="post-card">
-            <div class="post-header">
-              <div class="usr-time">
-                <p>${timestamp}</p>
-              </div>
-          </div>
-            <div class="text-container">
-              <p>${text}</p>
-            </div>
-            <div class="media-container">
-              <video controls>
-                <source src="/static/uploads/${videoUrl}" type="video/mp4">
-              </video>
-            </div>
-          </div>`;
-      body += markup;
-      postText.innerHTML = body;
-      console.log(json);
     }).catch((err) => {
       console.log(`error: ${err}`);
     });
@@ -252,48 +191,10 @@ submitBtn.addEventListener('click', (e) => {
 
   const audioPost = () => {
     fetch('/post/audio', mediaSettings).then((results) => results.json()).then((json) => {
-
-      console.log(mediaSettings);
       if (!json[0].success) {
         alert(json.error);
         return;
       }
-      console.log('audio post bbyyy');
-      console.log(json);
-
-      const timestamp = json[1].timestamp;
-      const text = json[1].text;
-
-      const cont = document.createElement('div');
-      cont.id = 'waveform';
-
-      const wavesurfer = WaveSurfer.create({
-        container: '#waveform',
-        waveColor: 'violet',
-        progressColor: 'purple',
-      });
-
-      const audioFile = wavesurfer.load(`/static/uploads/${json[1].fileName}`);
-
-      const markup = `
-        <div id="post-card">
-          <div class="post-header">
-            <div class="usr-time">
-              <p>${timestamp}</p>
-            </div>
-        </div>
-          <div class="text-container">
-            <p>${text}</p>
-          </div>
-          <div class="media-container">
-            <p>${json[1].title}</p>
-            ${cont.appendChild(audioFile)}
-          </div>
-        </div>`;
-
-      body += markup;
-      postText.innerHTML = body;
-
     }).catch((err) => {
       console.log(`err ${err}`);
     });
