@@ -71,7 +71,7 @@ const createPost = (json, i) => {
 
   const moreBtn = document.createElement('div');
   moreBtn.classList.add('more-btn');
-  moreBtn.style.backgroundImage = "url('/static/img/more-vertical.svg')";
+  moreBtn.style.backgroundImage = 'url(\'/static/img/more-vertical.svg\')';
 
   const morePopup = document.createElement('div');
   morePopup.classList.add('more-popup');
@@ -81,7 +81,6 @@ const createPost = (json, i) => {
 
   morePopup.appendChild(deleteThis);
   morePopup.style.display = 'none';
-
 
   moreBtn.addEventListener('click', (e) => {
     e.preventDefault();
@@ -131,7 +130,9 @@ const createPost = (json, i) => {
   likeCount.classList.add('dsa');
   likeCount.textContent = json.posts[i].likes;
 
-  likeEventListener(likeIcon, dislikeIcon, json.posts[i], likeCount, dislikeCount);
+  if (authenticated) {
+    likeEventListener(likeIcon, dislikeIcon, json.posts[i], likeCount, dislikeCount);
+  }
 
   dislike.appendChild(dislikeIcon);
   dislike.appendChild(dislikeCount);
@@ -427,41 +428,35 @@ const likeEventListener = (likeElement, dislikeElement, post, likeCount, dislike
 
   dislikeElement.addEventListener('click', () => {
     dislikeElement.style.stroke = '#FF3939';
-    fetch('/post/dislike', settings)
-      .then((response) => response.json())
-      .then((json) => {
-        if (json.success) {
-          console.log(dislikeCount.textContent);
-          dislikeCount.textContent = post.dislikes + 1;
-        }
-      })
-      .catch((err) => {
-        console.log('nopedi nope go get the rope ' + err);
-      });
+    fetch('/post/dislike', settings).then((response) => response.json()).then((json) => {
+      if (json.success) {
+        console.log(dislikeCount.textContent);
+        dislikeCount.textContent = post.dislikes + 1;
+      }
+    }).catch((err) => {
+      console.log('nopedi nope go get the rope ' + err);
+    });
   });
 };
 
 const getTrendingFeed = () => {
   loading.classList.add('loading');
-  fetch('/trending')
-    .then((response) => response.json())
-    .then((json) => {
+  fetch('/trending').then((response) => response.json()).then((json) => {
+    console.log(json);
+    if (!json.success) {
       console.log(json);
-      if (!json.success) {
-        console.log(json);
-        console.log('terve');
-        alert(json.error);
-        return;
-      }
-      // console.log(`post likes: ${json.posts[0].text} ${json.posts[0].likes}`);
-      for (let i = 0; i < json.posts.length; i++) {
-        createPost(json, i);
-      }
-      loading.classList.remove('loading');
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+      console.log('terve');
+      alert(json.error);
+      return;
+    }
+    // console.log(`post likes: ${json.posts[0].text} ${json.posts[0].likes}`);
+    for (let i = 0; i < json.posts.length; i++) {
+      createPost(json, i);
+    }
+    loading.classList.remove('loading');
+  }).catch((err) => {
+    console.error(err);
+  });
 };
 
 const getUserFeed = () => {

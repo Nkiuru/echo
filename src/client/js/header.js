@@ -4,6 +4,7 @@ const settingsLink = document.querySelector('#dd-settings');
 const dropdownToggle = document.querySelector('#dropdown-toggle');
 const dropdown = document.querySelector('.dropdown');
 const rightContainer = document.querySelector('.right-side-items');
+let authenticated = false;
 
 dropdownToggle.addEventListener('click', (e) => {
   if (!dropdown.classList.contains('show')) {
@@ -14,29 +15,26 @@ dropdownToggle.addEventListener('click', (e) => {
 });
 
 const getUser = () => {
-  if (window.localStorage.getItem('userData')) {
-    setProfilePicture();
-  } else {
-    fetch('/users/user').then((result) => result.json()).then((json) => {
-      if (json.success === false) {
-        dropdownToggle.style = 'display: none';
-        const btn = document.createElement('button');
-        btn.innerText = 'Login';
-        btn.classList.add('button');
-        btn.classList.add('blue');
-        btn.classList.add('white');
-        btn.style = 'margin-right: 1rem';
-        btn.addEventListener('click', () => window.location.replace('/login'));
-        rightContainer.appendChild(btn);
-      } else {
-        window.localStorage.setItem('userData', JSON.stringify(json));
-        dropdownToggle.style = 'display: flex';
-        setProfilePicture();
-      }
-    }).catch((err) => {
-      alert(err);
-    });
-  }
+  fetch('/users/user').then((result) => result.json()).then((json) => {
+    if (json.success === false) {
+      dropdownToggle.style = 'display: none';
+      const btn = document.createElement('button');
+      btn.innerText = 'Login';
+      btn.classList.add('button');
+      btn.classList.add('blue');
+      btn.classList.add('white');
+      btn.style.marginRight = '1rem';
+      btn.addEventListener('click', () => window.location.replace('/login'));
+      rightContainer.appendChild(btn);
+    } else {
+      window.localStorage.setItem('userData', JSON.stringify(json));
+      dropdownToggle.style = 'display: flex';
+      setProfilePicture();
+    }
+  }).catch((err) => {
+    alert(err);
+  });
+
 };
 
 const setProfilePicture = () => {
@@ -90,5 +88,17 @@ settingsLink.addEventListener('click', (e) => {
   e.preventDefault();
   settings();
 });
-getUser();
+
+const checkAuth = () => {
+  fetch('/authenticated', { method: 'GET' }).then((response) => response.text()).then((res) => {
+    authenticated = res === 'true';
+    if (authenticated && window.localStorage.getItem('userData')) {
+      setProfilePicture();
+    } else {
+      getUser();
+    }
+  });
+};
+
+checkAuth();
 logoutLink.addEventListener('click', logout);

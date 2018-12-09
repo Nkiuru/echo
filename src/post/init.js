@@ -73,7 +73,11 @@ const dislikePost = (req, res) => {
 };
 
 const getImages = (req, res) => {
-  post.getAllPosts(req.user.userId).then((results) => {
+  let userId = null;
+  if (req.isAuthenticated()) {
+    userId = req.user.userId;
+  }
+  post.getAllPosts(userId).then((results) => {
     res.json({
       success: true,
       posts: results,
