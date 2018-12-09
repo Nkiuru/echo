@@ -69,6 +69,10 @@ app.get('/genres', passport.authenticationMiddleware(), (req, res) => {
   });
 });
 
+app.get('/authenticated', (req, res) => {
+  res.send(req.isAuthenticated());
+});
+
 require('./src/user').init(app);
 require('./src/post').init(app);
 

@@ -81,7 +81,7 @@
 
   .media-container {
     text-align: center;
-    
+
     img {
       border-radius: 2px;
       width: 100%;
@@ -156,6 +156,61 @@
     input[type=range]:focus::-webkit-slider-runnable-track {
       background: #CFCFCF;
     }
-    
+
+  }
+  .comments-container {
+    border-top: $card-border;
+    .comment-group {
+
+      .comment-container {
+
+        .comment-header {
+          display: flex;
+          align-items: center;
+          img {
+            width: 2.5rem;
+            height: 2.5rem;
+            margin-right: .4rem;
+            border-radius: 50%;
+          }
+        }
+
+        .comment {
+          background-color: $main_blue;
+          border-radius: 1.5rem;
+          font-size: 14px;
+          word-break: break-word;
+
+          p {
+            margin: auto;
+            padding: 0.4rem 1.0rem;
+            color: $snow;
+          }
+        }
+
+        .comment-footer {
+          font-size: 12px;
+          display: flex;
+          flex-direction: row;
+          a {
+          }
+          p {
+            margin: 0 0.2rem;
+            color: $card-border-color;
+          }
+        }
+      }
+
+    }
+
+    .reply-btn {
+      background: none;
+      border: none;
+    }
+
+    .reply-btn:hover {
+      background: none;
+      animation: btn-hover $btn-hover-timing;
+    }
   }
 }

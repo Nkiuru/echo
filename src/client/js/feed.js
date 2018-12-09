@@ -2,7 +2,7 @@
 const feedContainer = document.querySelector('.feed-container');
 const feed = document.createElement('div');
 const loading = document.querySelector('#loading');
-
+let authenticated = false;
 const likeElements = [];
 
 let dislikeIcon = '';
@@ -19,7 +19,8 @@ const createLikes = () => {
   likeIconSvg.style.stroke = '#6C6E86';
 
   likeIconCircle = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  likeIconCircle.setAttribute('d', `M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z`);
+  likeIconCircle.setAttribute('d',
+    `M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z`);
 
   const likeIconPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
   likeIconPath.setAttribute('d', 'M8 12L12 16L16 12');
@@ -140,6 +141,7 @@ const createPost = (json, i) => {
 
   votes.appendChild(dislike);
   votes.appendChild(like);
+  const commentsContainer = createComments(json.posts[i]);
 
   textContainer.appendChild(text);
   usrTime.appendChild(username);
@@ -164,11 +166,179 @@ const createPost = (json, i) => {
   }
   postCard.appendChild(hr);
   postCard.appendChild(votes);
+
+  postCard.appendChild(commentsContainer);
   singlePostContainer.appendChild(postCard);
   feed.appendChild(singlePostContainer);
   feedContainer.appendChild(feed);
 };
 
+const createComments = (json) => {
+  const tree = createTree(json.comments).reverse();
+
+  const commentsContainer = document.createElement('div');
+  commentsContainer.classList.add('comments-container');
+  if (authenticated) {
+    const commentForm = document.createElement('form');
+    const submit = document.createElement('button');
+    submit.type = 'submit';
+    submit.innerText = 'Submit';
+    submit.classList.add('button', 'blue', 'white');
+    const input = document.createElement('textarea');
+    input.placeholder = 'Write something';
+
+    commentForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const settings = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          entityId: json.entityId,
+          commentText: input.value,
+        }),
+      };
+
+      fetch('/post/comment', settings).then((response) => response.json()).then((comment) => {
+        const post = commentsContainer.parentElement;
+        post.removeChild(commentsContainer);
+        json.comments.push(comment[1][0]);
+        post.appendChild(createComments(json));
+      }).catch((err) => alert(err));
+    });
+
+    commentForm.appendChild(input);
+    commentForm.appendChild(submit);
+    commentsContainer.appendChild(commentForm);
+  }
+  tree.forEach((cmnt) => {
+    commentsContainer.appendChild(createComment(json, cmnt));
+  });
+  return commentsContainer;
+};
+
+const createTree = (list) => {
+  const map = {};
+  let node;
+  const roots = [];
+  let i;
+  for (i = 0; i < list.length; i++) {
+    map[list[i].commentId] = i; // initialize the map
+    list[i].children = []; // initialize the children
+  }
+  for (i = 0; i < list.length; i++) {
+    node = list[i];
+    if (node.parentCommentId) {
+      // if you have dangling branches check that map[node.parentId] exists
+      list[map[node.parentCommentId]].children.push(node);
+    } else {
+      roots.push(node);
+    }
+  }
+
+  return roots;
+};
+
+const createComment = (json, cmnt, commentGroup = document.createElement('div'), depth = 0) => {
+  commentGroup.classList.add('comment-group');
+
+  const commentContainer = document.createElement('div');
+  commentContainer.classList.add('comment-container');
+
+  const profileHeader = document.createElement('div');
+  profileHeader.classList.add('comment-header');
+
+  const profileImg = document.createElement('img');
+  if (cmnt.userImg) {
+    profileImg.setAttribute('src', `/static/uploads/${cmnt.userImg}`);
+  } else {
+    profileImg.setAttribute('src', `/static/uploads/bbe.png`);
+  }
+  profileHeader.appendChild(profileImg);
+
+  const userElm = document.createElement('p');
+  userElm.innerHTML = cmnt.displayName;
+  profileHeader.appendChild(userElm);
+
+  const commentElm = document.createElement('div');
+  const commentText = document.createElement('p');
+  commentText.innerText = cmnt.comment;
+  commentElm.classList.add('comment');
+  commentElm.appendChild(commentText);
+
+  const footer = document.createElement('div');
+  footer.classList.add('comment-footer');
+
+  if (authenticated) {
+    const reply = document.createElement('button');
+    reply.innerText = 'Reply';
+    reply.classList.add('reply-btn');
+    footer.appendChild(reply);
+    reply.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (!commentContainer.querySelector('form')) {
+        const replyForm = document.createElement('form');
+        const submitReply = document.createElement('button');
+        submitReply.type = 'submit';
+        submitReply.innerText = 'Submit';
+        submitReply.classList.add('button', 'blue', 'white');
+        const inputReply = document.createElement('textarea');
+        inputReply.placeholder = 'Write something';
+
+        replyForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+
+          const settings = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              entityId: json.entityId,
+              commentText: inputReply.value,
+              parentCommentId: cmnt.commentId,
+            }),
+          };
+
+          fetch('/post/comment', settings).then((response) => response.json()).then((comment) => {
+            const post = commentGroup.parentElement.parentElement;
+            console.log(commentGroup.parentElement);
+            post.removeChild(commentGroup.parentElement);
+            json.comments.push(comment[1][0]);
+            post.appendChild(createComments(json));
+          }).catch((err) => alert(err));
+        });
+
+        replyForm.appendChild(inputReply);
+        replyForm.appendChild(submitReply);
+        commentContainer.appendChild(replyForm);
+      }
+    });
+  }
+
+  const timestamp = document.createElement('p');
+  timestamp.innerText = cmnt.timestamp;
+  footer.appendChild(timestamp);
+
+  commentContainer.appendChild(profileHeader);
+  commentContainer.appendChild(commentElm);
+  commentContainer.appendChild(footer);
+
+  commentContainer.style.marginLeft = depth * 20 + 'px';
+
+  commentGroup.appendChild(commentContainer);
+
+  if (cmnt.children.length > 0) {
+    depth++;
+    const reversed = cmnt.children.reverse();
+    reversed.forEach((child) => {
+      createComment(json, child, commentGroup, depth);
+    });
+  }
+  return commentGroup;
+};
 
 const audioPost = (json, i, postCard) => {
   const audioContainer = document.createElement('div');
@@ -246,20 +416,18 @@ const likeEventListener = (likeElement, dislikeElement, post, likeCount, dislike
 
   likeElement.addEventListener('click', () => {
     likeElement.style.stroke = '#1ED689';
-    fetch('/post/like', settings)
-      .then((response) => response.json())
-      .then((json) => {
-        if (json.success) {
-          likeCount.textContent = post.likes + 1;
-        }
-      })
-      .catch((err) => {
-        console.log('nopedi nope go get the rope ' + err);
-      });
+    fetch('/post/like', settings).then((response) => response.json()).then((json) => {
+      if (json.success) {
+        likeCount.textContent = post.likes + 1;
+      }
+    }).catch((err) => {
+      console.log('nopedi nope go get the rope ' + err);
+    });
   });
 
   dislikeElement.addEventListener('click', () => {
     dislikeElement.style.stroke = '#FF3939';
+<<<<<<< Updated upstream
     fetch('/post/dislike', settings)
       .then((response) => response.json())
       .then((json) => {
@@ -276,6 +444,7 @@ const likeEventListener = (likeElement, dislikeElement, post, likeCount, dislike
 
 const getTrendingFeed = () => {
   loading.classList.add('loading');
+<<<<<<< Updated upstream
   fetch('/trending')
     .then((response) => response.json())
     .then((json) => {
@@ -289,7 +458,7 @@ const getTrendingFeed = () => {
       // console.log(`post likes: ${json.posts[0].text} ${json.posts[0].likes}`);
       for (let i = 0; i < json.posts.length; i++) {
         createPost(json, i);
-      };
+      }
       loading.classList.remove('loading');
     })
     .catch((err) => {
@@ -301,33 +470,33 @@ const getUserFeed = () => {
   loading.classList.add('loading');
   const path = window.location.pathname.split('/')[2];
   // console.log(path);
-  fetch(`/user/posts/${path}`)
-    .then((response) => response.json())
-    .then((json) => {
-      if (!json.success) {
-        alert(json.error);
-        return;
-      }
-      for (let i = 0; i < json.posts.length; i++) {
-        createPost(json, i);
-      };
+  fetch(`/user/posts/${path}`).then((response) => response.json()).then((json) => {
+    if (!json.success) {
+      alert(json.error);
+      return;
+    }
+    for (let i = 0; i < json.posts.length; i++) {
+      createPost(json, i);
+    }
 
-      loading.classList.remove('loading');
-      console.log(likeElements.length);
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+    loading.classList.remove('loading');
+    console.log(likeElements.length);
+  }).catch((err) => {
+    console.error(err);
+  });
 };
 
 const getLocation = () => {
-  if (/user/.test(self.location.href)) {
-    feed.id = 'profile-feed';
-    getUserFeed();
-  } else {
-    feed.id = 'trending-feed';
-    getTrendingFeed();
-  }
+  fetch('/authenticated', { method: 'GET' }).then((response) => response.text()).then((res) => {
+    authenticated = res === 'true';
+    if (/user/.test(self.location.href)) {
+      feed.id = 'profile-feed';
+      getUserFeed();
+    } else {
+      feed.id = 'trending-feed';
+      getTrendingFeed();
+    }
+  });
 };
 
 getLocation();
