@@ -1,3 +1,4 @@
+'use strict';
 const passport = require('passport');
 const multer = require('multer');
 const path = require('path');
