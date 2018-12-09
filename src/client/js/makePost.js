@@ -14,7 +14,6 @@ const fileInput = document.querySelector('#file-input');
 
 let isAudio = false;
 
-// song title, genreId, bandId, text (post)
 const img = 'image/*,.pdf';
 const video = '.mp4,.webm';
 const audio = 'audio/*';
@@ -133,7 +132,6 @@ closeBtn.addEventListener('click', (e) => {
 submitBtn.addEventListener('click', (e) => {
   e.preventDefault();
   closeOverlay();
-  console.log('eyy');
 
   const fd = new FormData(postForm);
 
@@ -193,6 +191,7 @@ submitBtn.addEventListener('click', (e) => {
         alert(json.error);
         return;
       }
+      console.log(json);
     }).catch((err) => {
       console.log(`err ${err}`);
     });
@@ -205,7 +204,6 @@ submitBtn.addEventListener('click', (e) => {
   } else if (inputType == video) {
     videoPost();
   } else if (inputType == audio) {
-    console.log('audio post');
     audioPost();
   }
 });

@@ -161,56 +161,91 @@
   .comments-container {
     border-top: $card-border;
     .comment-group {
-
+      margin-bottom: .5rem;
       .comment-container {
+        display: flex;
+        flex-wrap: wrap;
+
 
         .comment-header {
           display: flex;
+          margin-right: .5rem;
+          flex-direction: column;
           align-items: center;
+          justify-content: center;
+
           img {
             width: 2.5rem;
             height: 2.5rem;
-            margin-right: .4rem;
             border-radius: 50%;
+          }
+
+          p {
+            margin: 0;
           }
         }
 
         .comment {
-          background-color: $main_blue;
-          border-radius: 1.5rem;
+          flex: 1;
+          background-color: $comment-box;
+          padding: .5rem;
+          border-radius: 2px;
           font-size: 14px;
           word-break: break-word;
+          position: relative;
 
           p {
             margin: auto;
-            padding: 0.4rem 1.0rem;
-            color: $snow;
+            color: $main_darkblue;
+          }
+
+          .timestamp {
+            position: absolute;
+            right: .25rem;
+            bottom: .25rem;
+            font-size: 12px;
+          }
+
+          .delete-comment {
+            height: 24px;
+            width: 24px;
+            background: red;
+            right: 0;
+            position: absolute;
+            top: 0;
+            cursor: pointer;
           }
         }
-
-        .comment-footer {
+          .comment-footer {
+          width: 100%;
           font-size: 12px;
           display: flex;
-          flex-direction: row;
-          a {
-          }
+          flex-direction: row-reverse;
+
           p {
             margin: 0 0.2rem;
             color: $card-border-color;
           }
+
+          .reply-btn {
+            background: none;
+            border: none;
+
+            &:hover {
+              background: none;
+              animation: btn-hover $btn-hover-timing;
+            }
+          }
         }
       }
-
     }
-
-    .reply-btn {
-      background: none;
-      border: none;
-    }
-
-    .reply-btn:hover {
-      background: none;
-      animation: btn-hover $btn-hover-timing;
+    form {
+      width: 100%;
+      margin-bottom: 1rem;
+      
+      textarea {
+        margin-top: 1rem;
+      }
     }
   }
 }

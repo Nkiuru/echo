@@ -120,6 +120,18 @@ input, select, textarea {
   }
 }
 
+  textarea {
+    letter-spacing: normal;
+
+    &:focus {
+      border: 1px solid $input-bd;
+    }
+
+    &:focus:not(:invalid) {
+      border: 1px solid $input-bd;
+    }
+  }
+
 label {
   h5 {
     margin: 0 0 .2rem 0;

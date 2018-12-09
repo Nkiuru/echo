@@ -43,6 +43,5 @@ const createAudiowave = (json, i, waveformContainer, toggle, volume) => {
     audiowave.drawBuffer();
     audiowave.seekTo(progress);
   });
-
 };
 

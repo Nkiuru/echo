@@ -3,17 +3,20 @@ const feedContainer = document.querySelector('.feed-container');
 const feed = document.createElement('div');
 const loading = document.querySelector('#loading');
 let authenticated = false;
-const likeElements = [];
 
 let dislikeIcon = '';
 let likeIcon = '';
 let likeIconCircle = '';
 
+let deleteComment = '';
+
 const isAdmin = () => {
   const user = window.localStorage.getItem('userData');
-  const json = JSON.parse(user);
-  if (json.isAdmin === 1) return true;
-  if (json.isAdmin !== 1) return false;
+  if (user) {
+    const json = JSON.parse(user);
+    if (json.isAdmin === 1) return true;
+    if (json.isAdmin !== 1) return false;
+  }
 };
 
 const deletePost = (postEntity) => {
@@ -119,7 +122,7 @@ const createPost = (json, i) => {
   const text = document.createElement('p');
   text.textContent = json.posts[i].text;
 
-  const hr = document.createElement('hr');
+  
 
   const votes = document.createElement('div');
   votes.classList.add('votes-container');
@@ -192,7 +195,7 @@ const createPost = (json, i) => {
       videoPost(json, i, postCard);
     }
   }
-  postCard.appendChild(hr);
+
   postCard.appendChild(votes);
 
   postCard.appendChild(commentsContainer);
@@ -213,7 +216,7 @@ const createComments = (json) => {
     submit.innerText = 'Submit';
     submit.classList.add('button', 'blue', 'white');
     const input = document.createElement('textarea');
-    input.placeholder = 'Write something';
+    input.placeholder = 'Write something...';
 
     commentForm.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -230,6 +233,7 @@ const createComments = (json) => {
       };
 
       fetch('/post/comment', settings).then((response) => response.json()).then((comment) => {
+        console.log(comment[1][0].commentId);
         const post = commentsContainer.parentElement;
         post.removeChild(commentsContainer);
         json.comments.push(comment[1][0]);
@@ -271,6 +275,7 @@ const createTree = (list) => {
 
 const createComment = (json, cmnt, commentGroup = document.createElement('div'), depth = 0) => {
   commentGroup.classList.add('comment-group');
+  // commentGroup.appendChild(footer);
 
   const commentContainer = document.createElement('div');
   commentContainer.classList.add('comment-container');
@@ -292,9 +297,19 @@ const createComment = (json, cmnt, commentGroup = document.createElement('div'),
 
   const commentElm = document.createElement('div');
   const commentText = document.createElement('p');
+
   commentText.innerText = cmnt.comment;
   commentElm.classList.add('comment');
   commentElm.appendChild(commentText);
+
+  deleteComment = document.createElement('div');
+  deleteComment.classList.add('delete-comment');
+
+  deleteComment.addEventListener('click', () => {
+    console.log('tööt');
+  });
+
+  if (isAdmin()) commentElm.appendChild(deleteComment);
 
   const footer = document.createElement('div');
   footer.classList.add('comment-footer');
@@ -347,8 +362,9 @@ const createComment = (json, cmnt, commentGroup = document.createElement('div'),
   }
 
   const timestamp = document.createElement('p');
+  timestamp.classList.add('timestamp');
   timestamp.innerText = cmnt.timestamp;
-  footer.appendChild(timestamp);
+  commentElm.appendChild(timestamp);
 
   commentContainer.appendChild(profileHeader);
   commentContainer.appendChild(commentElm);
@@ -383,7 +399,7 @@ const audioPost = (json, i, postCard) => {
   const volumeContainer = document.createElement('div');
   volumeContainer.classList.add('volume-container');
 
-  const hr = document.createElement('hr');
+  // const hr = document.createElement('hr');
 
   const volume = document.createElement('input');
   volume.classList.add('volume');
@@ -400,7 +416,7 @@ const audioPost = (json, i, postCard) => {
   controls.appendChild(volumeContainer);
   audioContainer.appendChild(waveformContainer);
   postCard.appendChild(audioContainer);
-  postCard.appendChild(hr);
+  // postCard.appendChild(hr);
   postCard.appendChild(controls);
 
   createAudiowave(json, i, waveformContainer, toggle, volume);
@@ -500,7 +516,6 @@ const getTrendingFeed = () => {
     console.log(json);
     if (!json.success) {
       console.log(json);
-      console.log('terve');
       alert(json.error);
       return;
     }
@@ -525,9 +540,7 @@ const getUserFeed = () => {
     for (let i = 0; i < json.posts.length; i++) {
       createPost(json, i);
     }
-
     loading.classList.remove('loading');
-    console.log(likeElements.length);
   }).catch((err) => {
     console.error(err);
   });
