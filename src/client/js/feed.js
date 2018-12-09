@@ -119,8 +119,13 @@ const createPost = (json, i) => {
   likeIcon.classList.add('likeIcon');
   likeIcon.style.transform = 'rotate(180deg)';
 
-  if (json.posts[i].like) likeIcon.style.stroke = '#1ED689';
-  if (json.posts[i].dislike) dislikeIcon.style.stroke = '#FF3939';
+  if (json.posts[i].like) {
+    likeIcon.style.stroke = '#1ED689';
+  }
+
+  if (json.posts[i].dislike) {
+    dislikeIcon.style.stroke = '#FF3939';
+  }
 
   const dislikeCount = document.createElement('p');
   dislikeCount.classList.add('asd');
@@ -415,11 +420,27 @@ const likeEventListener = (likeElement, dislikeElement, post, likeCount, dislike
     }),
   };
 
+  // if (json.posts[i].like) likeIcon.style.stroke = '#1ED689';
+
   likeElement.addEventListener('click', () => {
+    if (post.like) return;
+
     likeElement.style.stroke = '#1ED689';
     fetch('/post/like', settings).then((response) => response.json()).then((json) => {
       if (json.success) {
-        likeCount.textContent = post.likes + 1;
+        if (post.dislike) {
+          post.likes += 1;
+          post.dislikes -= 1;
+          dislikeElement.style.stroke = '#6C6E86';
+        } else {
+          likeCount.textContent = post.likes + 1;
+        }
+
+        dislikeCount.textContent = post.dislikes;
+        likeCount.textContent = post.likes;
+
+        post.like = true;
+        post.dislike = false;
       }
     }).catch((err) => {
       console.log('nopedi nope go get the rope ' + err);
@@ -427,11 +448,24 @@ const likeEventListener = (likeElement, dislikeElement, post, likeCount, dislike
   });
 
   dislikeElement.addEventListener('click', () => {
+    if (post.dislike) return;
+
     dislikeElement.style.stroke = '#FF3939';
     fetch('/post/dislike', settings).then((response) => response.json()).then((json) => {
       if (json.success) {
-        console.log(dislikeCount.textContent);
-        dislikeCount.textContent = post.dislikes + 1;
+        if (post.like) {
+          post.likes -= 1;
+          post.dislikes += 1;
+          likeElement.style.stroke = '#6C6E86';
+        } else {
+          dislikeCount.textContent = post.dislikes + 1;
+        }
+
+        dislikeCount.textContent = post.dislikes;
+        likeCount.textContent = post.likes;
+
+        post.like = false;
+        post.dislike = true;
       }
     }).catch((err) => {
       console.log('nopedi nope go get the rope ' + err);
@@ -449,7 +483,6 @@ const getTrendingFeed = () => {
       alert(json.error);
       return;
     }
-    // console.log(`post likes: ${json.posts[0].text} ${json.posts[0].likes}`);
     for (let i = 0; i < json.posts.length; i++) {
       createPost(json, i);
     }
@@ -462,7 +495,6 @@ const getTrendingFeed = () => {
 const getUserFeed = () => {
   loading.classList.add('loading');
   const path = window.location.pathname.split('/')[2];
-  // console.log(path);
   fetch(`/user/posts/${path}`).then((response) => response.json()).then((json) => {
     if (!json.success) {
       alert(json.error);

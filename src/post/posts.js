@@ -241,6 +241,7 @@ const dislikePost = (entityId, userId) => {
     }).then(() => {
       resolve();
     }).catch((err) => reject(err));
+    console.log('POST DISLIKED');
   });
 };
 
@@ -256,6 +257,7 @@ const likePost = (entityId, userId) => {
     }).then(() => {
       resolve();
     }).catch((err) => reject(err));
+    console.log('POST LIKED');
   });
 };
 
