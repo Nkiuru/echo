@@ -25,6 +25,10 @@
     border: 2px solid $main_green;
     font-family: $roboto-condensed;
     font-weight: $font-bold;
+
+    &:active, &:visited {
+      color: $main_darkblue;
+    }
   }
 
   &.register-btn {

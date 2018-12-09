@@ -209,6 +209,12 @@ const createComments = (json) => {
 
   const commentsContainer = document.createElement('div');
   commentsContainer.classList.add('comments-container');
+
+  const hr = document.createElement('hr');
+  hr.classList.add('comments-divider');
+
+  commentsContainer.appendChild(hr);
+
   if (authenticated) {
     const commentForm = document.createElement('form');
     const submit = document.createElement('button');

@@ -135,8 +135,6 @@ submitBtn.addEventListener('click', (e) => {
 
   const fd = new FormData(postForm);
 
-  window.location.replace(window.location.pathname);
-
   const mediaSettings = {
     method: 'POST',
     body: fd,
@@ -158,6 +156,7 @@ submitBtn.addEventListener('click', (e) => {
         alert(json.error);
         return;
       }
+      window.location.replace(window.location.pathname);
     }).catch((err) => {
       console.log(`error ${err}`);
     });
@@ -169,6 +168,7 @@ submitBtn.addEventListener('click', (e) => {
         alert(json.error);
         return;
       }
+      window.location.replace(window.location.pathname);
     }).catch((err) => {
       console.log(`error ${err}`);
     });
@@ -180,6 +180,7 @@ submitBtn.addEventListener('click', (e) => {
         alert(json.error);
         return;
       }
+      window.location.replace(window.location.pathname);
     }).catch((err) => {
       console.log(`error: ${err}`);
     });
@@ -192,6 +193,7 @@ submitBtn.addEventListener('click', (e) => {
         return;
       }
       console.log(json);
+      window.location.replace(window.location.pathname);
     }).catch((err) => {
       console.log(`err ${err}`);
     });
