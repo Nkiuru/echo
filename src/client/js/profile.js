@@ -7,7 +7,6 @@ const profileImg = document.querySelector('#usrImg');
 const getUser = () => {
   const path = window.location.pathname.split('/')[2];
   if (window.localStorage.getItem('userData').username === path) {
-    // console.log(window.localStorage.getItem('userData'));
     updateProfile(JSON.parse(window.localStorage.getItem('userData')));
   } else {
     fetch(`/users/${path}`).then((response) => response.json()).then((json) => {
@@ -17,7 +16,6 @@ const getUser = () => {
 };
 
 const updateProfile = (json) => {
-  // console.log(json);
   // set display name
   displayName.textContent = json.displayName;
 

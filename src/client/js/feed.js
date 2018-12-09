@@ -9,6 +9,23 @@ let dislikeIcon = '';
 let likeIcon = '';
 let likeIconCircle = '';
 
+const isAdmin = () => {
+  const user = window.localStorage.getItem('userData');
+  const json = JSON.parse(user);
+  if (json.isAdmin === 1) return true;
+  if (json.isAdmin !== 1) return false;
+};
+
+const deletePost = (postEntity) => {
+  return fetch(`/post/delete/${postEntity}`, {
+    method: 'delete',
+  })
+    .then((response) => response.json()).then((json) => {
+      console.log(json);
+    })
+    .catch((err) => console.log(err));
+};
+
 const createLikes = () => {
   const likeIconSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   likeIconSvg.setAttribute('width', '24px');
@@ -86,12 +103,13 @@ const createPost = (json, i) => {
     e.preventDefault();
     morePopup.style.display = 'flex';
     morePopup.addEventListener('click', (e) => {
-      console.log('DELETE');
+      const postEntity = json.posts[i].entityId;
+      console.log(postEntity);
+      deletePost(postEntity);
       singlePostContainer.classList.add('post-anime-out');
       setTimeout(() => {
-        // do some stuff and actually delete the post
-        window.location.replace(window.location.pathname);
-      }, 1000);
+        singlePostContainer.remove();
+      }, 500);
     });
   });
 
@@ -155,7 +173,11 @@ const createPost = (json, i) => {
   profileContainer.appendChild(userImg);
   postHeader.appendChild(profileContainer);
   postHeader.appendChild(usrTime);
-  postHeader.appendChild(moreBtn);
+
+  if (isAdmin()) {
+    postHeader.appendChild(moreBtn);
+  }
+
   postHeader.appendChild(morePopup);
   postCard.appendChild(postHeader);
   postCard.appendChild(textContainer);
@@ -420,8 +442,6 @@ const likeEventListener = (likeElement, dislikeElement, post, likeCount, dislike
     }),
   };
 
-  // if (json.posts[i].like) likeIcon.style.stroke = '#1ED689';
-
   likeElement.addEventListener('click', () => {
     if (post.like) return;
 
@@ -433,6 +453,7 @@ const likeEventListener = (likeElement, dislikeElement, post, likeCount, dislike
           post.dislikes -= 1;
           dislikeElement.style.stroke = '#6C6E86';
         } else {
+          post.likes += 1;
           likeCount.textContent = post.likes + 1;
         }
 
@@ -458,9 +479,9 @@ const likeEventListener = (likeElement, dislikeElement, post, likeCount, dislike
           post.dislikes += 1;
           likeElement.style.stroke = '#6C6E86';
         } else {
+          post.dislikes += 1;
           dislikeCount.textContent = post.dislikes + 1;
         }
-
         dislikeCount.textContent = post.dislikes;
         likeCount.textContent = post.likes;
 
@@ -486,6 +507,7 @@ const getTrendingFeed = () => {
     for (let i = 0; i < json.posts.length; i++) {
       createPost(json, i);
     }
+
     loading.classList.remove('loading');
   }).catch((err) => {
     console.error(err);

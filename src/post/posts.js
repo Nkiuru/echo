@@ -277,7 +277,12 @@ const getLike = (entityId, userId) => {
 
 const deletePost = (entityId) => {
   return new Promise((resolve, reject) => {
-    db.deletePost(entityId).then(() => resolve()).catch((err) => reject(err));
+    db.deletePost(entityId)
+      .then(() => {
+        console.log(entityId);
+        resolve();
+      })
+      .catch((err) => reject(err));
   });
 };
 
