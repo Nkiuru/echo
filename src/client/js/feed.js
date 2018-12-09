@@ -427,7 +427,6 @@ const likeEventListener = (likeElement, dislikeElement, post, likeCount, dislike
 
   dislikeElement.addEventListener('click', () => {
     dislikeElement.style.stroke = '#FF3939';
-<<<<<<< Updated upstream
     fetch('/post/dislike', settings)
       .then((response) => response.json())
       .then((json) => {
@@ -444,7 +443,6 @@ const likeEventListener = (likeElement, dislikeElement, post, likeCount, dislike
 
 const getTrendingFeed = () => {
   loading.classList.add('loading');
-<<<<<<< Updated upstream
   fetch('/trending')
     .then((response) => response.json())
     .then((json) => {
