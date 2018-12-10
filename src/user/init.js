@@ -14,7 +14,7 @@ const initUser = (app) => {
   app.get('/', renderWelcome);
 
   /*
-  * Endpoint for logining in
+  * Endpoint for logging in
   * Returns success: true if credentials match
   */
   app.post('/login', (req, res, next) => {
