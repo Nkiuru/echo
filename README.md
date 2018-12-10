@@ -2,6 +2,8 @@
 Music content sharing platform
 
 ## Setting up delevopment build
+Clone repository
+
 Install [nodejs](https://nodejs.org/en/)
 
 Install [gulp](https://gulpjs.com/)
@@ -23,3 +25,10 @@ Optionally for https support:
 To start the backend -> ```gulp start```
 Connect to either http://localhost:8000 or https://localhost:3000
 
+## Setting up production build
+
+Complete the aforementioned tasks
+
+Run ```gulp production```
+
+Connect to the production server
