@@ -119,6 +119,7 @@ const closeOverlay = () => {
 };
 
 openPostBtn.addEventListener('click', (e) => {
+  console.log('jsdhkajsd');
   e.preventDefault();
   fullscreen.style.display = 'flex';
   overlay.style.display = 'block';
