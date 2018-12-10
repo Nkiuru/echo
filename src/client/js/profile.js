@@ -3,6 +3,8 @@ const locationElement = document.querySelector('.location');
 const bio = document.querySelector('.bio-text');
 const profileImg = document.querySelector('#usrImg');
 
+const {flag, code, name} = require('country-emoji');
+
 
 const getUser = () => {
   const path = window.location.pathname.split('/')[2];
@@ -20,12 +22,12 @@ const updateProfile = (json) => {
   displayName.textContent = json.displayName;
 
   // Check if both city and country are given and display location correctly
-  if (json.city && json.country) {
-    locationElement.textContent = `${json.city}, ${json.country}`;
-  } else if (json.city && !json.country) {
+  if (json.city && json.countryCode) {
+    locationElement.textContent = `${json.city}, ${json.countryCode}`;
+  } else if (json.city && !json.countryCode) {
     locationElement.textContent = json.city;
   } else {
-    locationElement.textContent = json.country;
+    locationElement.textContent = json.countryCode;
   }
 
   // set bio text
