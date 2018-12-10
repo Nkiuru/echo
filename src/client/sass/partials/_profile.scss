@@ -3,7 +3,11 @@
   max-width: 50%;
   justify-content: center;
   margin-left: 20%;
-  
+
+  @include sm-desktop {
+    max-width: 80%;
+    margin-left: 5%;
+  }
 
   @include mobile {
     margin: .5rem;
