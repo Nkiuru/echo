@@ -14,7 +14,11 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = 8000;
 
+// Use the authentication files
 require('./src/authenticate').init(app);
+/*
+* Generate unique identifier, assign a secret and set the age to 69000ms.
+*/
 app.use(session({
   genid: (req) => {
     return uuid(); // use UUIDs for session IDs
@@ -40,9 +44,10 @@ app.engine(
 
 app.set('views', __dirname + '/src/views');
 app.set('view engine', 'hbs');
-
+// Use body parser.
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+// Initialize passport and its session
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -54,7 +59,7 @@ app.use('/static', express.static(path.join(__dirname, '/dist')));
 app.get('/login', (req, res) => {
   res.render('logregbase', { login: true });
 });
-
+// Render register page with the necessary countries for the select menu
 app.get('/register', (req, res) => {
   db.getCountries().then((result) => {
     res.render('logregbase', { country: result });
@@ -63,6 +68,7 @@ app.get('/register', (req, res) => {
   });
 });
 
+// Endpoint for getting the list of genres
 app.get('/genres', passport.authenticationMiddleware(), (req, res) => {
   db.getGenres().then((genres) => {
     res.json([{ success: true }, genres]);
@@ -73,9 +79,13 @@ app.get('/authenticated', (req, res) => {
   res.send(req.isAuthenticated());
 });
 
+// use the user files
 require('./src/user').init(app);
+
+// use the post related files
 require('./src/post').init(app);
 
+// Start the server using HTTPS if given certs
 if (process.env.hasOwnProperty('HTTPS')) {
   const sslKey = fs.readFileSync(process.env.SSL_KEY);
   const sslCert = fs.readFileSync(process.env.SSL_CERT);
