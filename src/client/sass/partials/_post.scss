@@ -5,6 +5,10 @@
   border: 1px solid #BABBC5;
   border-radius: 5px;
   margin-bottom: 1rem;
+
+  @include mobile {
+    margin: 0 1rem 0 1rem;
+  }
 }
 
 .post-anime-out {
@@ -212,7 +216,7 @@
           .delete-comment {
             height: 24px;
             width: 24px;
-            background: red;
+            margin: .25rem;
             right: 0;
             position: absolute;
             top: 0;

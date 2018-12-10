@@ -13,6 +13,16 @@ body {
   margin: 5rem;
   position: fixed;
 
+  @include mobile {
+    margin: 1rem;
+    width: 48px;
+    height: 48px;
+
+    img {
+      width: 100%;
+    }
+  }
+
   img {
     border-radius: 100%;
   }

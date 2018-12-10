@@ -34,6 +34,10 @@
     position: absolute;
   }
 
+  @include mobile {
+    width: 100%;
+  }
+
   h1 {
     z-index: 1;
     position: relative;

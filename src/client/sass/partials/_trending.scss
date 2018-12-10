@@ -5,4 +5,8 @@
   @include sm-desktop {
     width: 70vw;
   }
+
+  @include mobile {
+    width: 100%;
+  }
 }
