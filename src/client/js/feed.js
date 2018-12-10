@@ -22,11 +22,9 @@ const isAdmin = () => {
 const deletePost = (postEntity) => {
   return fetch(`/post/delete/${postEntity}`, {
     method: 'delete',
-  })
-    .then((response) => response.json()).then((json) => {
-      console.log(json);
-    })
-    .catch((err) => console.log(err));
+  }).then((response) => response.json()).then((json) => {
+    console.log(json);
+  }).catch((err) => console.log(err));
 };
 
 const createLikes = () => {
@@ -121,8 +119,6 @@ const createPost = (json, i) => {
 
   const text = document.createElement('p');
   text.textContent = json.posts[i].text;
-
-  
 
   const votes = document.createElement('div');
   votes.classList.add('votes-container');
@@ -312,7 +308,19 @@ const createComment = (json, cmnt, commentGroup = document.createElement('div'),
   deleteComment.classList.add('delete-comment');
 
   deleteComment.addEventListener('click', () => {
-    console.log('tööt');
+    fetch(`/post/comment/${cmnt.commentId}`, { method: 'delete' }).
+      then((response) => response.json()).
+      then((newComment) => {
+        const redacted = newComment[1][0];
+        json.comments.forEach((elm) => {
+          if (elm.commentId === redacted.commentId) {
+            elm.comment = redacted.comment;
+          }
+        });
+        const post = commentGroup.parentElement.parentElement;
+        post.removeChild(commentGroup.parentElement);
+        post.appendChild(createComments(json));
+      });
   });
 
   if (isAdmin()) commentElm.appendChild(deleteComment);
@@ -353,7 +361,6 @@ const createComment = (json, cmnt, commentGroup = document.createElement('div'),
 
           fetch('/post/comment', settings).then((response) => response.json()).then((comment) => {
             const post = commentGroup.parentElement.parentElement;
-            console.log(commentGroup.parentElement);
             post.removeChild(commentGroup.parentElement);
             json.comments.push(comment[1][0]);
             post.appendChild(createComments(json));

@@ -37,11 +37,11 @@ const deletePost = (req, res) => {
 const deleteComment = (req, res) => {
   if (req.user.isAdmin === 1) {
     post.deleteComment(req.params.commentId).then(() => {
-      res.json({ success: true });
-      res.end();
+      return post.getComment(req.params.commentId);
+    }).then((comment) => {
+      res.json([{ success: true }, comment]);
     }).catch((err) => {
       res.json({ success: false, error: err });
-      res.end();
     });
   } else {
     res.json({ success: false, error: 'VERBOTEN!' });
