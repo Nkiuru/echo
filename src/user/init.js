@@ -7,6 +7,8 @@ const upload = multer({ dest: (path.join(__dirname, '../../dist/uploads')) });
 const db = require('../modules/database');
 const uploadJs = require('../modules/upload');
 
+const {flag, code, name} = require('country-emoji');
+
 /*
 * List of API endpoints for all user related requests
 */
@@ -132,6 +134,7 @@ const getUserPosts = (req, res) => {
 const getUserData = (req, res) => {
   if (req.params.hasOwnProperty('username')) {
     users.getUserWithUsername(req.params.username).then((user) => {
+      user.countryCode= flag(user.countryCode);
       res.json([{ success: true }, user]);
       res.end();
     }).catch((err) => {

@@ -70,6 +70,11 @@ const createPost = (json, i) => {
   profileContainer.classList.add('profile-container');
 
   const userImg = document.createElement('img');
+  console.log(json);
+  userImg.addEventListener('click', () => {
+    window.location.href = `/user/${json.posts[i].username}`;
+  });
+  userImg.style.cursor = 'pointer';
 
   if (json.posts[i].userImg) {
     userImg.setAttribute('src', `/static/uploads/${json.posts[i].userImg}`);
@@ -88,7 +93,7 @@ const createPost = (json, i) => {
 
   const m = moment.utc(timestampText, 'YYYY/MM/DD HH:mm:ss');
 
-  timestamp.textContent = m.local().fromNow(timestampText);
+  timestamp.textContent = m.local().fromNow(timestampText) + ' ago';
 
   const moreBtn = document.createElement('div');
   moreBtn.classList.add('more-btn');
@@ -223,6 +228,12 @@ const createComments = (json) => {
     const input = document.createElement('textarea');
     input.placeholder = 'Write something...';
 
+    input.addEventListener('input', () => {
+      if (input.value.length > 0) {
+        submit.disabled = false;
+      }
+    });
+    submit.disabled = true;
     commentForm.addEventListener('submit', (e) => {
       e.preventDefault();
 
@@ -291,8 +302,13 @@ const createComment = (json, cmnt, commentGroup = document.createElement('div'),
   if (cmnt.userImg) {
     profileImg.setAttribute('src', `/static/uploads/${cmnt.userImg}`);
   } else {
-    profileImg.setAttribute('src', `/static/uploads/bbe.png`);
+    profileImg.setAttribute('src', `/static/img/bbe.png`);
   }
+  profileImg.addEventListener('click', () => {
+    window.location.href = `/user/${cmnt.username}`;
+  });
+
+  profileImg.style.cursor = 'pointer';
   profileHeader.appendChild(profileImg);
 
   const userElm = document.createElement('p');
@@ -346,6 +362,12 @@ const createComment = (json, cmnt, commentGroup = document.createElement('div'),
         const inputReply = document.createElement('textarea');
         inputReply.placeholder = 'Write something';
 
+        inputReply.addEventListener('input', () => {
+          if (inputReply.value.length > 0) {
+            submitReply.disabled = false;
+          }
+        });
+        submitReply.disabled = true;
         replyForm.addEventListener('submit', (e) => {
           e.preventDefault();
 
@@ -382,7 +404,7 @@ const createComment = (json, cmnt, commentGroup = document.createElement('div'),
   const commentTime = cmnt.timestamp;
 
   const m = moment.utc(commentTime, 'YYYY/MM/DD HH:mm:ss');
-  timestamp.textContent = m.local().fromNow(commentTime);
+  timestamp.textContent = m.local().fromNow(commentTime) + ' ago';
 
   commentElm.appendChild(timestamp);
 
@@ -428,10 +450,15 @@ const audioPost = (json, i, postCard) => {
   volume.setAttribute('step', '.1');
 
   toggle.classList.add('button', 'btn-toggle', 'blue');
+  const songname = document.createElement('p');
+  songname.innerText = `Song: ${json.posts[i].title}`;
+  songname.style.flex = 'auto';
+  songname.style.fontFamily = 'Roboto Condensed';
 
   controls.appendChild(toggle);
   volumeContainer.appendChild(volume);
   controls.appendChild(volumeContainer);
+  controls.appendChild(songname);
   audioContainer.appendChild(waveformContainer);
   postCard.appendChild(audioContainer);
   postCard.appendChild(controls);

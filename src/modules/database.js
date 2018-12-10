@@ -62,9 +62,10 @@ const getUserById = (id) => {
 const getUserByIdWEmail = (id) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      `SELECT u.userId, u.username, u.displayName, u.countryId, u.city, u.bio, u.email, u.isAdmin, 
+      `SELECT u.userId, u.username, u.displayName, country.countryCode, u.city, u.bio, u.email, u.isAdmin, 
       upload.fileName as usrImg, u.bandId 
       FROM user u LEFT JOIN upload ON upload.uploadId=u.profileImageId 
+      LEFT JOIN country ON country.countryId=u.countryId 
       WHERE u.userId = ?`, [id], (err, results) => {
         if (err) {
           reject(err.code);
@@ -77,9 +78,10 @@ const getUser = (username) => {
   console.log(username);
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT u.userId, u.username, u.displayName, u.countryId, u.city, u.bio, u.email, u.isAdmin, 
+      `SELECT u.userId, u.username, u.displayName, country.countryCode, u.city, u.bio, u.email, u.isAdmin, 
       upload.fileName as usrImg, u.bandId 
       FROM user u LEFT JOIN upload ON upload.uploadId=u.profileImageId 
+      LEFT JOIN country ON country.countryId=u.countryId 
       WHERE u.username = ?`, [username], (err, results) => {
         if (err) {
           reject(err.code);
@@ -479,7 +481,7 @@ const getAllVideoPosts = () => {
 const getComment = (commentId) => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT entityComment.*, u.displayName, uf.fileName as userImg 
+      `SELECT entityComment.*, u.username, u.displayName, uf.fileName as userImg 
       FROM entityComment, user u LEFT JOIN upload uf ON uf.uploadId = u.profileImageId 
       WHERE entityComment.commentId = ? AND entityComment.userId = u.userId`,
       [commentId],
@@ -510,7 +512,7 @@ const getAllTextPosts = () => {
 const getComments = (entityId) => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT entityComment.* , u.displayName, uf.fileName as userImg 
+      `SELECT entityComment.* , u.username, u.displayName, uf.fileName as userImg 
       FROM entityComment, user u LEFT JOIN upload uf ON uf.uploadId = u.profileImageId 
       WHERE entityComment.entityId = ? AND entityComment.userId = u.userId`,
       [entityId],
