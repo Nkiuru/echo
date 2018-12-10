@@ -481,7 +481,7 @@ const getAllVideoPosts = () => {
 const getComment = (commentId) => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT entityComment.*, u.displayName, uf.fileName as userImg 
+      `SELECT entityComment.*, u.username, u.displayName, uf.fileName as userImg 
       FROM entityComment, user u LEFT JOIN upload uf ON uf.uploadId = u.profileImageId 
       WHERE entityComment.commentId = ? AND entityComment.userId = u.userId`,
       [commentId],
@@ -512,7 +512,7 @@ const getAllTextPosts = () => {
 const getComments = (entityId) => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT entityComment.* , u.displayName, uf.fileName as userImg 
+      `SELECT entityComment.* , u.username, u.displayName, uf.fileName as userImg 
       FROM entityComment, user u LEFT JOIN upload uf ON uf.uploadId = u.profileImageId 
       WHERE entityComment.entityId = ? AND entityComment.userId = u.userId`,
       [entityId],

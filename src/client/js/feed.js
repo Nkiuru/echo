@@ -70,6 +70,11 @@ const createPost = (json, i) => {
   profileContainer.classList.add('profile-container');
 
   const userImg = document.createElement('img');
+  console.log(json);
+  userImg.addEventListener('click', () => {
+    window.location.href = `/user/${json.posts[i].username}`;
+  });
+  userImg.style.cursor = 'pointer';
 
   if (json.posts[i].userImg) {
     userImg.setAttribute('src', `/static/uploads/${json.posts[i].userImg}`);
@@ -299,6 +304,11 @@ const createComment = (json, cmnt, commentGroup = document.createElement('div'),
   } else {
     profileImg.setAttribute('src', `/static/img/bbe.png`);
   }
+  profileImg.addEventListener('click', () => {
+    window.location.href = `/user/${cmnt.username}`;
+  });
+
+  profileImg.style.cursor = 'pointer';
   profileHeader.appendChild(profileImg);
 
   const userElm = document.createElement('p');
