@@ -114,7 +114,7 @@
         border-radius: 100%;
         display: block;
         position: absolute;
-        top: 7px;
+        top: 8px;
         left: 3px;
         width: 8px;
         height: 8px;
@@ -138,6 +138,7 @@
         min-height: 200px;
         padding: 1rem;
         display: flex;
+        justify-content: center;
         position: relative;
         align-items: center;
         margin-bottom: 1rem;
@@ -145,17 +146,21 @@
         border: 1px dashed $medium-grey;
 
         .file-icons {
-          display: none;
           justify-content: space-evenly;
-          flex-wrap: wrap
+          flex-wrap: wrap;
+
+          .btn-add-files {
+            text-align: center;
+            font-family: $roboto-condensed;
+            font-weight: $font-bold;
+          }
         }
 
-        /*input {
-          display: none;
+        input {
+          opacity: 0;
         }
 
-        input,
-        label {
+        input {
           width: 100%;
           height: 100%;
           position: absolute;
@@ -163,8 +168,7 @@
           left: 0;
           border: none;
           cursor: pointer;
-
-        } */
+        }
       }
     }
   }
