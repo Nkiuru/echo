@@ -223,6 +223,12 @@ const createComments = (json) => {
     const input = document.createElement('textarea');
     input.placeholder = 'Write something...';
 
+    input.addEventListener('input', () => {
+      if (input.value.length > 0) {
+        submit.disabled = false;
+      }
+    });
+    submit.disabled = true;
     commentForm.addEventListener('submit', (e) => {
       e.preventDefault();
 
@@ -346,6 +352,12 @@ const createComment = (json, cmnt, commentGroup = document.createElement('div'),
         const inputReply = document.createElement('textarea');
         inputReply.placeholder = 'Write something';
 
+        inputReply.addEventListener('input', () => {
+          if (inputReply.value.length > 0) {
+            submitReply.disabled = false;
+          }
+        });
+        submitReply.disabled = true;
         replyForm.addEventListener('submit', (e) => {
           e.preventDefault();
 
