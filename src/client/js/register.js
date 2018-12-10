@@ -85,7 +85,9 @@ submit.addEventListener('click', (e) => {
           error.style.display = 'block';
           return;
         }
-        window.location.replace(`/users/${username}`);
+        if (window.confirm('Redirect to login')) {
+          window.location.replace('/login');
+        }
       }).
       catch((err) => {
         console.log('ERROR ' + err);
