@@ -3,8 +3,6 @@ const locationElement = document.querySelector('.location');
 const bio = document.querySelector('.bio-text');
 const profileImg = document.querySelector('#usrImg');
 
-
-
 const getUser = () => {
   const path = window.location.pathname.split('/')[2];
   if (window.localStorage.getItem('userData').username === path) {
@@ -22,7 +20,7 @@ const updateProfile = (json) => {
 
   // Check if both city and country are given and display location correctly
   if (json.city && json.countryCode) {
-    locationElement.textContent = `${json.city}, ${json.countryCode}`;
+    locationElement.textContent = `${json.city} ${json.countryCode}`;
   } else if (json.city && !json.countryCode) {
     locationElement.textContent = json.city;
   } else {
@@ -36,7 +34,6 @@ const updateProfile = (json) => {
     bio.textContent = 'bio not written';
   }
   // set profile picture
-  console.log(json);
   if (json.usrImg) {
     profileImg.setAttribute('src', `/static/uploads/${json.usrImg}`);
   }
