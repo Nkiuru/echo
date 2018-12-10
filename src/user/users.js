@@ -18,28 +18,16 @@ const createUser = (req, res) => {
         req.body.city,
         req.body.email,
       ];
-      const bandData = [
-        req.body.username,
-        null,
-      ];
-      db.createUser(data).then(() => {
+      db.createUser(data).then((userId) => {
         res.json({ success: true });
         console.log(req.body.username + ' created');
-        return res.end();
+        db.createBand(req.body.username, null).then((id) => {
+          db.addBand(id, userId).then(() => {
+            return res.end();
+          });
+        });
       }).catch((err) => {
         console.log('ERROR CREATING USER: ' + err);
-        res.json({
-          success: false,
-          error: err,
-        });
-        return res.end();
-      });
-      db.createBand(bandData).then(() => {
-        res.json({ success: true });
-        console.log(req.body.username + ' band created');
-        return res.end();
-      }).catch((err) => {
-        console.log('ERROR CREATING BAND: ' + err);
         res.json({
           success: false,
           error: err,
@@ -142,7 +130,7 @@ const getOwnPosts = (userId) => {
   });
 };
 
-const resolvePosts =(results) => {
+const resolvePosts = (results) => {
   const posts = [];
   results[0].forEach((audioPost) => { // audio posts
     posts.push(audioPost);

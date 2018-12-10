@@ -30,7 +30,7 @@ const createUser = (data) => {
       data,
       (err, results, fields) => {
         if (err) reject(err.code);
-        if (results) resolve(results);
+        if (results) resolve(results.insertId);
       });
   });
 };
@@ -625,8 +625,7 @@ const deleteComment = (commentId) => {
       (err, results) => {
         if (err) reject(err);
         if (results) resolve();
-      },
-    );
+      });
   });
 };
 
@@ -639,6 +638,17 @@ const getGenres = () => {
         if (results) resolve(results);
       },
     );
+  });
+};
+
+const addBand = (id, userId) => {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      'UPDATE user SET bandId = ? WHERE userId = ?', [id, userId],
+      (err, results, fields) => {
+        if (err) reject(err);
+        if (results) resolve(results);
+      });
   });
 };
 
@@ -688,4 +698,5 @@ module.exports = {
   deletePost,
   deleteComment,
   getGenres,
+  addBand,
 };
