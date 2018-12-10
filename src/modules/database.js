@@ -62,10 +62,10 @@ const getUserById = (id) => {
 const getUserByIdWEmail = (id) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      `SELECT u.userId, u.username, u.displayName, coutry.countryCode, u.city, u.bio, u.email, u.isAdmin, 
+      `SELECT u.userId, u.username, u.displayName, country.countryCode, u.city, u.bio, u.email, u.isAdmin, 
       upload.fileName as usrImg, u.bandId 
       FROM user u LEFT JOIN upload ON upload.uploadId=u.profileImageId 
-      LEFT JOIN coutry ON country.countryId=u.countryId 
+      LEFT JOIN country ON country.countryId=u.countryId 
       WHERE u.userId = ?`, [id], (err, results) => {
         if (err) {
           reject(err.code);
@@ -78,9 +78,10 @@ const getUser = (username) => {
   console.log(username);
   return new Promise((resolve, reject) => {
     connection.execute(
-      `SELECT u.userId, u.username, u.displayName, u.countryId, u.city, u.bio, u.email, u.isAdmin, 
+      `SELECT u.userId, u.username, u.displayName, country.countryCode, u.city, u.bio, u.email, u.isAdmin, 
       upload.fileName as usrImg, u.bandId 
       FROM user u LEFT JOIN upload ON upload.uploadId=u.profileImageId 
+      LEFT JOIN country ON country.countryId=u.countryId 
       WHERE u.username = ?`, [username], (err, results) => {
         if (err) {
           reject(err.code);

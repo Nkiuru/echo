@@ -3,7 +3,6 @@ const locationElement = document.querySelector('.location');
 const bio = document.querySelector('.bio-text');
 const profileImg = document.querySelector('#usrImg');
 
-const {flag, code, name} = require('country-emoji');
 
 
 const getUser = () => {
@@ -37,6 +36,7 @@ const updateProfile = (json) => {
     bio.textContent = 'bio not written';
   }
   // set profile picture
+  console.log(json);
   if (json.usrImg) {
     profileImg.setAttribute('src', `/static/uploads/${json.usrImg}`);
   }
