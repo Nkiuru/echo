@@ -88,7 +88,7 @@ const createPost = (json, i) => {
 
   const m = moment.utc(timestampText, 'YYYY/MM/DD HH:mm:ss');
 
-  timestamp.textContent = m.local().fromNow(timestampText);
+  timestamp.textContent = m.local().fromNow(timestampText) + ' ago';
 
   const moreBtn = document.createElement('div');
   moreBtn.classList.add('more-btn');
@@ -394,7 +394,7 @@ const createComment = (json, cmnt, commentGroup = document.createElement('div'),
   const commentTime = cmnt.timestamp;
 
   const m = moment.utc(commentTime, 'YYYY/MM/DD HH:mm:ss');
-  timestamp.textContent = m.local().fromNow(commentTime);
+  timestamp.textContent = m.local().fromNow(commentTime) + ' ago';
 
   commentElm.appendChild(timestamp);
 
@@ -444,7 +444,7 @@ const audioPost = (json, i, postCard) => {
   songname.innerText = `Song: ${json.posts[i].title}`;
   songname.style.flex = 'auto';
   songname.style.fontFamily = 'Roboto Condensed';
-  
+
   controls.appendChild(toggle);
   volumeContainer.appendChild(volume);
   controls.appendChild(volumeContainer);
