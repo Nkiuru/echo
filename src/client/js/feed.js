@@ -1,4 +1,3 @@
-// const feed = document.querySelector('#trending-feed');
 const feedContainer = document.querySelector('.feed-container');
 const feed = document.createElement('div');
 const loading = document.querySelector('#loading');
@@ -85,7 +84,11 @@ const createPost = (json, i) => {
   username.textContent = json.posts[i].displayName;
 
   const timestamp = document.createElement('p');
-  timestamp.textContent = json.posts[i].timestamp;
+  const timestampText = json.posts[i].timestamp;
+
+  const m = moment.utc(timestampText, 'YYYY/MM/DD HH:mm:ss');
+
+  timestamp.textContent = m.local().fromNow(timestampText);
 
   const moreBtn = document.createElement('div');
   moreBtn.classList.add('more-btn');
@@ -277,7 +280,6 @@ const createTree = (list) => {
 
 const createComment = (json, cmnt, commentGroup = document.createElement('div'), depth = 0) => {
   commentGroup.classList.add('comment-group');
-  // commentGroup.appendChild(footer);
 
   const commentContainer = document.createElement('div');
   commentContainer.classList.add('comment-container');
@@ -376,7 +378,12 @@ const createComment = (json, cmnt, commentGroup = document.createElement('div'),
 
   const timestamp = document.createElement('p');
   timestamp.classList.add('timestamp');
-  timestamp.innerText = cmnt.timestamp;
+
+  const commentTime = cmnt.timestamp;
+
+  const m = moment.utc(commentTime, 'YYYY/MM/DD HH:mm:ss');
+  timestamp.textContent = m.local().fromNow(commentTime);
+
   commentElm.appendChild(timestamp);
 
   commentContainer.appendChild(profileHeader);
@@ -412,8 +419,6 @@ const audioPost = (json, i, postCard) => {
   const volumeContainer = document.createElement('div');
   volumeContainer.classList.add('volume-container');
 
-  // const hr = document.createElement('hr');
-
   const volume = document.createElement('input');
   volume.classList.add('volume');
   volume.setAttribute('type', 'range');
@@ -429,7 +434,6 @@ const audioPost = (json, i, postCard) => {
   controls.appendChild(volumeContainer);
   audioContainer.appendChild(waveformContainer);
   postCard.appendChild(audioContainer);
-  // postCard.appendChild(hr);
   postCard.appendChild(controls);
 
   createAudiowave(json, i, waveformContainer, toggle, volume);
@@ -526,12 +530,12 @@ const likeEventListener = (likeElement, dislikeElement, post, likeCount, dislike
 const getTrendingFeed = () => {
   loading.classList.add('loading');
   fetch('/trending').then((response) => response.json()).then((json) => {
-    console.log(json);
     if (!json.success) {
       console.log(json);
       alert(json.error);
       return;
     }
+
     for (let i = 0; i < json.posts.length; i++) {
       createPost(json, i);
     }
