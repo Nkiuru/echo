@@ -384,11 +384,11 @@ const createSong = (title, albumId, genreId, uploadId, bandId) => {
   });
 };
 
-const createBand = (bandName, description, genreId) => {
+const createBand = (bandName, description) => {
   return new Promise((resolve, reject) => {
     connection.execute(
-      `INSERT INTO band(bandId, bandName, description, genreId)
-      VALUES(0, ?, ?, ?)`, [bandName, description, genreId],
+      `INSERT INTO band(bandId, bandName, description)
+      VALUES(0, ?, ?)`, [bandName, description],
       (err, results) => {
         if (err) reject(err);
         if (results) resolve(results.insertId);

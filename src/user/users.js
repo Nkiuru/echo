@@ -18,12 +18,28 @@ const createUser = (req, res) => {
         req.body.city,
         req.body.email,
       ];
+      const bandData = [
+        req.body.username,
+        null,
+      ];
       db.createUser(data).then(() => {
         res.json({ success: true });
         console.log(req.body.username + ' created');
         return res.end();
       }).catch((err) => {
         console.log('ERROR CREATING USER: ' + err);
+        res.json({
+          success: false,
+          error: err,
+        });
+        return res.end();
+      });
+      db.createBand(bandData).then(() => {
+        res.json({ success: true });
+        console.log(req.body.username + ' band created');
+        return res.end();
+      }).catch((err) => {
+        console.log('ERROR CREATING BAND: ' + err);
         res.json({
           success: false,
           error: err,
