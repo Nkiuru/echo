@@ -54,3 +54,12 @@ gulp.task('start', ['watch'], () => {
     ignore: ['dist/*', 'src/client/*', 'sessions/*'],
   });
 });
+
+// Watch for backend changes
+gulp.task('production', () => {
+  return nodemon({
+    script: 'app.js',
+    ignore: ['dist/*', 'src/client/*', 'sessions/*'],
+  });
+});
+
