@@ -10,15 +10,48 @@ const imgFiletype = document.querySelector('#filetype-img');
 const videoFiletype = document.querySelector('#filetype-video');
 const audioFiletype = document.querySelector('#filetype-audio');
 
+const progressContainer = document.querySelector('.progress');
 const fileInput = document.querySelector('#file-input');
 
+const postError = document.createElement('div');
+postError.classList.add('post-error');
+const errorMsg = document.createElement('p');
+
 let isAudio = false;
+let isGenreSelected = false;
+let hasTitle = false;
 
 const img = 'image/*,.pdf';
 const video = '.mp4,.webm';
 const audio = 'audio/*';
 
 let inputType = 'all';
+let hasFiles = false;
+
+let files = [];
+
+fileInput.addEventListener('change', () => {
+  console.log(fileInput.value);
+  files = fileInput.files;
+  console.log(files.length);
+
+  for (let i = 0; i < files.length; i++) {
+    const selectedFile = document.createElement('p');
+
+    const oneFileProgress = document.createElement('div');
+    oneFileProgress.classList.add('one-file-progress');
+
+    selectedFile.textContent = files[i].name;
+    oneFileProgress.appendChild(selectedFile);
+    progressContainer.appendChild(oneFileProgress);
+
+    if (files[i].size > 100000000) {
+      console.log(files[i].size);
+      selectedFile.textContent = 'File size is too big';
+    };
+  }
+  hasFiles = true;
+});
 
 // change accepted filetype according to checked radio button
 const fileSelection = () => {
@@ -59,6 +92,14 @@ const addFieldsForAudio = () => {
       songName.setAttribute('name', 'songTitle');
       songName.setAttribute('placeholder', 'Song title');
       songName.required = true;
+
+      songName.addEventListener('change', () => {
+        if (songName.value.length > 0) {
+          console.log('has title');
+          hasTitle = true;
+        }
+      });
+
       const container = document.querySelector('.progress');
       container.appendChild(songName);
       container.appendChild(select);
@@ -81,6 +122,10 @@ const createGenreSelect = (genres) => {
   opt.hidden = true;
   opt.innerText = 'Genre';
   select.appendChild(opt);
+
+  select.addEventListener('change', () => {
+    isGenreSelected = true;
+  });
 
   genres.forEach((genre) => {
     const option = document.createElement('option');
@@ -119,7 +164,6 @@ const closeOverlay = () => {
 };
 
 openPostBtn.addEventListener('click', (e) => {
-  console.log('jsdhkajsd');
   e.preventDefault();
   fullscreen.style.display = 'flex';
   overlay.style.display = 'block';
@@ -132,8 +176,6 @@ closeBtn.addEventListener('click', (e) => {
 
 submitBtn.addEventListener('click', (e) => {
   e.preventDefault();
-  closeOverlay();
-
   const fd = new FormData(postForm);
 
   const mediaSettings = {
@@ -200,13 +242,29 @@ submitBtn.addEventListener('click', (e) => {
     });
   };
 
-  if (inputType == 'all') {
+  if (inputType == 'all' && !hasFiles) {
     textPost();
+  } else if (inputType == 'all' && hasFiles) {
+    errorMsg.textContent = 'Please select a filetype';
+
+    postError.appendChild(errorMsg);
+    postFormContainer.appendChild(postError);
+    return;
   } else if (inputType == img) {
     imgPost();
   } else if (inputType == video) {
     videoPost();
   } else if (inputType == audio) {
-    audioPost();
-  }
+    console.log('title ' + hasTitle);
+    console.log('genre ' + isGenreSelected);
+    if (!hasTitle || !isGenreSelected) {
+      errorMsg.textContent = 'Please give a title & genre';
+      postError.appendChild(errorMsg);
+      postFormContainer.appendChild(postError);
+      return;
+    } else {
+      audioPost();
+    }
+  };
+  closeOverlay();
 });

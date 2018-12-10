@@ -11,9 +11,8 @@
   align-items: center;
 }
 
-
 .post-container {
-  width: 30vw;
+  width: 40vw;
   z-index: 10;
   padding: 1rem;
   background: $snow;
@@ -135,6 +134,14 @@
 
       .progress {
         margin-left: 1rem;
+
+        .one-file-progress {
+          margin-bottom: .5rem;
+          p {
+            margin: 0;
+            font-size: 12px;
+          }
+        }
       }
 
       .file-container {
@@ -174,6 +181,19 @@
           cursor: pointer;
         }
       }
+    }
+  }
+
+  .post-error {
+    background: $error-red;
+    padding: 1rem;
+    margin-top: .5rem;
+    color: $snow;
+    text-align: center;
+    border-radius: 2px;
+
+    p {
+      margin: 0;
     }
   }
 }
