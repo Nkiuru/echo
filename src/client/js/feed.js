@@ -440,10 +440,15 @@ const audioPost = (json, i, postCard) => {
   volume.setAttribute('step', '.1');
 
   toggle.classList.add('button', 'btn-toggle', 'blue');
-
+  const songname = document.createElement('p');
+  songname.innerText = `Song: ${json.posts[i].title}`;
+  songname.style.flex = 'auto';
+  songname.style.fontFamily = 'Roboto Condensed';
+  
   controls.appendChild(toggle);
   volumeContainer.appendChild(volume);
   controls.appendChild(volumeContainer);
+  controls.appendChild(songname);
   audioContainer.appendChild(waveformContainer);
   postCard.appendChild(audioContainer);
   postCard.appendChild(controls);
