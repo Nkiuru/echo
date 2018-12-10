@@ -291,7 +291,7 @@ const createComment = (json, cmnt, commentGroup = document.createElement('div'),
   if (cmnt.userImg) {
     profileImg.setAttribute('src', `/static/uploads/${cmnt.userImg}`);
   } else {
-    profileImg.setAttribute('src', `/static/uploads/bbe.png`);
+    profileImg.setAttribute('src', `/static/img/bbe.png`);
   }
   profileHeader.appendChild(profileImg);
 
