@@ -18,10 +18,14 @@ const createUser = (req, res) => {
         req.body.city,
         req.body.email,
       ];
-      db.createUser(data).then(() => {
+      db.createUser(data).then((userId) => {
         res.json({ success: true });
         console.log(req.body.username + ' created');
-        return res.end();
+        db.createBand(req.body.username, null, null).then((id) => {
+          db.addBand(id, userId).then(() => {
+            return res.end();
+          });
+        });
       }).catch((err) => {
         console.log('ERROR CREATING USER: ' + err);
         res.json({
