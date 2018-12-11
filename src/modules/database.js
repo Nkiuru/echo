@@ -267,7 +267,7 @@ const getAudioPost = (entityId) => {
       `SELECT ap.*, song.title, upload.fileName, genre.genreName, band.bandName, 
       ( SELECT COUNT(userId) FROM dislikedEntity WHERE entityId = ap.entityId ) AS dislikes, 
       ( SELECT COUNT(userId) FROM likedEntity WHERE entityId = ap.entityId ) AS likes, 
-      u.displayName, uf.fileName as userImg FROM entity e, audioPost ap, song, upload, genre, band, 
+      u.displayName, u.username, uf.fileName as userImg FROM entity e, audioPost ap, song, upload, genre, band, 
       user u LEFT JOIN upload uf ON uf.uploadId = u.profileImageId WHERE ap.entityId = ? AND ap.entityId = e.entityId 
       AND e.userId = u.userId AND ap.songId = song.songId AND song.uploadId = upload.uploadId 
       AND song.genreId = genre.genreId AND band.bandId = song.bandId`,
@@ -285,7 +285,7 @@ const getUserAudioPosts = (userId) => {
       `SELECT ap.*, song.title, upload.fileName, genre.genreName, band.bandName, 
       ( SELECT COUNT(userId) FROM dislikedEntity WHERE entityId = ap.entityId ) AS dislikes, 
       ( SELECT COUNT(userId) FROM likedEntity WHERE entityId = ap.entityId ) AS likes, 
-      u.displayName, uf.fileName as userImg FROM entity e, audioPost ap, song, upload, genre, band, 
+      u.displayName, u.username, uf.fileName as userImg FROM entity e, audioPost ap, song, upload, genre, band, 
       user u LEFT JOIN upload uf ON uf.uploadId = u.profileImageId WHERE e.userId = ? AND ap.entityId = e.entityId 
       AND e.userId = u.userId AND ap.songId = song.songId AND song.uploadId = upload.uploadId 
       AND song.genreId = genre.genreId AND band.bandId = song.bandId`,
@@ -529,7 +529,7 @@ const getAllAudioPosts = () => {
       `SELECT ap.*, song.title, upload.fileName, genre.genreName, band.bandName, 
       ( SELECT COUNT(userId) FROM dislikedEntity WHERE entityId = ap.entityId ) AS dislikes, 
       ( SELECT COUNT(userId) FROM likedEntity WHERE entityId = ap.entityId ) AS likes, 
-      u.displayName, uf.fileName as userImg FROM entity e, audioPost ap, song, upload, genre, band, 
+      u.displayName, u.username, uf.fileName as userImg FROM entity e, audioPost ap, song, upload, genre, band, 
       user u LEFT JOIN upload uf ON uf.uploadId = u.profileImageId WHERE ap.entityId = e.entityId 
       AND e.userId = u.userId AND ap.songId = song.songId AND song.uploadId = upload.uploadId 
       AND song.genreId = genre.genreId AND band.bandId = song.bandId`,
