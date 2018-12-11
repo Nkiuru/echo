@@ -62,7 +62,7 @@ const getUserById = (id) => {
 const getUserByIdWEmail = (id) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      `SELECT u.userId, u.username, u.displayName, country.countryCode, u.city, u.bio, u.email, u.isAdmin, 
+      `SELECT u.userId, u.username, u.displayName, country.countryCode, u.city, u.bio, u.profileImageId, u.email, u.isAdmin, 
       upload.fileName as usrImg, u.bandId 
       FROM user u LEFT JOIN upload ON upload.uploadId=u.profileImageId 
       LEFT JOIN country ON country.countryId=u.countryId 
