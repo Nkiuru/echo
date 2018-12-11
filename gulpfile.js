@@ -56,7 +56,7 @@ gulp.task('start', ['watch'], () => {
 });
 
 // Watch for backend changes
-gulp.task('production', () => {
+gulp.task('production', ['js', 'scss', 'img'], () => {
   return nodemon({
     script: 'app.js',
     ignore: ['dist/*', 'src/client/*', 'sessions/*'],
